@@ -1,11 +1,12 @@
-package com.jinhanyu.jack.langren;
+package com.jinhanyu.jack.langren.other;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
-import org.json.JSONException;
+import com.jinhanyu.jack.langren.R;
+
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
