@@ -1,8 +1,8 @@
 package com.jinhanyu.jack.langren.ui;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.GridView;
@@ -16,8 +16,6 @@ import com.jinhanyu.jack.langren.entity.UserInfo;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.jinhanyu.jack.langren.R.id.gv_waitingList;
 
 public class RoomActivity extends AppCompatActivity implements View.OnClickListener,CompoundButton.OnCheckedChangeListener{
     private List<UserInfo> list;
@@ -33,7 +31,7 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
         list=new ArrayList<>();
         waitList= (GridView) findViewById(R.id.gv_waitingList);
         cancel= (ImageButton) findViewById(R.id.ib_waitRoom_cancel);
-        ready= (ToggleButton) findViewById(R.id.ib_waitRoom_ready);
+        ready= (ToggleButton) findViewById(R.id.tb_waitRoom_ready);
         adapter=new WaitRoomAdapter(this,list);
         waitList.setAdapter(adapter);
         cancel.setOnClickListener(this);
@@ -53,9 +51,9 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if(isChecked){
-            MainApplication.socket.emit("prepare",null);
+            MainApplication.socket.emit("prepare",1);
         }else {
-            MainApplication.socket.emit("unprepare",null);
+            MainApplication.socket.emit("unprepare",1);
         }
     }
 }

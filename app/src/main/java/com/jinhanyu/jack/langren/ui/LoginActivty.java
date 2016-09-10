@@ -9,9 +9,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 public class LoginActivty extends AppCompatActivity implements View.OnClickListener {
@@ -46,25 +48,32 @@ public class LoginActivty extends AppCompatActivity implements View.OnClickListe
                   break;
               case R.id.game_login:
 
-                  String username= game_number.getText().toString();
+                  final String username= game_number.getText().toString();
                   String password = game_password.getText().toString();
                   ParseUser.logInInBackground(username, password, new LogInCallback() {
                       @Override
                       public void done(ParseUser user, ParseException e) {
                           if(e!=null){
+                              e.printStackTrace();
                               Toast.makeText(LoginActivty.this, "登录失败", Toast.LENGTH_SHORT).show();
                           }
                           else {
-                              
+                              MainApplication.userInfo.setUserId(user.getObjectId());
+                              ParseFile file = (ParseFile) user.get("head");
+                              MainApplication.userInfo.setHead(file.getUrl());
+                              MainApplication.userInfo.setName(username);
+                              MainApplication.userInfo.setScore((Integer) user.get("score"));
+
+
+                              Intent intent1 = new Intent(LoginActivty.this,SelectRoomActivity.class);
+                              startActivity(intent1);
+                              finish();
                           }
                       }
                   });
 
 
 
-
-                  Intent intent1 = new Intent(this,SelectRoomActivity.class);
-                  startActivity(intent1);
                   break;
               case R.id.game_register:
                   Intent intent = new Intent(this,UserNameActivity.class);
