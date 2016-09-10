@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jinhanyu.jack.langren.R;
+import com.jinhanyu.jack.langren.RoundImageViewByXfermode;
 import com.jinhanyu.jack.langren.entity.UserInfo;
 import com.squareup.picasso.Picasso;
 
@@ -28,7 +29,7 @@ public class WaitRoomAdapter extends CommonAdapter<UserInfo> {
         if(convertView==null){
             convertView= LayoutInflater.from(context).inflate(R.layout.room_item,null);
             viewHolder=new ViewHolderForUser();
-            viewHolder.portrait= (ImageView) convertView.findViewById(R.id.iv_waitRoom_item_portrait);
+            viewHolder.portrait= (RoundImageViewByXfermode) convertView.findViewById(R.id.iv_waitRoom_item_portrait);
             viewHolder.userName= (TextView) convertView.findViewById(R.id.tv_waitRoom_item_userId);
             convertView.setTag(viewHolder);
         }else {
@@ -41,6 +42,6 @@ public class WaitRoomAdapter extends CommonAdapter<UserInfo> {
     }
 }
 class ViewHolderForUser{
-    ImageView portrait;
+    RoundImageViewByXfermode portrait;
     TextView userName;
 }
