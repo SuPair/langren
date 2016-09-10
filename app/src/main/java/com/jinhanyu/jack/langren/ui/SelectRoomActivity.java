@@ -1,11 +1,19 @@
 package com.jinhanyu.jack.langren.ui;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
@@ -20,10 +28,11 @@ import java.util.List;
 
 import io.socket.emitter.Emitter;
 
-public class SelectRoomActivity extends AppCompatActivity{
+public class SelectRoomActivity extends AppCompatActivity implements View.OnClickListener{
     private GridView roomList;
     private SelectRoomAdapter adapter;
     private List<RoomInfo> list;
+    private ImageView createRoom;
 
     Handler handler = new Handler(){
         @Override
@@ -32,20 +41,23 @@ public class SelectRoomActivity extends AppCompatActivity{
             adapter.notifyDataSetChanged();
         }
     };
+    private View view;
+    private EditText et_room_name;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_room);
-
-
-
         list=new ArrayList<>();
         roomList= (GridView) findViewById(R.id.gv_roomList);
         adapter=new SelectRoomAdapter(this,list);
         roomList.setAdapter(adapter);
-
+        createRoom= (ImageView) findViewById(R.id.iv_createRoom);
         prepareSocket();
+        createRoom.setOnClickListener(this);
 
+        view = getLayoutInflater().inflate(R.layout.create_room,null);
+        et_room_name = (EditText) view.findViewById(R.id.et_room_name);
     }
 
     private void prepareSocket(){
@@ -101,5 +113,32 @@ public class SelectRoomActivity extends AppCompatActivity{
 
 
         MainApplication.socket.emit("login",MainApplication.userInfo.getUserId());
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.iv_createRoom:
+                AlertDialog dialog = new AlertDialog.Builder(this).setTitle("创建房间")
+                        .setView(view)
+                        .setPositiveButton("创建", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String roomName = et_room_name.getText().toString();
+                                  if(TextUtils.isEmpty(roomName))
+                                      Toast.makeText(SelectRoomActivity.this, "房间名称不能为空", Toast.LENGTH_SHORT).show();
+                                  else {
+                                      MainApplication.socket.emit("createRoom", roomName, MainApplication.userInfo.getUserId());
+                                  }
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).create();
+                dialog.show();
+        }
     }
 }

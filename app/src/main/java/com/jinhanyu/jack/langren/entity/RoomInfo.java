@@ -1,9 +1,11 @@
 package com.jinhanyu.jack.langren.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by anzhuo on 2016/9/10.
  */
-public class RoomInfo {
+public class RoomInfo implements Serializable{
     private  String roomId;
 
     public String getRoomId() {

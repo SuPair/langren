@@ -31,6 +31,7 @@ public class WaitRoomAdapter extends CommonAdapter<UserInfo> {
             viewHolder=new ViewHolderForUser();
             viewHolder.portrait= (RoundImageViewByXfermode) convertView.findViewById(R.id.iv_waitRoom_item_portrait);
             viewHolder.userName= (TextView) convertView.findViewById(R.id.tv_waitRoom_item_userId);
+            viewHolder.iv_overlay = (ImageView) convertView.findViewById(R.id.iv_overlay);
             convertView.setTag(viewHolder);
         }else {
             viewHolder= (ViewHolderForUser) convertView.getTag();
@@ -38,10 +39,16 @@ public class WaitRoomAdapter extends CommonAdapter<UserInfo> {
         userInfo=data.get(position);
         Picasso.with(context).load(userInfo.getHead()).into(viewHolder.portrait);
         viewHolder.userName.setText(userInfo.getName());
+        if(userInfo.isReady()){
+            viewHolder.iv_overlay.setVisibility(View.VISIBLE);
+        }else{
+            viewHolder.iv_overlay.setVisibility(View.INVISIBLE);
+        }
         return convertView;
     }
 }
 class ViewHolderForUser{
     RoundImageViewByXfermode portrait;
     TextView userName;
+    ImageView iv_overlay;
 }
