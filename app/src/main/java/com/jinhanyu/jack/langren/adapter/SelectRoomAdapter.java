@@ -17,7 +17,8 @@ import java.util.List;
  * Created by anzhuo on 2016/9/9.
  */
 public class SelectRoomAdapter extends CommonAdapter<RoomInfo> {
-    RoomInfo roomInfo;
+
+
     public SelectRoomAdapter(Context context, List<RoomInfo> data) {
         super(context, data);
     }
@@ -41,7 +42,7 @@ public class SelectRoomAdapter extends CommonAdapter<RoomInfo> {
                 context.startActivity(intent);
             }
         });
-        roomInfo = data.get(i);
+        RoomInfo roomInfo = data.get(i);
         viewHolder.peopleNum.setText(roomInfo.getPeopleNum()+"");
         viewHolder.roomName.setText(roomInfo.getRoomName());
         return view;

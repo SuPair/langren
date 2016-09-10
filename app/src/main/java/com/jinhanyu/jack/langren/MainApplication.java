@@ -1,14 +1,12 @@
 package com.jinhanyu.jack.langren;
 
 import android.app.Application;
-import android.content.Intent;
 import android.util.Log;
 
+import com.jinhanyu.jack.langren.entity.UserInfo;
 import com.parse.Parse;
 import com.parse.ParseACL;
 import com.parse.ParseUser;
-
-import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 
@@ -52,23 +50,24 @@ public class MainApplication extends Application {
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-
+                     Log.i("connected to socket io","nice");
                 }
 
             }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
 
                 @Override
                 public void call(Object... args) {
-
+                    Log.i("disconnected to socket", "sorry");
                 }
 
             });
+            socket.connect();
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
     }
 
-    public static User user;
+    public static UserInfo userInfo = new UserInfo();
     public static Socket socket;
 
     private static final String myServer = "http://172.168.0.10:3000/msg";
