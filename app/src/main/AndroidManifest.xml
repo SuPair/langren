@@ -43,7 +43,7 @@
         <activity android:name=".ui.GameDetailActivity" />
         <activity android:name=".ui.GameOverActivity" />
         <activity android:name=".ui.GameTopActivity" />
-        <activity android:name=".ui.Vote" />
+        <activity android:name=".ui.VoteActivity" />
         <activity android:name=".ui.GuardActivity" />
         <activity android:name=".ui.PredictorActivity" />
         <activity android:name=".ui.HunterActivity" />

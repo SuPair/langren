@@ -31,4 +31,5 @@ dependencies {
     compile 'com.parse:parse-android:1.13.1'
     compile 'com.parse.bolts:bolts-tasks:1.4.0'
     compile 'com.alibaba:fastjson:1.2.17'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }

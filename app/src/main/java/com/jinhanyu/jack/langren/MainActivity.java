@@ -28,7 +28,7 @@ import io.socket.emitter.Emitter;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final  String myserver = "http://172.168.0.10:3000/msg";
+    public static final String myServer = "http://172.168.0.10:3000/msg";
     String dirPath;
     Socket socket;
     TextView tv_content;
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initSocket(){
         try {
-            socket = IO.socket(myserver);
+            socket = IO.socket(myServer);
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
