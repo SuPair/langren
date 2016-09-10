@@ -2,20 +2,53 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jinhanyu.jack.langren">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.front"
+        android:required="false" />
+
     <application
+        android:name=".MainApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".other.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ParseActivity" />
+        <activity android:name=".TakePhotoActivity" />
+        <activity android:name=".RecordActivity" />
+        <activity android:name=".ui.LoginActivty" />
+        <activity android:name=".ui.SplashActivity" />
+        <activity android:name=".ui.UserNameActivity" />
+        <activity android:name=".ui.UserHeadActivity" />
+        <activity android:name=".ui.SelectRoomActivity" />
+        <activity android:name=".ui.RoomActivity" />
+        <activity android:name=".ui.GameMainActivity" />
+        <activity android:name=".ui.GameDetailActivity" />
+        <activity android:name=".ui.GameOverActivity" />
+        <activity android:name=".ui.GameTopActivity" />
+        <activity android:name=".ui.Vote" />
+        <activity android:name=".ui.GuardActivity" />
+        <activity android:name=".ui.PredictorActivity" />
+        <activity android:name=".ui.HunterActivity" />
+        <activity android:name=".ui.WizardActivity" />
+        <activity android:name=".ui.WolfActivity"></activity>
     </application>
 
 </manifest>

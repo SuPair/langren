@@ -10,6 +10,7 @@ android {
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
+
     }
     buildTypes {
         release {
@@ -23,8 +24,11 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.2.0'
-    compile ('io.socket:socket.io-client:0.7.0'){
+    compile('io.socket:socket.io-client:0.7.0') {
         // excluding org.json which is provided by Android
         exclude group: 'org.json', module: 'json'
     }
+    compile 'com.parse:parse-android:1.13.1'
+    compile 'com.parse.bolts:bolts-tasks:1.4.0'
+    compile 'com.alibaba:fastjson:1.2.17'
 }

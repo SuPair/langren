@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/tv_state"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_margin="5dp"
+        android:gravity="center"
+        android:text="您正在听其他玩家的发言"/>
+
+    <Button
+        android:onClick="finishSpeak"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:id="@+id/bt_finishSpeak"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="过麦"
+        android:textColor="#00008B"
+        android:textStyle="bold" />
+</LinearLayout>
