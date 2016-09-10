@@ -53,9 +53,11 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if(isChecked){
-            MainApplication.socket.emit("prepare",null);
+            MainApplication.socket.emit("prepared",null);
+            ready.setText("已准备");
         }else {
             MainApplication.socket.emit("unprepare",null);
+            ready.setText("准备");
         }
     }
 }
