@@ -1,6 +1,7 @@
 package com.jinhanyu.jack.langren;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.jinhanyu.jack.langren.entity.UserInfo;
 import com.parse.Parse;
@@ -49,17 +50,18 @@ public class MainApplication extends Application {
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-
+                     Log.i("connected to socket io","nice");
                 }
 
             }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
 
                 @Override
                 public void call(Object... args) {
-
+                    Log.i("disconnected to socket", "sorry");
                 }
 
             });
+            socket.connect();
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }

@@ -1,12 +1,12 @@
 package com.jinhanyu.jack.langren.ui;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.GridView;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ToggleButton;
 
 import com.jinhanyu.jack.langren.MainApplication;
@@ -17,13 +17,11 @@ import com.jinhanyu.jack.langren.entity.UserInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.jinhanyu.jack.langren.R.id.gv_waitingList;
-
 public class RoomActivity extends AppCompatActivity implements View.OnClickListener,CompoundButton.OnCheckedChangeListener{
     private List<UserInfo> list;
     private GridView waitList;
     private WaitRoomAdapter adapter;
-    private ImageButton cancel;
+    private ImageView cancel;
     private ToggleButton ready;
 
     @Override
@@ -32,8 +30,8 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.room);
         list=new ArrayList<>();
         waitList= (GridView) findViewById(R.id.gv_waitingList);
-        cancel= (ImageButton) findViewById(R.id.ib_waitRoom_cancel);
-        ready= (ToggleButton) findViewById(R.id.ib_waitRoom_ready);
+        cancel= (ImageView) findViewById(R.id.ib_waitRoom_cancel);
+        ready= (ToggleButton) findViewById(R.id.tb_waitRoom_ready);
         adapter=new WaitRoomAdapter(this,list);
         waitList.setAdapter(adapter);
         cancel.setOnClickListener(this);
@@ -53,11 +51,11 @@ public class RoomActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if(isChecked){
-            MainApplication.socket.emit("prepared",null);
-            ready.setText("已准备");
+            MainApplication.socket.emit("prepared",1);
+
         }else {
-            MainApplication.socket.emit("unprepare",null);
-            ready.setText("准备");
+            MainApplication.socket.emit("unprepare",1);
+
         }
     }
 }

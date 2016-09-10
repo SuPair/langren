@@ -16,13 +16,19 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/ib_waitRoom_cancel"
-            style="@style/ChooseButton" />
+            style="@style/ChooseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <ToggleButton
             android:id="@+id/tb_waitRoom_ready"
             style="@style/ChooseButton"
-            android:checked="false" />
+            android:checked="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOff="准备"
+            android:textOn="取消准备"/>
     </LinearLayout>
 </LinearLayout>

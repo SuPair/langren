@@ -4,13 +4,23 @@ package com.jinhanyu.jack.langren.entity;
  * Created by anzhuo on 2016/9/10.
  */
 public class RoomInfo {
+    private  String roomId;
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
+
     private String roomName;
 
-    public String getPeopleNum() {
+    public int getPeopleNum() {
         return peopleNum;
     }
 
-    public void setPeopleNum(String peopleNum) {
+    public void setPeopleNum(int peopleNum) {
         this.peopleNum = peopleNum;
     }
 
@@ -22,5 +32,5 @@ public class RoomInfo {
         this.roomName = roomName;
     }
 
-    private String peopleNum;
+    private int peopleNum;
 }

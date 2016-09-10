@@ -43,7 +43,7 @@ public class SelectRoomAdapter extends CommonAdapter<RoomInfo> {
             }
         });
         RoomInfo roomInfo = data.get(i);
-        viewHolder.peopleNum.setText(roomInfo.getPeopleNum());
+        viewHolder.peopleNum.setText(roomInfo.getPeopleNum()+"");
         viewHolder.roomName.setText(roomInfo.getRoomName());
         return view;
     }
