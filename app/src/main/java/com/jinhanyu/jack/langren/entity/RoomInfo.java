@@ -5,22 +5,22 @@ package com.jinhanyu.jack.langren.entity;
  */
 public class RoomInfo {
     private String roomName;
+    private int peopleNum;
 
-    public String getPeopleNum() {
+    public int getPeopleNum() {
         return peopleNum;
     }
 
-    public void setPeopleNum(String peopleNum) {
+    public void setPeopleNum(int peopleNum) {
         this.peopleNum = peopleNum;
     }
 
     public String getRoomName() {
         return roomName;
     }
-
     public void setRoomName(String roomName) {
         this.roomName = roomName;
     }
 
-    private String peopleNum;
+
 }

@@ -12,6 +12,10 @@
         android:text="@string/roomListName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    <ImageView
+        android:id="@+id/iv_createRoom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </RelativeLayout>
     <GridView
         android:id="@+id/gv_roomList"

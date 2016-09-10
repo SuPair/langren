@@ -12,14 +12,21 @@
      android:layout_weight="1"/>
     <LinearLayout
         android:orientation="horizontal"
+        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <ImageButton
+        <ImageView
             android:id="@+id/ib_waitRoom_cancel"
-            style="@style/ChooseButton" />
+            style="@style/ChooseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
         <ToggleButton
             android:id="@+id/tb_waitRoom_ready"
             android:checked="false"
-            style="@style/ChooseButton" />
+            android:textOff="准备"
+            android:textOn="已准备"
+            style="@style/ChooseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </LinearLayout>
