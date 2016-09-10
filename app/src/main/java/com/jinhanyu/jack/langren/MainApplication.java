@@ -1,15 +1,26 @@
 package com.jinhanyu.jack.langren;
 
 import android.app.Application;
+import android.content.Intent;
+import android.util.Log;
 
 import com.parse.Parse;
 import com.parse.ParseACL;
 import com.parse.ParseUser;
 
+import org.json.JSONObject;
+
+import java.net.URISyntaxException;
+
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
+
 /**
  * Created by anzhuo on 2016/9/7.
  */
 public class MainApplication extends Application {
+
 
     @Override
     public void onCreate() {
@@ -29,7 +40,36 @@ public class MainApplication extends Application {
         // Optionally enable public read access.
         // defaultACL.setPublicReadAccess(true);
         ParseACL.setDefaultACL(defaultACL, true);
+
+        initSocket();
+    }
+
+    private void initSocket(){
+        try {
+            if(socket==null) {
+                socket = IO.socket(myServer);
+            }
+            socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+
+                }
+
+            }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+
+                @Override
+                public void call(Object... args) {
+
+                }
+
+            });
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
     }
 
     public static User user;
+    public static Socket socket;
+
+    private static final String myServer = "http://172.168.0.10:3000/msg";
 }

@@ -8,12 +8,12 @@ import java.util.List;
 /**
  * Created by anzhuo on 2016/9/9.
  */
-public abstract class CommonAdapter extends BaseAdapter {
+public abstract class CommonAdapter<T> extends BaseAdapter {
 
-    private Context context;
-    private List<Object> data;
+    protected Context context;
+    protected List<T> data;
 
-    public CommonAdapter(Context context, List<Object> data) {
+    public CommonAdapter(Context context, List<T> data) {
         this.context = context;
         this.data = data;
     }
