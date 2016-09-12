@@ -10,16 +10,20 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
+        android:padding="10dp"
         android:numColumns="3" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="30dp"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/ib_waitRoom_cancel"
             style="@style/ChooseButton"
+            android:layout_marginRight="60dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/ic_launcher"/>
@@ -30,7 +34,8 @@
             android:checked="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textOff="准备"
+            android:textSize="22sp"
+            android:textOff="准 备"
             android:textOn="取消准备"/>
     </LinearLayout>
 </LinearLayout>

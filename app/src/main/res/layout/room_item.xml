@@ -9,35 +9,38 @@
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:foregroundGravity="center"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:foregroundGravity="center">
 
         <LinearLayout
-            android:gravity="center"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:orientation="vertical">
 
             <com.jinhanyu.jack.langren.RoundImageViewByXfermode
                 android:id="@+id/iv_waitRoom_item_portrait"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@mipmap/ic_launcher" />
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@mipmap/lang" />
 
             <TextView
                 android:id="@+id/tv_waitRoom_item_userId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="mingzi"
+                android:textColor="#000000"
+                android:layout_margin="10dp"
+                android:text="狼王_JY"
                 android:textSize="18dp" />
         </LinearLayout>
-        <ImageView
+
+        <com.jinhanyu.jack.langren.RoundImageViewByXfermode
             android:id="@+id/iv_overlay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_gravity="bottom|right"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/lang" />
     </FrameLayout>
 </LinearLayout>

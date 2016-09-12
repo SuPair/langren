@@ -1,5 +1,6 @@
 package com.jinhanyu.jack.langren.ui;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.Gallery;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.socket.emitter.Emitter;
+
 
 public class GameMainActivity extends CommonActivity implements View.OnClickListener {
     Gallery gallery;
@@ -78,10 +80,16 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                 });
     }
 
+
+
+
+
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
+        switch (v.getId()){
             case R.id.iv_gameStage_gameRule:
+                Intent intent = new Intent(GameMainActivity.this,GameRule.class);
+                startActivity(intent);
                 break;
             case R.id.tv_playStage_expand:
                 break;
@@ -90,3 +98,4 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
         }
     }
 }
+
