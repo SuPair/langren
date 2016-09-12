@@ -42,43 +42,43 @@ public class LoginActivty extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-          switch (v.getId()){
-              case R.id.forget_password:
+        switch (v.getId()) {
+            case R.id.forget_password:
 
-                  break;
-              case R.id.game_login:
+                break;
+            case R.id.game_login:
 
-                  final String username= game_number.getText().toString();
-                        String password = game_password.getText().toString();
-                  ParseUser.logInInBackground(username, password, new LogInCallback() {
-                      @Override
-                      public void done(ParseUser user, ParseException e) {
-                          if(e!=null){
-                              e.printStackTrace();
-                              Toast.makeText(LoginActivty.this, "登录失败", Toast.LENGTH_SHORT).show();
-                          }
-                          else {
-                              MainApplication.userInfo.setUserId(user.getObjectId());
-                              ParseFile file = (ParseFile) user.get("head");
-                              MainApplication.userInfo.setHead(file.getUrl());
-                              MainApplication.userInfo.setName(username);
-                              MainApplication.userInfo.setScore((Integer) user.get("score"));
+                final String username = game_number.getText().toString();
+                final String password = game_password.getText().toString();
+                ParseUser.logInInBackground(username, password, new LogInCallback() {
+                    @Override
+                    public void done(ParseUser user, ParseException e) {
+                        if (e != null) {
+                            e.printStackTrace();
+                            Toast.makeText(LoginActivty.this, "登录失败", Toast.LENGTH_SHORT).show();
+                        } else {
+                            MainApplication.userInfo.setUserId(user.getObjectId());
+                            ParseFile file = (ParseFile) user.get("head");
+                            MainApplication.userInfo.setHead(file.getUrl());
+                            MainApplication.userInfo.setName(username);
+                            MainApplication.userInfo.setScore((Integer) user.get("score"));
+
+                            //把登录信息保存到preferences里
+                            getSharedPreferences(MainApplication.login_preference_name, MODE_APPEND).edit().putString("username", username).putString("password", password).putBoolean("login",true).commit();
+
+                            Intent intent1 = new Intent(LoginActivty.this, SelectRoomActivity.class);
+                            startActivity(intent1);
+                            finish();
+                        }
+                    }
+                });
 
 
-                              Intent intent1 = new Intent(LoginActivty.this,SelectRoomActivity.class);
-                              startActivity(intent1);
-                              finish();
-                          }
-                      }
-                  });
-
-
-
-                  break;
-              case R.id.game_register:
-                  Intent intent = new Intent(this,UserNameActivity.class);
-                  startActivity(intent);
-                  break;
-          }
+                break;
+            case R.id.game_register:
+                Intent intent = new Intent(this, UserNameActivity.class);
+                startActivity(intent);
+                break;
+        }
     }
 }

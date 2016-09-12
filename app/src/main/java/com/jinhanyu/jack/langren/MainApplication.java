@@ -74,6 +74,7 @@ public class MainApplication extends Application {
     public static RoomInfo roomInfo;
     public static Socket socket;
     public static List<UserInfo> currentRoomUsers= new ArrayList<UserInfo>();
+    public static String login_preference_name = "login";
 
     private static final String myServer = "http://172.168.0.10:3000/msg";
 }

@@ -35,4 +35,8 @@ public class RoomInfo implements Serializable{
     }
 
     private int peopleNum;
+
+    public void changePeopleNum(int diff){
+        this.peopleNum+=diff;
+    }
 }

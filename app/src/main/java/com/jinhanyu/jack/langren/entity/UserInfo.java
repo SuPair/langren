@@ -9,6 +9,16 @@ private String head,name,userId;
     private int vote_kill;
     private int vote_wolf;
     private int score;
+    private Type type;
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = Type.values()[type];
+    }
+
     private int sign_type;
     private boolean isDead;
     private boolean isSpeaking;
@@ -101,4 +111,19 @@ private String head,name,userId;
     }
 
 
+    public enum Type{
+         Citizen("村民"),Wolf("狼人"),Predictor("预言家"),Wizard("女巫"),Guard("守卫"),Hunter("猎人");
+
+         Type(String name){
+             this.name = name;
+         }
+
+        private String name;
+
+        public String getName(){
+            return name;
+        }
+
+
+    }
 }

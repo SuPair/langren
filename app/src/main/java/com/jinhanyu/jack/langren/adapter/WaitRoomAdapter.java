@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.RoundImageViewByXfermode;
@@ -40,8 +41,10 @@ public class WaitRoomAdapter extends CommonAdapter<UserInfo> {
         Picasso.with(context).load(userInfo.getHead()).into(viewHolder.portrait);
         viewHolder.userName.setText(userInfo.getName());
         if(userInfo.isReady()){
+            //Toast.makeText(context, "prepare", Toast.LENGTH_SHORT).show();
             viewHolder.iv_overlay.setVisibility(View.VISIBLE);
         }else{
+            //Toast.makeText(context, "unprepare", Toast.LENGTH_SHORT).show();
             viewHolder.iv_overlay.setVisibility(View.INVISIBLE);
         }
         return convertView;
