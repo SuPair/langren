@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jinhanyu.jack.langren.MainApplication;
@@ -31,6 +32,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
     private SelectRoomAdapter adapter;
     private List<RoomInfo> list;
     private ImageView createRoom;
+    private TextView game_top;
 
     Handler handler = new Handler() {
         @Override
@@ -41,6 +43,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
     };
     private View view;
     private EditText et_room_name;
+    private AlertDialog dialog;
 
 
     @Override
@@ -48,12 +51,35 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
         setContentView(R.layout.select_room);
         list = new ArrayList<>();
         roomList = (GridView) findViewById(R.id.gv_roomList);
+        game_top = (TextView) findViewById(R.id.game_top);
+
         adapter = new SelectRoomAdapter(this, list);
         roomList.setAdapter(adapter);
         createRoom = (ImageView) findViewById(R.id.iv_createRoom);
         createRoom.setOnClickListener(this);
+        game_top.setOnClickListener(this);
+
         view = getLayoutInflater().inflate(R.layout.create_room, null);
         et_room_name = (EditText) view.findViewById(R.id.et_room_name);
+        dialog = new AlertDialog.Builder(this).setTitle("创建房间")
+                .setView(view)
+                .setPositiveButton("创建", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String roomName = et_room_name.getText().toString();
+                        if (TextUtils.isEmpty(roomName))
+                            Toast.makeText(SelectRoomActivity.this, "房间名称不能为空", Toast.LENGTH_SHORT).show();
+                        else {
+                            MainApplication.socket.emit("createRoom", roomName, MainApplication.userInfo.getUserId());
+                        }
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).create();
     }
 
     protected void prepareSocket() {
@@ -149,26 +175,12 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_createRoom:
-                AlertDialog dialog = new AlertDialog.Builder(this).setTitle("创建房间")
-                        .setView(view)
-                        .setPositiveButton("创建", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String roomName = et_room_name.getText().toString();
-                                if (TextUtils.isEmpty(roomName))
-                                    Toast.makeText(SelectRoomActivity.this, "房间名称不能为空", Toast.LENGTH_SHORT).show();
-                                else {
-                                    MainApplication.socket.emit("createRoom", roomName, MainApplication.userInfo.getUserId());
-                                }
-                            }
-                        })
-                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }).create();
                 dialog.show();
+                break;
+            case R.id.game_top:
+                Intent intent = new Intent(this, GameTopActivity.class);
+                startActivity(intent);
+                break;
         }
     }
 }

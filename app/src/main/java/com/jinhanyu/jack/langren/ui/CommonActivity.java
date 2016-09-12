@@ -1,5 +1,6 @@
 package com.jinhanyu.jack.langren.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -23,7 +24,7 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
 
         builder = ActionSheet.createBuilder(this, getSupportFragmentManager())
                 .setCancelButtonTitle("Cancel")
-                .setOtherButtonTitles("Item1", "Item2", "Item3", "Item4")
+                .setOtherButtonTitles("排行榜", "切换账号", "退出游戏")
                 .setCancelableOnTouchOutside(true)
                 .setListener(this);
 
@@ -44,7 +45,16 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
 
     @Override
     public void onOtherButtonClick(ActionSheet actionSheet, int index) {
-
+           switch (index){
+               case 0:
+                   startActivity(new Intent(this,GameTopActivity.class));
+                   break;
+               case 1:
+                   startActivity(new Intent(this,LoginActivty.class));
+                   break;
+               case 2:
+                   break;
+           }
     }
 
     @Override
@@ -56,6 +66,6 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
             }
             return true;
         }
-        return false;
+        return super.onKeyDown(keyCode,event);
     }
 }
