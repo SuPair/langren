@@ -70,6 +70,7 @@ public class SelectRoomActivity extends AppCompatActivity implements View.OnClic
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject obj = (JSONObject) array.get(i);
                         RoomInfo info = new RoomInfo();
+                        info.setRoomId(obj.getString("roomId"));
                         info.setRoomName(obj.getString("name"));
                         info.setPeopleNum(obj.getInt("currentCount"));
                         list.add(info);
@@ -92,6 +93,11 @@ public class SelectRoomActivity extends AppCompatActivity implements View.OnClic
                 list.add(info);
                 handler.sendEmptyMessage(0);
 
+                //进入房间
+                MainApplication.roomInfo = info;
+                startActivity(new Intent(SelectRoomActivity.this,RoomActivity.class));
+
+
 
             }
         }).on("destroyRoom", new Emitter.Listener() {
@@ -108,6 +114,17 @@ public class SelectRoomActivity extends AppCompatActivity implements View.OnClic
 
                   list.remove(i);
                   handler.sendEmptyMessage(0);
+            }
+        }).on("newRoom", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                RoomInfo info =new RoomInfo();
+                info.setRoomId((String) args[0]);
+                info.setRoomName((String)args[1]);
+                info.setPeopleNum((Integer) args[2]);
+
+                list.add(info);
+                handler.sendEmptyMessage(0);
             }
         });
 

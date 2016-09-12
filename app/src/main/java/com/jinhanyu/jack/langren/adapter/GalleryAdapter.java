@@ -59,8 +59,10 @@ public class GalleryAdapter extends BaseAdapter {
         viewHolder.userName.setText(info.getName());
         return convertView;
     }
-}
-class ViewHolderForGallery{
-    RoundImageViewByXfermode portrait;
-    TextView userName;
+
+
+    class ViewHolderForGallery{
+        RoundImageViewByXfermode portrait;
+        TextView userName;
+    }
 }

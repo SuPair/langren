@@ -84,11 +84,11 @@ public class RoundImageViewByXfermode extends ImageView {
         if (null == bitmap || bitmap.isRecycled())
         {
             Drawable drawable = getDrawable();
-            int dWidth = drawable.getIntrinsicWidth();
-            int dHeight = drawable.getIntrinsicHeight();
 
             if (drawable != null)
             {
+                int dWidth = drawable.getIntrinsicWidth();
+                int dHeight = drawable.getIntrinsicHeight();
                 //创建bitmap
                 bitmap = Bitmap.createBitmap(getWidth(), getHeight(),
                         Bitmap.Config.ARGB_8888);

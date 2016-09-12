@@ -3,6 +3,7 @@ package com.jinhanyu.jack.langren;
 import android.app.Application;
 import android.util.Log;
 
+import com.jinhanyu.jack.langren.entity.RoomInfo;
 import com.jinhanyu.jack.langren.entity.UserInfo;
 import com.parse.Parse;
 import com.parse.ParseACL;
@@ -70,6 +71,7 @@ public class MainApplication extends Application {
     }
 
     public static UserInfo userInfo = new UserInfo();
+    public static RoomInfo roomInfo;
     public static Socket socket;
     public static List<UserInfo> currentRoomUsers= new ArrayList<UserInfo>();
 

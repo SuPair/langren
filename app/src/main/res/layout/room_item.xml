@@ -1,32 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:gravity="center"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <com.jinhanyu.jack.langren.RoundImageViewByXfermode
-            android:id="@+id/iv_waitRoom_item_portrait"
-            android:layout_width="50dp"
-            android:layout_height="50dp" />
-        <TextView
-            android:id="@+id/tv_waitRoom_item_userId"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="mingzi"
-            android:textSize="18dp" />
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/iv_overlay"
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher"
-        android:layout_gravity="bottom|right"/>
-</FrameLayout>
+        android:foregroundGravity="center"
+        android:layout_gravity="center">
+
+        <LinearLayout
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.jinhanyu.jack.langren.RoundImageViewByXfermode
+                android:id="@+id/iv_waitRoom_item_portrait"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@mipmap/ic_launcher" />
+
+            <TextView
+                android:id="@+id/tv_waitRoom_item_userId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="mingzi"
+                android:textSize="18dp" />
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/iv_overlay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:src="@mipmap/ic_launcher" />
+    </FrameLayout>
+</LinearLayout>

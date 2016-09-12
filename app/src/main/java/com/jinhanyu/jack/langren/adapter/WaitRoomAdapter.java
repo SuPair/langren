@@ -46,9 +46,11 @@ public class WaitRoomAdapter extends CommonAdapter<UserInfo> {
         }
         return convertView;
     }
-}
-class ViewHolderForUser{
-    RoundImageViewByXfermode portrait;
-    TextView userName;
-    ImageView iv_overlay;
+
+
+    class ViewHolderForUser{
+        RoundImageViewByXfermode portrait;
+        TextView userName;
+        ImageView iv_overlay;
+    }
 }

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.entity.RoomInfo;
 import com.jinhanyu.jack.langren.ui.RoomActivity;
@@ -39,8 +40,8 @@ public class SelectRoomAdapter extends CommonAdapter<RoomInfo> {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(context, RoomActivity.class);
-                context.startActivity(intent.putExtra("roomInfo",roomInfo));
+                MainApplication.roomInfo = roomInfo;
+              context.startActivity(new Intent(context, RoomActivity.class));
             }
         });
 
@@ -48,9 +49,11 @@ public class SelectRoomAdapter extends CommonAdapter<RoomInfo> {
         viewHolder.roomName.setText(roomInfo.getRoomName());
         return view;
     }
-}
 
-class ViewHolder {
-    TextView roomName;
-    TextView peopleNum;
+
+
+    class ViewHolder {
+        TextView roomName;
+        TextView peopleNum;
+    }
 }
