@@ -35,14 +35,15 @@ public class SelectRoomAdapter extends CommonAdapter<RoomInfo> {
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
+        final RoomInfo roomInfo = data.get(i);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(context, RoomActivity.class);
-                context.startActivity(intent);
+                context.startActivity(intent.putExtra("roomInfo",roomInfo));
             }
         });
-        RoomInfo roomInfo = data.get(i);
+
         viewHolder.peopleNum.setText(roomInfo.getPeopleNum()+"");
         viewHolder.roomName.setText(roomInfo.getRoomName());
         return view;

@@ -9,6 +9,8 @@ import com.parse.ParseACL;
 import com.parse.ParseUser;
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -69,6 +71,7 @@ public class MainApplication extends Application {
 
     public static UserInfo userInfo = new UserInfo();
     public static Socket socket;
+    public static List<UserInfo> currentRoomUsers= new ArrayList<UserInfo>();
 
     private static final String myServer = "http://172.168.0.10:3000/msg";
 }
