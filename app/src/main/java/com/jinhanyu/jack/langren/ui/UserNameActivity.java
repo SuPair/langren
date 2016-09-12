@@ -38,6 +38,7 @@ public class UserNameActivity extends AppCompatActivity implements View.OnClickL
                 String password = game_password.getText().toString();
 
 
+
                 Intent intent = new Intent(UserNameActivity.this, UserHeadActivity.class);
                 startActivity(intent);
                 break;

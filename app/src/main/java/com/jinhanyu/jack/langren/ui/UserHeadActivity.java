@@ -37,6 +37,7 @@ public class UserHeadActivity extends AppCompatActivity implements View.OnClickL
             case R.id.camera://摄像头
 
 
+
                 break;
             case R.id.photo://相册
 
@@ -45,6 +46,7 @@ public class UserHeadActivity extends AppCompatActivity implements View.OnClickL
             case R.id.complete://完成 跳转到主页面(可以用线程做下计时)
                 Intent intent = new Intent(this, LoginActivty.class);
                 startActivity(intent);
+                finish();
                 break;
         }
 
