@@ -200,6 +200,7 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
     private void leaveRoom() {
         MainApplication.socket.emit("leaveRoom", MainApplication.roomInfo.getRoomId(), MainApplication.userInfo.getUserId());
         MainApplication.roomInfo = null;
+        MainApplication.currentRoomUsers.clear();
         finish();
     }
 }

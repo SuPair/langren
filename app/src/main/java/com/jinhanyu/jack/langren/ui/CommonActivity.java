@@ -56,6 +56,6 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
             }
             return true;
         }
-        return false;
+        return super.onKeyDown(keyCode,event);
     }
 }
