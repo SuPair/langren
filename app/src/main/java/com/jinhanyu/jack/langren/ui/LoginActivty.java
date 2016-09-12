@@ -49,7 +49,7 @@ public class LoginActivty extends AppCompatActivity implements View.OnClickListe
               case R.id.game_login:
 
                   final String username= game_number.getText().toString();
-                  String password = game_password.getText().toString();
+                        String password = game_password.getText().toString();
                   ParseUser.logInInBackground(username, password, new LogInCallback() {
                       @Override
                       public void done(ParseUser user, ParseException e) {
