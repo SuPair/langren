@@ -3,6 +3,7 @@ package com.jinhanyu.jack.langren.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,11 +42,17 @@ public class UserNameActivity extends AppCompatActivity implements View.OnClickL
                 String password = game_password.getText().toString();
 
 
-
                 Intent intent = new Intent(UserNameActivity.this, UserHeadActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.showPassword:
+            case R.id.showPassword://点击显示密码
+                if (click) {
+                    game_password.setTransformationMethod(null);//显示密码
+                    click = false;
+                } else {
+                    game_password.setTransformationMethod(PasswordTransformationMethod.getInstance());//隐藏密码
+                    click = true;
+                }
                 break;
         }
     }
