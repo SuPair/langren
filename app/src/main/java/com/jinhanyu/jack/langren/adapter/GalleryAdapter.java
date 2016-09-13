@@ -4,15 +4,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.langren.R;
-import com.jinhanyu.jack.langren.RoundImageViewByXfermode;
-import com.jinhanyu.jack.langren.User;
 import com.jinhanyu.jack.langren.entity.UserInfo;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -32,21 +28,21 @@ public class GalleryAdapter extends CommonAdapter<UserInfo> {
         if(convertView==null){
             convertView= LayoutInflater.from(context).inflate(R.layout.game_main_item,null);
             viewHolder=new ViewHolderForGallery();
-            viewHolder.portrait= (RoundImageViewByXfermode) convertView.findViewById(R.id.iv_waitRoom_item_portrait);
+            viewHolder.portrait= (SimpleDraweeView) convertView.findViewById(R.id.iv_waitRoom_item_portrait);
             viewHolder.userName= (TextView) convertView.findViewById(R.id.tv_waitRoom_item_userId);
             convertView.setTag(viewHolder);
         }else {
             viewHolder= (ViewHolderForGallery) convertView.getTag();
         }
         UserInfo info=data.get(position);
-        Picasso.with(context).load(info.getHead()).into(viewHolder.portrait);
+        viewHolder.portrait.setImageURI(info.getHead());
         viewHolder.userName.setText(info.getName());
         return convertView;
     }
 
 
     class ViewHolderForGallery{
-        RoundImageViewByXfermode portrait;
+        SimpleDraweeView portrait;
         TextView userName;
     }
 }

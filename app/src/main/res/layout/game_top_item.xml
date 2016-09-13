@@ -10,13 +10,15 @@
         android:orientation="horizontal"
         android:padding="5dp">
 
-        <com.jinhanyu.jack.langren.RoundImageViewByXfermode
+        <com.facebook.drawee.view.SimpleDraweeView
+            xmlns:fresco ="http://schemas.android.com/apk/res-auto"
             android:id="@+id/game_top_item_head"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="20dp"
-            android:src="@mipmap/lang" />
+            android:src="@mipmap/lang"
+            fresco:roundAsCircle="true"/>
 
         <TextView
             android:id="@+id/game_top_item_name"

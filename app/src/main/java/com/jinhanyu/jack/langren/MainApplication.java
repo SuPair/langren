@@ -3,6 +3,7 @@ package com.jinhanyu.jack.langren;
 import android.app.Application;
 import android.util.Log;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.jinhanyu.jack.langren.entity.RoomInfo;
 import com.jinhanyu.jack.langren.entity.UserInfo;
 import com.parse.Parse;
@@ -26,6 +27,8 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        Fresco.initialize(getApplicationContext());
 
 
         Parse.initialize(new Parse.Configuration.Builder(this)

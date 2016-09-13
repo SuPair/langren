@@ -6,10 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.langren.R;
-import com.jinhanyu.jack.langren.RoundImageViewByXfermode;
 import com.jinhanyu.jack.langren.entity.UserInfo;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class GameTopAdapter extends CommonAdapter {
         if(convertView==null){
             convertView= LayoutInflater.from(context).inflate(R.layout.game_top_item,null);
             viewHolder=new ViewHolder();
-            viewHolder.portrait= (RoundImageViewByXfermode) convertView.findViewById(R.id.game_top_item_head);
+            viewHolder.portrait= (SimpleDraweeView) convertView.findViewById(R.id.game_top_item_head);
             viewHolder.playerName= (TextView) convertView.findViewById(R.id.game_top_item_name);
             viewHolder.score= (TextView) convertView.findViewById(R.id.game_top_item_score);
             viewHolder.title= (TextView) convertView.findViewById(R.id.game_top_item_title);
@@ -37,7 +36,7 @@ public class GameTopAdapter extends CommonAdapter {
             viewHolder= (ViewHolder) convertView.getTag();
         }
        userInfo= (UserInfo) data.get(position);
-        Picasso.with(context).load(userInfo.getHead()).into(viewHolder.portrait);
+        viewHolder.portrait.setImageURI(userInfo.getHead());
         viewHolder.playerName.setText(userInfo.getName());
         viewHolder.score.setText(userInfo.getScore()+"");
         int score=userInfo.getScore();
@@ -67,7 +66,7 @@ public class GameTopAdapter extends CommonAdapter {
     }
 
     class ViewHolder{
-    RoundImageViewByXfermode portrait;
+    SimpleDraweeView portrait;
         TextView playerName,score,title;
     }
 }

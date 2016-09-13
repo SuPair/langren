@@ -20,6 +20,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,26 +57,30 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
 
                             ParseQuery<ParseUser> query = ParseUser.getQuery();
                             List<String> userIds = new ArrayList<String>();
+                            final List<Boolean> readys = new ArrayList<Boolean>();
 
                             JSONArray array = (JSONArray) args[0];
                             for (int i = 0; i < array.length(); i++) {
-                                String userId = (String) array.get(i);
+                                JSONObject user = array.getJSONObject(i);
+                                String userId = (String) user.get("userId");
                                 userIds.add(userId);
+                                readys.add(user.getBoolean("ready"));
+
                             }
 
                             query.whereContainedIn("objectId", userIds).findInBackground(new FindCallback<ParseUser>() {
                                 @Override
                                 public void done(List<ParseUser> objects, ParseException e) {
-                                    for (ParseUser parseUser : objects) {
+                                    for (int i =0;i<objects.size();i++) {
                                         UserInfo info = new UserInfo();
+                                        ParseUser parseUser   =objects.get(i);
                                         info.setUserId(parseUser.getObjectId());
                                         ParseFile head = (ParseFile) parseUser.get("head");
                                         info.setHead(head.getUrl());
                                         info.setName((String) parseUser.get("username"));
                                         info.setScore((Integer) parseUser.get("score"));
-
+                                        info.setReady(readys.get(i));
                                         MainApplication.currentRoomUsers.add(info);
-
                                     }
 
                                     refreshUI(adapter);

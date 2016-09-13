@@ -8,10 +8,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.RoundImageViewByXfermode;
 import com.jinhanyu.jack.langren.entity.UserInfo;
-import com.squareup.picasso.Picasso;
+
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class WaitRoomAdapter extends CommonAdapter<UserInfo> {
         if(convertView==null){
             convertView= LayoutInflater.from(context).inflate(R.layout.room_item,null);
             viewHolder=new ViewHolderForUser();
-            viewHolder.portrait= (RoundImageViewByXfermode) convertView.findViewById(R.id.iv_waitRoom_item_portrait);
+            viewHolder.portrait= (SimpleDraweeView) convertView.findViewById(R.id.iv_waitRoom_item_portrait);
             viewHolder.userName= (TextView) convertView.findViewById(R.id.tv_waitRoom_item_userId);
             viewHolder.iv_overlay = (ImageView) convertView.findViewById(R.id.iv_overlay);
             convertView.setTag(viewHolder);
@@ -38,7 +39,7 @@ public class WaitRoomAdapter extends CommonAdapter<UserInfo> {
             viewHolder= (ViewHolderForUser) convertView.getTag();
         }
         userInfo=data.get(position);
-        Picasso.with(context).load(userInfo.getHead()).into(viewHolder.portrait);
+        viewHolder.portrait.setImageURI(userInfo.getHead());
         viewHolder.userName.setText(userInfo.getName());
         if(userInfo.isReady()){
             //Toast.makeText(context, "prepare", Toast.LENGTH_SHORT).show();
@@ -52,7 +53,7 @@ public class WaitRoomAdapter extends CommonAdapter<UserInfo> {
 
 
     class ViewHolderForUser{
-        RoundImageViewByXfermode portrait;
+        SimpleDraweeView portrait;
         TextView userName;
         ImageView iv_overlay;
     }
