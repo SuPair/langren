@@ -35,6 +35,14 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
 
     protected abstract void prepareSocket();
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindSocket();
+    }
+
+    protected abstract void unbindSocket();
+
 
 
     private boolean isShowing = false;

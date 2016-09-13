@@ -85,6 +85,11 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
 
 
     @Override
+    protected void unbindSocket() {
+        MainApplication.socket.off("start").off("company");
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.iv_gameStage_gameRule:
