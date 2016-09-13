@@ -8,78 +8,118 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:layout_marginTop="-77dp"
-        android:src="@mipmap/user_head"/>
+        android:layout_weight="1"
+        android:src="@mipmap/user_head" />
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="15dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="20dp"
-            android:inputType="text"
-            android:text="游戏账号:"
-            android:textColor="#000000"
-            android:textSize="24sp" />
-
-        <EditText
-            android:id="@+id/game_number"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:hint="请输入账号..."
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="20dp"
-            android:background="#e1faf2"
-            android:maxLength="11"
-            android:maxLines="1"
-            android:padding="5dp" />
-    </LinearLayout>
+            android:orientation="horizontal"
+            android:padding="15dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        android:padding="15dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:inputType="text"
+                android:text="昵   称:"
+                android:textColor="#000000"
+                android:textSize="24sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="20dp"
-            android:text="游戏密码:"
-            android:textColor="#000000"
-            android:textSize="24sp" />
+            <EditText
+                android:id="@+id/game_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:background="#e1faf2"
+                android:hint="例如:灰太狼..."
+                android:maxLength="5"
+                android:maxLines="1"
+                android:padding="5dp" />
+        </LinearLayout>
 
-        <EditText
-            android:id="@+id/game_password"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:hint="请输入密码..."
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="20dp"
-            android:background="#e1faf2"
-            android:inputType="numberPassword"
-            android:maxLines="1"
-            android:padding="5dp" />
-    </LinearLayout>
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:padding="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:inputType="text"
+                android:text="游戏账号:"
+                android:textColor="#000000"
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/game_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:background="#e1faf2"
+                android:hint="请输入账号..."
+                android:maxLength="11"
+                android:maxLines="1"
+                android:padding="5dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:padding="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:text="游戏密码:"
+                android:textColor="#000000"
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/game_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:background="#e1faf2"
+                android:hint="请输入密码..."
+                android:inputType="numberPassword"
+                android:maxLength="16"
+                android:maxLines="1"
+                android:padding="5dp" />
+
+            <ImageView
+                android:id="@+id/showPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="-50dp"
+                android:layout_gravity="center"
+                android:src="@mipmap/show"/>
+
+        </LinearLayout>
     </LinearLayout>
 
     <Button
@@ -87,10 +127,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="下一步"
-        android:textSize="20sp"
-        android:background="#c6acac"
         android:layout_margin="10dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="10dp"
+        android:background="#c6acac"
+        android:text="下一步"
+        android:textSize="20sp" />
 
 </LinearLayout>

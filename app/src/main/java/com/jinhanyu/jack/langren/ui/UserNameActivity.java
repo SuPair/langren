@@ -3,9 +3,11 @@ package com.jinhanyu.jack.langren.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.jinhanyu.jack.langren.R;
 
@@ -13,7 +15,8 @@ public class UserNameActivity extends AppCompatActivity implements View.OnClickL
     private EditText game_number;
     private EditText game_password;
     private Button next;
-
+    private ImageView showPassword;
+    private boolean click;//判断是否显示密码
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +27,10 @@ public class UserNameActivity extends AppCompatActivity implements View.OnClickL
         game_number = (EditText) findViewById(R.id.game_number);
         game_password = (EditText) findViewById(R.id.game_password);
         next = (Button) findViewById(R.id.next);
+        showPassword = (ImageView) findViewById(R.id.showPassword);
 
         next.setOnClickListener(this);
-
+        showPassword.setOnClickListener(this);
 
     }
 
@@ -38,9 +42,17 @@ public class UserNameActivity extends AppCompatActivity implements View.OnClickL
                 String password = game_password.getText().toString();
 
 
-
                 Intent intent = new Intent(UserNameActivity.this, UserHeadActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.showPassword://点击显示密码
+                if (click) {
+                    game_password.setTransformationMethod(null);//显示密码
+                    click = false;
+                } else {
+                    game_password.setTransformationMethod(PasswordTransformationMethod.getInstance());//隐藏密码
+                    click = true;
+                }
                 break;
         }
     }

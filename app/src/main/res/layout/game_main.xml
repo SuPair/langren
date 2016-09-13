@@ -54,6 +54,14 @@
                 android:textColor="#000000"
                 android:textSize="21sp" />
 
+
+    <Gallery
+        android:id="@+id/gallery_players_head"
+        android:layout_width="match_parent"
+        android:spacing="25dp"
+        android:layout_height="wrap_content">
+    </Gallery>
+
             <ImageView
                 android:id="@+id/iv_playStage_voiceLevel"
                 android:layout_width="wrap_content"
@@ -64,10 +72,8 @@
                 android:src="@drawable/voice_anim" />
         </RelativeLayout>
 
-        <Gallery
-            android:id="@+id/gallery_players_head"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"></Gallery>
+
+
 
 
         <LinearLayout
