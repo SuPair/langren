@@ -65,6 +65,7 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                     @Override
                     public void call(Object... args) {
                         try {
+
                             ParseQuery<ParseUser> query = ParseUser.getQuery();
                             List<String> userIds = new ArrayList<String>();
 
@@ -73,7 +74,7 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                                 String userId = (String) array.get(i);
                                 userIds.add(userId);
                             }
-                            Log.i("array", userIds.toString());
+
                             query.whereContainedIn("objectId", userIds).findInBackground(new FindCallback<ParseUser>() {
                                 @Override
                                 public void done(List<ParseUser> objects, ParseException e) {
@@ -173,6 +174,18 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
     }
 
     @Override
+    protected void unbindSocket() {
+        MainApplication.socket
+                .off("enterRoom")
+                .off("joinRoom")
+                .off("leaveRoom")
+                .off("prepare")
+                .off("unprepare")
+                .off("willstart");
+
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ib_waitRoom_cancel:
@@ -196,6 +209,7 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
     public void onBackPressed() {
         leaveRoom();
     }
+
 
     private void leaveRoom() {
         MainApplication.socket.emit("leaveRoom", MainApplication.roomInfo.getRoomId(), MainApplication.userInfo.getUserId());
