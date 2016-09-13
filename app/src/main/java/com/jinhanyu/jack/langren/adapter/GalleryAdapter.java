@@ -27,7 +27,7 @@ public class GalleryAdapter extends CommonAdapter<UserInfo> {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolderForGallery viewHolder;
         if(convertView==null){
-            convertView= LayoutInflater.from(context).inflate(R.layout.room_item,null);
+            convertView= LayoutInflater.from(context).inflate(R.layout.game_main_item,null);
             viewHolder=new ViewHolderForGallery();
             viewHolder.portrait= (RoundImageViewByXfermode) convertView.findViewById(R.id.iv_waitRoom_item_portrait);
             viewHolder.userName= (TextView) convertView.findViewById(R.id.tv_waitRoom_item_userId);

@@ -1,8 +1,6 @@
 package com.jinhanyu.jack.langren.ui;
 
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -34,16 +32,6 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
     private WaitRoomAdapter adapter;
     private ImageView cancel;
     private ToggleButton ready;
-
-
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            adapter.notifyDataSetChanged();
-        }
-    };
-
 
     @Override
     protected void prepareViews() {
@@ -90,7 +78,7 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
 
                                     }
 
-                                    handler.sendEmptyMessage(0);
+                                    refreshUI(adapter);
                                 }
                             });
                         } catch (Exception e) {
@@ -115,7 +103,8 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                                 info.setName((String) parseUser.get("username"));
                                 info.setScore((Integer) parseUser.get("score"));
                                 MainApplication.currentRoomUsers.add(info);
-                                handler.sendEmptyMessage(0);
+
+                                refreshUI(adapter);
                             }
 
 
@@ -132,7 +121,8 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                                 break;
                         }
                         MainApplication.currentRoomUsers.remove(i);
-                        handler.sendEmptyMessage(0);
+
+                        refreshUI(adapter);
                     }
                 })
                 .on("prepare", new Emitter.Listener() {
@@ -146,7 +136,8 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                                 break;
                             }
                         }
-                        handler.sendEmptyMessage(0);
+
+                        refreshUI(adapter);
                     }
                 })
                 .on("unprepare", new Emitter.Listener() {
@@ -159,7 +150,8 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                                 break;
                             }
                         }
-                        handler.sendEmptyMessage(0);
+
+                        refreshUI(adapter);
                     }
                 })
                 .on("willstart", new Emitter.Listener() {

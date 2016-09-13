@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/game_rule_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/game_rule_bg"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:visibility="invisible">
 
-    <ImageView
-        android:id="@+id/back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="10dp"
-        android:src="@mipmap/back"/>
+
 
     <TextView
+        android:layout_marginBottom="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="【游 戏 规 则】"
@@ -29,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/game_rule"
-        android:textColor="#08cf0b"
+        android:textColor="@color/text_color"
         android:textSize="22sp" />
     </ScrollView>
 

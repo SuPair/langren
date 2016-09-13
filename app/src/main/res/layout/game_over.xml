@@ -36,7 +36,7 @@
             android:textSize="30sp" />
 
         <TextView
-            android:id="@+id/my_integral"
+            android:id="@+id/game_over_myScore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"

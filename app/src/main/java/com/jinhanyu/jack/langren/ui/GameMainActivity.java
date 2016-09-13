@@ -1,6 +1,6 @@
 package com.jinhanyu.jack.langren.ui;
 
-import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Gallery;
@@ -11,6 +11,7 @@ import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.adapter.GalleryAdapter;
 import com.jinhanyu.jack.langren.entity.UserInfo;
+import com.jinhanyu.jack.langren.util.RoundBitmap;
 
 import org.json.JSONArray;
 
@@ -24,9 +25,8 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
     Gallery gallery;
     private ImageView gameRule, voiceLevel;
     private TextView expand, identification;
-    private List<UserInfo> list;
     private GalleryAdapter adapter;
-
+    private View gameRuleBg;
 
     @Override
     protected void prepareViews() {
@@ -41,7 +41,9 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
         gameRule.setOnClickListener(this);
         expand.setOnClickListener(this);
         identification.setOnClickListener(this);
-
+        gameRuleBg = findViewById(R.id.game_rule_bg);
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) gameRuleBg.getBackground();
+        gameRuleBg.setBackground(new BitmapDrawable(RoundBitmap.getRoundedCornerBitmap(bitmapDrawable.getBitmap())));
     }
 
     protected void prepareSocket() {
@@ -92,14 +94,19 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.iv_gameStage_gameRule:
-                Intent intent = new Intent(GameMainActivity.this,GameRule.class);
-                startActivity(intent);
+                gameRuleBg.setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_playStage_expand:
                 break;
             case R.id.tv_playStage_identification:
                 break;
         }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        gameRuleBg.setVisibility(View.INVISIBLE);
     }
 }
 

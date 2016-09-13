@@ -8,6 +8,16 @@ import java.io.Serializable;
 public class RoomInfo implements Serializable{
     private  String roomId;
 
+    private int maxCount;
+
+    public int getMaxCount() {
+        return maxCount;
+    }
+
+    public void setMaxCount(int maxCount) {
+        this.maxCount = maxCount;
+    }
+
     public String getRoomId() {
         return roomId;
     }
