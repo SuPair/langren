@@ -62,6 +62,7 @@
     <Gallery
         android:id="@+id/gallery_players_head"
         android:layout_width="match_parent"
+        android:spacing="25dp"
         android:layout_height="wrap_content">
     </Gallery>
 

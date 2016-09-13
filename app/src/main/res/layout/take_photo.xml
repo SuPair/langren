@@ -15,7 +15,7 @@
     </SurfaceView>
 
     <LinearLayout
-        android:background="@color/bluegray"
+        android:background="@color/lightblue"
         android:padding="5dp"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"

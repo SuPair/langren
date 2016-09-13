@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.jinhanyu.jack.langren.R;
 
@@ -13,7 +14,8 @@ public class UserNameActivity extends AppCompatActivity implements View.OnClickL
     private EditText game_number;
     private EditText game_password;
     private Button next;
-
+    private ImageView showPassword;
+    private boolean click;//判断是否显示密码
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +26,10 @@ public class UserNameActivity extends AppCompatActivity implements View.OnClickL
         game_number = (EditText) findViewById(R.id.game_number);
         game_password = (EditText) findViewById(R.id.game_password);
         next = (Button) findViewById(R.id.next);
+        showPassword = (ImageView) findViewById(R.id.showPassword);
 
         next.setOnClickListener(this);
-
+        showPassword.setOnClickListener(this);
 
     }
 
@@ -41,6 +44,8 @@ public class UserNameActivity extends AppCompatActivity implements View.OnClickL
 
                 Intent intent = new Intent(UserNameActivity.this, UserHeadActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.showPassword:
                 break;
         }
     }

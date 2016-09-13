@@ -31,13 +31,12 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
     @Override
     protected void prepareViews() {
         setContentView(R.layout.game_main);
-        list = new ArrayList<>();
         gallery = (Gallery) findViewById(R.id.gallery_players_head);
         gameRule = (ImageView) findViewById(R.id.iv_gameStage_gameRule);
         voiceLevel = (ImageView) findViewById(R.id.iv_playStage_voiceLevel);
         expand = (TextView) findViewById(R.id.tv_playStage_expand);
         identification = (TextView) findViewById(R.id.tv_playStage_identification);
-        adapter = new GalleryAdapter(this, list);
+        adapter = new GalleryAdapter(this, MainApplication.currentRoomUsers);
         gallery.setAdapter(adapter);
         gameRule.setOnClickListener(this);
         expand.setOnClickListener(this);
