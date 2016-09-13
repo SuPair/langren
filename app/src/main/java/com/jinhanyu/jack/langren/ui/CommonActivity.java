@@ -2,8 +2,12 @@ package com.jinhanyu.jack.langren.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.widget.Adapter;
+import android.widget.BaseAdapter;
 
 import com.baoyz.actionsheet.ActionSheet;
 
@@ -28,6 +32,17 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
                 .setCancelableOnTouchOutside(true)
                 .setListener(this);
 
+    }
+
+    private Handler handler= new Handler();
+
+    protected void refreshUI(final BaseAdapter adapter){
+         handler.post(new Runnable() {
+             @Override
+             public void run() {
+                  adapter.notifyDataSetChanged();
+             }
+         });
     }
 
 

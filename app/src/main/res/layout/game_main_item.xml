@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <com.jinhanyu.jack.langren.RoundImageViewByXfermode
+        android:id="@+id/iv_waitRoom_item_portrait"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@mipmap/lang" />
+    <TextView
+        android:id="@+id/tv_waitRoom_item_userId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:text="狼王_JY"
+        android:textColor="#000000"
+        android:textSize="18dp" />
 
 </LinearLayout>

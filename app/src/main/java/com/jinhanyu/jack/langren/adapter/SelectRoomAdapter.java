@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
@@ -37,11 +38,17 @@ public class SelectRoomAdapter extends CommonAdapter<RoomInfo> {
             viewHolder = (ViewHolder) view.getTag();
         }
         final RoomInfo roomInfo = data.get(i);
+
+
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainApplication.roomInfo = roomInfo;
-              context.startActivity(new Intent(context, RoomActivity.class));
+                if(roomInfo.getPeopleNum()==roomInfo.getMaxCount())
+                    Toast.makeText(context, "房间已满", Toast.LENGTH_SHORT).show();
+                else {
+                    MainApplication.roomInfo = roomInfo;
+                    context.startActivity(new Intent(context, RoomActivity.class));
+                }
             }
         });
 

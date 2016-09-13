@@ -2,11 +2,8 @@ package com.jinhanyu.jack.langren.ui;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -34,13 +31,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
     private ImageView createRoom;
     private TextView game_top;
 
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            adapter.notifyDataSetChanged();
-        }
-    };
+
     private View view;
     private EditText et_room_name;
     private AlertDialog dialog;
@@ -87,7 +78,6 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                 .on("login", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
-                        Log.i("aaa", "aaa");
                         try {
                             JSONArray array = (JSONArray) args[0];
                             for (int i = 0; i < array.length(); i++) {
@@ -96,10 +86,10 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                                 info.setRoomId(obj.getString("roomId"));
                                 info.setRoomName(obj.getString("name"));
                                 info.setPeopleNum(obj.getInt("currentCount"));
+                                info.setMaxCount(obj.getInt("maxCount"));
                                 list.add(info);
                             }
-
-                            adapter.notifyDataSetChanged();
+                             refreshUI(adapter);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -114,8 +104,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                         info.setPeopleNum((Integer) args[2]);
 
                         list.add(info);
-                        handler.sendEmptyMessage(0);
-
+                        refreshUI(adapter);
                         //进入房间
                         MainApplication.roomInfo = info;
                         startActivity(new Intent(SelectRoomActivity.this, RoomActivity.class));
@@ -135,7 +124,8 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                         }
 
                         list.remove(i);
-                        handler.sendEmptyMessage(0);
+
+                        refreshUI(adapter);
                     }
                 })
                 .on("newRoom", new Emitter.Listener() {
@@ -147,7 +137,8 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                         info.setPeopleNum((Integer) args[2]);
 
                         list.add(info);
-                        handler.sendEmptyMessage(0);
+
+                        refreshUI(adapter);
                     }
                 })
                 .on("roomChange", new Emitter.Listener() {
@@ -162,7 +153,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                         }
                         list.get(i).changePeopleNum(diff);
 
-                        handler.sendEmptyMessage(0);
+                        refreshUI(adapter);
 
                     }
                 });

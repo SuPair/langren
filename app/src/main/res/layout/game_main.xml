@@ -1,84 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#ffffff"
-    android:orientation="vertical">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <ImageView
-            android:id="@+id/iv_gameStage_gameRule"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="15dp"
-            android:src="@mipmap/gamerule"/>
-
-        <com.jinhanyu.jack.langren.RoundImageViewByXfermode
-            android:id="@+id/iv_playStage_bigHead"
-            android:layout_width="400dp"
-            android:layout_height="400dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="10dp"
-            android:layout_centerInParent="true"
-            android:src="@mipmap/lang"/>
-
-        <TextView
-            android:id="@+id/tv_playStage_expand"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="10dp"
-            android:text="展开"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="#000000"/>
-
-        <TextView
-            android:id="@+id/tv_playStage_identification"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="60dp"
-            android:text="标记"
-            android:textSize="21sp"
-            android:textColor="#000000"/>
-
-        <ImageView
-            android:id="@+id/iv_playStage_voiceLevel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_toRightOf="@+id/iv_playStage_bigHead"
-            android:layout_below="@+id/tv_playStage_identification"
-            android:src="@drawable/voice_anim"/>
-    </RelativeLayout>
-
-    <Gallery
-        android:id="@+id/gallery_players_head"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </Gallery>
-
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center">
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:orientation="vertical">
 
-        <Button
-            style="@style/ChooseButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/endRecorder"
-            android:padding="15dp"
-            android:layout_gravity="bottom"
-            android:textSize="22dp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/iv_gameStage_gameRule"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:src="@mipmap/gamerule" />
+
+            <com.jinhanyu.jack.langren.RoundImageViewByXfermode
+                android:id="@+id/iv_playStage_bigHead"
+                android:layout_width="400dp"
+                android:layout_height="400dp"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="30dp"
+                android:src="@mipmap/lang" />
+
+            <TextView
+                android:id="@+id/tv_playStage_expand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="10dp"
+                android:text="展开"
+                android:textColor="#000000"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_playStage_identification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="60dp"
+                android:text="标记"
+                android:textColor="#000000"
+                android:textSize="21sp" />
+
+            <ImageView
+                android:id="@+id/iv_playStage_voiceLevel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_playStage_identification"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/iv_playStage_bigHead"
+                android:src="@drawable/voice_anim" />
+        </RelativeLayout>
+
+        <Gallery
+            android:id="@+id/gallery_players_head"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></Gallery>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <Button
+                style="@style/ChooseButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:padding="15dp"
+                android:text="@string/endRecorder"
+                android:textSize="22dp" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+
+    <include layout="@layout/game_rule"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="40dp"
+        />
+</FrameLayout>
