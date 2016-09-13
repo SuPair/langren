@@ -10,32 +10,32 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:padding="10dp"
-        android:numColumns="3" />
+        android:numColumns="3"
+        android:padding="10dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:padding="30dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="30dp">
 
         <ImageView
             android:id="@+id/ib_waitRoom_cancel"
             style="@style/ChooseButton"
-            android:layout_marginRight="60dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher"/>
+            android:layout_marginRight="60dp"
+            android:src="@mipmap/ic_launcher" />
 
         <ToggleButton
             android:id="@+id/tb_waitRoom_ready"
             style="@style/ChooseButton"
-            android:checked="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="22sp"
+            android:checked="false"
             android:textOff="准 备"
-            android:textOn="取消准备"/>
+            android:textOn="取消准备"
+            android:textSize="22sp" />
     </LinearLayout>
 </LinearLayout>

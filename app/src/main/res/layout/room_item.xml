@@ -40,7 +40,7 @@
             android:id="@+id/iv_overlay"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_gravity="bottom|right"
-            android:src="@mipmap/lang" />
+            android:background="@null"
+            android:src="@mipmap/prepare" />
     </FrameLayout>
 </LinearLayout>

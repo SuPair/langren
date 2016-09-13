@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -11,7 +12,7 @@
         android:padding="5dp">
 
         <com.jinhanyu.jack.langren.RoundImageViewByXfermode
-            android:id="@+id/game_top_item_head"
+            android:id="@+id/gameDetail_item_head"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginLeft="12dp"
@@ -19,7 +20,7 @@
             android:src="@mipmap/lang" />
 
         <TextView
-            android:id="@+id/game_top_item_name"
+            android:id="@+id/gameDetail_item_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -29,26 +30,27 @@
             android:textSize="19sp" />
 
         <TextView
-            android:id="@+id/game_top_item_score"
+            android:id="@+id/gameDetail_item_state"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="20dp"
             android:layout_weight="1"
-            android:text="56"
+            android:text="存活"
             android:textColor="#080808"
             android:textSize="25sp" />
 
         <TextView
-            android:id="@+id/game_top_item_title"
-            android:layout_width="0dp"
+            android:id="@+id/gameDetail_item_marker"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="15dp"
-            android:layout_weight="2"
-            android:text="令人敬仰的"
+            android:layout_weight="1"
+            android:text="预言家"
             android:textColor="#0b0b0b"
             android:textSize="20sp" />
     </LinearLayout>
+
 
 </LinearLayout>
