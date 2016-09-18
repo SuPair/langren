@@ -134,13 +134,7 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                     @Override
                     public void call(Object... args) {
                         String userId = (String) args[0];
-                        //Log.i("prepare", userId);
-                        for (UserInfo info : MainApplication.currentRoomUsers) {
-                            if (info.getUserId().equals(userId)) {
-                                info.setReady(true);
-                                break;
-                            }
-                        }
+                        MainApplication.findUserInRoom(userId).setReady(true);
 
                         refreshUI(adapter);
                     }
@@ -149,12 +143,7 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                     @Override
                     public void call(Object... args) {
                         String userId = (String) args[0];
-                        for (UserInfo info : MainApplication.currentRoomUsers) {
-                            if (info.getUserId().equals(userId)) {
-                                info.setReady(false);
-                                break;
-                            }
-                        }
+                        MainApplication.findUserInRoom(userId).setReady(false);
 
                         refreshUI(adapter);
                     }

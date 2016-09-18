@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.widget.Adapter;
 import android.widget.BaseAdapter;
+import android.widget.Toast;
 
 import com.baoyz.actionsheet.ActionSheet;
 
@@ -90,5 +91,10 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
             return true;
         }
         return super.onKeyDown(keyCode,event);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(CommonActivity.this, "请不要退出游戏", Toast.LENGTH_SHORT).show();
     }
 }

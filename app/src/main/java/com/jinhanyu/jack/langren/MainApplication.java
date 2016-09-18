@@ -2,10 +2,12 @@ package com.jinhanyu.jack.langren;
 
 import android.app.Application;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.jinhanyu.jack.langren.entity.RoomInfo;
 import com.jinhanyu.jack.langren.entity.UserInfo;
+import com.jinhanyu.jack.langren.entity.VoteResult;
 import com.parse.Parse;
 import com.parse.ParseACL;
 import com.parse.ParseUser;
@@ -66,6 +68,11 @@ public class MainApplication extends Application {
                     Log.i("disconnected to socket", "sorry");
                 }
 
+            }).on("serverError", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    Toast.makeText(MainApplication.this,"服务器错误："+ args[0], Toast.LENGTH_SHORT).show();
+                }
             });
             socket.connect();
         } catch (URISyntaxException e) {
@@ -77,7 +84,18 @@ public class MainApplication extends Application {
     public static RoomInfo roomInfo;
     public static Socket socket;
     public static List<UserInfo> currentRoomUsers= new ArrayList<UserInfo>();
+    public static List<VoteResult> voteResults = new ArrayList<>();
     public static String login_preference_name = "login";
+
+
+    public static UserInfo findUserInRoom(String userId){
+        for (UserInfo info : MainApplication.currentRoomUsers) {
+            if (info.getUserId().equals(userId)) {
+               return info;
+            }
+        }
+        throw new RuntimeException("客户端：  用户未找到");
+    }
 
     private static final String myServer = "http://172.168.0.10:3000/msg";
 }
