@@ -2,19 +2,25 @@
 <animation-list xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:drawable="@mipmap/card_icon_wifi_0"
+        android:drawable="@mipmap/v1"
         android:duration="100" />
     <item
-        android:drawable="@mipmap/card_icon_wifi_1"
+        android:drawable="@mipmap/v2"
         android:duration="100" />
     <item
-        android:drawable="@mipmap/card_icon_wifi_2"
+        android:drawable="@mipmap/v3"
         android:duration="100" />
     <item
-        android:drawable="@mipmap/card_icon_wifi_3"
+        android:drawable="@mipmap/v4"
         android:duration="100" />
     <item
-        android:drawable="@mipmap/card_icon_wifi_4"
+        android:drawable="@mipmap/v5"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/v6"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/v7"
         android:duration="100" />
 
 

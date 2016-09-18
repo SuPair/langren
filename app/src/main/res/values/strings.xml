@@ -18,4 +18,12 @@
         11.村民：无身份，帮助神民（有身份的玩家，除狼人）找出狼人。找出并投票投出所有狼人即游戏胜利！\n
         12.神民：女巫，预言家，猎人，守卫，属于好人阵营！
     </string>
+    <string name="isDead">死亡</string>
+    <string name="isLiving">存活</string>
+    <string name="guardSkill">守护</string>
+    <string name="hunterSkill">枪击</string>
+    <string name="predictorSkill">验</string>
+    <string name="wolfSkill">击杀</string>
+    <string name="wizardPoison">毒</string>
+    <string name="wizardCure">救</string>
 </resources>

@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+      <string-array name="sign">
+             <item>村民</item>
+            <item>狼人</item>
+          <item>女巫</item>
+      </string-array>
 </resources>

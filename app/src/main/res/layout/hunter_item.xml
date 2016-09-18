@@ -10,13 +10,14 @@
         android:orientation="horizontal"
         android:padding="5dp">
 
-        <com.jinhanyu.jack.langren.RoundImageViewByXfermode
+        <com.facebook.drawee.view.SimpleDraweeView
+            xmlns:fresco="http://schemas.android.com/apk/res-auto"
             android:id="@+id/gameHunter_item_head"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="20dp"
-            android:src="@mipmap/lang" />
+            fresco:roundAsCircle="true"/>
 
         <TextView
             android:id="@+id/gameHunter_item_name"
@@ -39,16 +40,13 @@
             android:textColor="#080808"
             android:textSize="18sp" />
 
-        <TextView
+        <Spinner
             android:id="@+id/gameHunter_item_marker"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="15dp"
-            android:layout_weight="1"
-            android:text="标记"
-            android:textColor="#0b0b0b"
-            android:textSize="20sp" />
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/gameHunter_item_shoot"
