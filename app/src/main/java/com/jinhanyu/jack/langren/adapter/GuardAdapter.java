@@ -4,14 +4,17 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.jinhanyu.jack.langren.entity.UserInfo;
+
 import java.util.List;
 
 /**
  * Created by anzhuo on 2016/9/9.
  */
-public class GuardAdapter extends CommonAdapter {
+public class GuardAdapter extends CommonAdapter<UserInfo> {
 
-    public GuardAdapter(Context context, List<Object> data) {
+
+    public GuardAdapter(Context context, List<UserInfo> data) {
         super(context, data);
     }
 

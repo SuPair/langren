@@ -112,24 +112,19 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         });
                     }
                 })
-        .on("wolf_in", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                Toast.makeText(GameMainActivity.this, "狼人开始活动，预言家、守卫开始行动。。。", Toast.LENGTH_SHORT).show();
-            }
-        })
-        .on("wizard_in", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                Toast.makeText(GameMainActivity.this, "女巫开始活动...", Toast.LENGTH_SHORT).show();
-            }
-        })
-        .on("select_police", new Emitter.Listener() {
+        .on("votePolice", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
                 //开始选警长。
                 Toast.makeText(GameMainActivity.this, "开始选警长。。。", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(GameMainActivity.this,VoteActivity.class).putExtra("type",0));
+            }
+        }).on("voteWolf", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                //开始票坏人。
+                Toast.makeText(GameMainActivity.this, "开始票坏人。。。", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(GameMainActivity.this,VoteActivity.class).putExtra("type",1));
             }
         })
         .on("action", new Emitter.Listener() {
@@ -166,6 +161,27 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
 
                     Toast.makeText(GameMainActivity.this, sb.toString(), Toast.LENGTH_SHORT).show();
                 }
+            }
+        }).on("startSpeak", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                Toast.makeText(GameMainActivity.this, "现在发言开始", Toast.LENGTH_SHORT).show();
+            }
+        }).on("speak", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                String userId = (String) args[0];
+                Toast.makeText(GameMainActivity.this, "现在"+MainApplication.findUserInRoom(userId).getName()+"开始发言", Toast.LENGTH_SHORT).show();
+            }
+        }).on("youSpeak", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                Toast.makeText(GameMainActivity.this, "现在轮到你发言", Toast.LENGTH_SHORT).show();
+            }
+        }).on("endSpeak", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                Toast.makeText(GameMainActivity.this, "发言结束", Toast.LENGTH_SHORT).show();
             }
         })
         ;

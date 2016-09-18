@@ -1,18 +1,25 @@
 package com.jinhanyu.jack.langren.ui;
 
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
+import com.jinhanyu.jack.langren.adapter.PredictorAdapter;
 
 import io.socket.emitter.Emitter;
 
 public class PredictorActivity extends CommonActivity {
 
-
+    private PredictorAdapter adapter;
+    private ListView listView;
     @Override
     protected void prepareViews() {
         setContentView(R.layout.predictor);
+        listView = (ListView) findViewById(R.id.predictor_listView);
+        adapter = new PredictorAdapter(this,MainApplication.currentRoomUsers);
+        listView.setAdapter(adapter);
+
     }
 
     @Override

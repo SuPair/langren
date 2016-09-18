@@ -179,7 +179,7 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ib_waitRoom_cancel:
-                leaveRoom();
+                finish();
                 break;
         }
     }
@@ -195,16 +195,16 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        leaveRoom();
-    }
 
+    @Override
+    protected void onDestroy() {
+        leaveRoom();
+        super.onDestroy();
+    }
 
     private void leaveRoom() {
         MainApplication.socket.emit("leaveRoom", MainApplication.roomInfo.getRoomId(), MainApplication.userInfo.getUserId());
         MainApplication.roomInfo = null;
         MainApplication.currentRoomUsers.clear();
-        finish();
     }
 }

@@ -15,11 +15,13 @@ import java.util.List;
 /**
  * Created by kinpowoo on 9/13/16.
  */
-public class GameTopAdapter extends CommonAdapter {
-    private UserInfo userInfo;
-    public GameTopAdapter(Context context, List data) {
+public class GameTopAdapter extends CommonAdapter<UserInfo> {
+
+
+    public GameTopAdapter(Context context, List<UserInfo> data) {
         super(context, data);
     }
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -35,7 +37,7 @@ public class GameTopAdapter extends CommonAdapter {
         }else {
             viewHolder= (ViewHolder) convertView.getTag();
         }
-       userInfo= (UserInfo) data.get(position);
+        UserInfo userInfo=data.get(position);
         viewHolder.portrait.setImageURI(userInfo.getHead());
         viewHolder.playerName.setText(userInfo.getName());
         viewHolder.score.setText(userInfo.getScore()+"");

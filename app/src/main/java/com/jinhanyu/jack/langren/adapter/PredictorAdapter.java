@@ -4,14 +4,18 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.jinhanyu.jack.langren.User;
+import com.jinhanyu.jack.langren.entity.UserInfo;
+
 import java.util.List;
 
 /**
  * Created by anzhuo on 2016/9/9.
  */
-public class PredictorAdapter extends CommonAdapter {
+public class PredictorAdapter extends CommonAdapter<UserInfo> {
 
-    public PredictorAdapter(Context context, List<Object> data) {
+
+    public PredictorAdapter(Context context, List<UserInfo> data) {
         super(context, data);
     }
 

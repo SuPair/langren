@@ -10,13 +10,13 @@
         android:orientation="horizontal"
         android:padding="5dp">
 
-        <com.jinhanyu.jack.langren.RoundImageViewByXfermode
+        <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/gameDetail_item_head"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="20dp"
-            android:src="@mipmap/lang" />
+            />
 
         <TextView
             android:id="@+id/gameDetail_item_name"
