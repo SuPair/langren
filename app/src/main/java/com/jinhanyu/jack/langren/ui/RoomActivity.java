@@ -76,7 +76,11 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                                         ParseUser parseUser   =objects.get(i);
                                         info.setUserId(parseUser.getObjectId());
                                         ParseFile head = (ParseFile) parseUser.get("head");
-                                        info.setHead(head.getUrl());
+                                        if(head!=null)
+                                            info.setHead(head.getUrl());
+                                        else{
+                                            info.setHead("res://com.jinhanyu.jack.langren/"+R.mipmap.ic_launcher);
+                                        }
                                         info.setName((String) parseUser.get("username"));
                                         info.setScore((Integer) parseUser.get("score"));
                                         info.setReady(readys.get(i));

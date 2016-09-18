@@ -57,9 +57,9 @@ public class GameTopAdapter extends CommonAdapter {
         }else if(score<100){
             viewHolder.title.setText("不可企及");
         }else if (score<150){
-            viewHolder.title.setText("传说");
+            viewHolder.title.setText("传说中的");
         }else{
-            viewHolder.title.setText("上帝的存在");
+            viewHolder.title.setText("上 帝");
         }
 
         return convertView;

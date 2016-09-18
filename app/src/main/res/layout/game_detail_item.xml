@@ -15,7 +15,7 @@
             android:id="@+id/gameDetail_item_head"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="12dp"
+            android:layout_marginLeft="5dp"
             android:layout_marginRight="20dp"
             android:src="@mipmap/lang" />
 
@@ -24,7 +24,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_weight="1.5"
             android:text="玩家1号"
             android:textColor="#080808"
             android:textSize="19sp" />
@@ -34,20 +35,22 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:text="存活"
             android:textColor="#080808"
-            android:textSize="25sp" />
+            android:textSize="23sp" />
 
         <TextView
             android:id="@+id/gameDetail_item_marker"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="15dp"
-            android:layout_weight="1"
-            android:text="预言家"
+            android:gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1.3"
+            android:maxLines="1"
+            android:text="标记身份"
             android:textColor="#0b0b0b"
             android:textSize="20sp" />
     </LinearLayout>

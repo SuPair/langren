@@ -6,13 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.langren.R;
-import com.jinhanyu.jack.langren.RoundImageViewByXfermode;
 import com.jinhanyu.jack.langren.entity.UserInfo;
-
 
 import java.util.List;
 

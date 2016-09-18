@@ -24,11 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.SplashActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".ParseActivity" />
         <activity android:name=".TakePhotoActivity" />
@@ -38,8 +34,13 @@
         <activity android:name=".ui.UserHeadActivity" />
         <activity android:name=".ui.SelectRoomActivity" />
         <activity android:name=".ui.RoomActivity" />
-        <activity android:name=".ui.GameMainActivity" />
-        <activity android:name=".ui.GameDetailActivity" />
+        <activity android:name=".ui.GameMainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.GameOverActivity" />
         <activity android:name=".ui.GameTopActivity" />
         <activity android:name=".ui.VoteActivity" />

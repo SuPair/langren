@@ -88,6 +88,7 @@ public class MainApplication extends Application {
     public static String login_preference_name = "login";
 
 
+
     public static UserInfo findUserInRoom(String userId){
         for (UserInfo info : MainApplication.currentRoomUsers) {
             if (info.getUserId().equals(userId)) {
@@ -96,6 +97,9 @@ public class MainApplication extends Application {
         }
         throw new RuntimeException("客户端：  用户未找到");
     }
+
+    public static ParseUser user;
+
 
     private static final String myServer = "http://172.168.0.10:3000/msg";
 }

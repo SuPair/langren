@@ -36,7 +36,11 @@ public class SplashActivity extends AppCompatActivity {
                             } else {
                                 MainApplication.userInfo.setUserId(user.getObjectId());
                                 ParseFile file = (ParseFile) user.get("head");
-                                MainApplication.userInfo.setHead(file.getUrl());
+                                if(file!=null)
+                                  MainApplication.userInfo.setHead(file.getUrl());
+                                else{
+                                    MainApplication.userInfo.setHead("res://com.jinhanyu.jack.langren/"+R.mipmap.ic_launcher);
+                                }
                                 MainApplication.userInfo.setName(user.getUsername());
                                 MainApplication.userInfo.setScore((Integer) user.get("score"));
                                 Intent intent1 = new Intent(SplashActivity.this, SelectRoomActivity.class);

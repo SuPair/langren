@@ -63,6 +63,8 @@ public class LoginActivty extends AppCompatActivity implements View.OnClickListe
                             MainApplication.userInfo.setName(username);
                             MainApplication.userInfo.setScore((Integer) user.get("score"));
 
+                            MainApplication.user = user;
+
                             //把登录信息保存到preferences里
                             getSharedPreferences(MainApplication.login_preference_name, MODE_APPEND).edit().putString("username", username).putString("password", password).putBoolean("login",true).commit();
 

@@ -13,8 +13,8 @@ import com.jinhanyu.jack.langren.entity.UserInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameTopActivity extends AppCompatActivity implements View.OnClickListener{
-   private Button back;
+public class GameTopActivity extends AppCompatActivity implements View.OnClickListener {
+    private Button back;
     private ListView listView;
     private List<UserInfo> list;
     private GameTopAdapter adapter;
@@ -23,17 +23,17 @@ public class GameTopActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_top);
-        list=new ArrayList<>();
+        list = new ArrayList<>();
         back = (Button) findViewById(R.id.back);
-        listView= (ListView) findViewById(R.id.top_listView);
-        adapter=new GameTopAdapter(this,list);
+        listView = (ListView) findViewById(R.id.top_listView);
+        adapter = new GameTopAdapter(this, list);
         listView.setAdapter(adapter);
         back.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.back:
                 finish();
                 break;
