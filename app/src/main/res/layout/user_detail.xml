@@ -1,18 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="15dp"
-        android:text="个人信息"
-        android:textColor="#000000"
-        android:textSize="40sp" />
+ <LinearLayout
+     android:padding="10dp"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content">
+     <com.facebook.drawee.view.SimpleDraweeView
+         android:id="@+id/sdv_userInfo_userHead"
+         xmlns:fresco="http://schemas.android.com/apk/res-auto"
+         fresco:roundAsCircle="true"
+         android:layout_centerVertical="true"
+         android:layout_alignParentLeft="true"
+         android:layout_marginLeft="10dp"
+         android:layout_width="80dp"
+         android:layout_height="80dp" />
+     <TextView
+         android:id="@+id/tv_userInfo_username"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_gravity="center_vertical"
+         android:text="黑鬼小王"
+         android:layout_marginLeft="10dp"
+         android:textColor="#000000"
+         android:textSize="25sp" />
+ </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,11 +39,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="游 戏 账 号："
+            android:text="游戏账号："
             android:textColor="#000000"
             android:textSize="25sp" />
 
         <TextView
+            android:id="@+id/tv_userInfo_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="547494937"
@@ -38,29 +53,6 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="15dp"
-        android:orientation="horizontal"
-        android:padding="15dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="游 戏 昵 称："
-            android:textColor="#000000"
-            android:textSize="25sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="黑鬼小王"
-            android:textColor="#000000"
-            android:textSize="25sp" />
-
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -73,11 +65,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="游 戏 积 分："
+            android:text="游戏积分："
             android:textColor="#000000"
             android:textSize="25sp" />
 
         <TextView
+            android:id="@+id/tv_userInfo_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="54"
@@ -97,17 +90,31 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="游 戏 称 号："
+            android:text="游戏称号："
             android:textColor="#000000"
             android:textSize="25sp" />
 
         <TextView
+            android:id="@+id/tv_userInfo_rank"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="初为人知"
             android:textStyle="italic"
             android:textColor="#000000"
             android:textSize="25sp" />
-
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <ImageView
+            android:id="@+id/iv_userInfo_settings"
+            android:src="@mipmap/ic_launcher"
+            android:layout_gravity="bottom|left"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </LinearLayout>

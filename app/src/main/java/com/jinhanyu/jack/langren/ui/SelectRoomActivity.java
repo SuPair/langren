@@ -2,15 +2,21 @@ package com.jinhanyu.jack.langren.ui;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.adapter.SelectRoomAdapter;
@@ -28,11 +34,11 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
     private GridView roomList;
     private SelectRoomAdapter adapter;
     private List<RoomInfo> list;
-    private ImageView createRoom;
+    private ImageView createRoom,settings;
     private TextView game_top;
-
-
-    private View view;
+    private SimpleDraweeView head,userHead;
+    private TextView username,account,scoreText,rank;
+    private View view,profile;
     private EditText et_room_name;
     private AlertDialog dialog;
 
@@ -43,14 +49,45 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
         list = new ArrayList<>();
         roomList = (GridView) findViewById(R.id.gv_roomList);
         game_top = (TextView) findViewById(R.id.game_top);
-
+        head= (SimpleDraweeView) findViewById(R.id.sdv_userHead);
         adapter = new SelectRoomAdapter(this, list);
         roomList.setAdapter(adapter);
         createRoom = (ImageView) findViewById(R.id.iv_createRoom);
         createRoom.setOnClickListener(this);
         game_top.setOnClickListener(this);
-
+        head.setOnClickListener(this);
         view = getLayoutInflater().inflate(R.layout.create_room, null);
+        profile=getLayoutInflater().inflate(R.layout.user_detail,null);
+        userHead= (SimpleDraweeView) profile.findViewById(R.id.sdv_userInfo_userHead);
+        username= (TextView) profile.findViewById(R.id.tv_userInfo_username);
+        account= (TextView) profile.findViewById(R.id.tv_userInfo_account);
+        scoreText= (TextView) profile.findViewById(R.id.tv_userInfo_score);
+        rank= (TextView) profile.findViewById(R.id.tv_userInfo_rank);
+        settings= (ImageView) profile.findViewById(R.id.iv_userInfo_settings);
+
+        settings.setOnClickListener(this);
+        int score=Integer.valueOf(scoreText.getText().toString());
+        if(score<10){
+            rank.setText("默默无名");
+        }else if (score < 20) {
+            rank.setText("初为人知");
+        }else if(score<30){
+            rank.setText("小有名气");
+        }else if(score<40){
+            rank.setText("受到尊敬");
+        }else if(score<50){
+            rank.setText("耳熟能详");
+        }else if(score<60){
+            rank.setText("广为人知");
+        }else if(score<80){
+            rank.setText("远近驰名");
+        }else if(score<100){
+            rank.setText("不可企及");
+        }else if (score<150){
+            rank.setText("传说中的");
+        }else{
+            rank.setText("上 帝");
+        }
         et_room_name = (EditText) view.findViewById(R.id.et_room_name);
         dialog = new AlertDialog.Builder(this).setTitle("创建房间")
                 .setView(view)
@@ -181,6 +218,17 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
             case R.id.game_top:
                 Intent intent = new Intent(this, GameTopActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.sdv_userHead:
+                PopupWindow popupWindow=new PopupWindow(profile, ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.MATCH_PARENT);
+                popupWindow.setFocusable(true);
+                popupWindow.setTouchable(true);
+                popupWindow.setOutsideTouchable(true);
+                popupWindow.setBackgroundDrawable(new BitmapDrawable());
+                popupWindow.showAtLocation(view, Gravity.LEFT,0,0);
+                break;
+            case R.id.iv_userInfo_settings:
+            //这里点击切换账号
                 break;
         }
     }
