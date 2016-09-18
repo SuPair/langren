@@ -11,16 +11,19 @@
         android:orientation="horizontal"
         android:padding="5dp">
 
-        <com.jinhanyu.jack.langren.RoundImageViewByXfermode
-            android:id="@+id/gameDetail_item_head"
+        <com.facebook.drawee.view.SimpleDraweeView
+            xmlns:fresco="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/gameGuard_item_head"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="20dp"
-            android:src="@mipmap/lang" />
+            android:src="@mipmap/lang"
+            fresco:roundAsCircle="true"
+            />
 
         <TextView
-            android:id="@+id/gameDetail_item_name"
+            android:id="@+id/gameGuard_item_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -30,7 +33,7 @@
             android:textSize="19sp" />
 
         <TextView
-            android:id="@+id/gameDetail_item_state"
+            android:id="@+id/gameGuard_item_state"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -41,16 +44,18 @@
             android:textSize="18sp" />
 
         <Spinner
-            android:id="@+id/gameDetail_item_marker"
+            android:id="@+id/gameGuard_item_marker"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="15dp"
             android:layout_weight="1"
-            android:entries="@array/sign"/>
+            android:textColor="#0b0b0b"
+            android:textSize="20sp" />
+
 
         <TextView
-            android:id="@+id/gameDetail_item_choose"
+            android:id="@+id/gameGuard_item_choose"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
