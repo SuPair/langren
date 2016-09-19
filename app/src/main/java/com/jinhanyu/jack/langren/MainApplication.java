@@ -1,6 +1,7 @@
 package com.jinhanyu.jack.langren;
 
 import android.app.Application;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -9,8 +10,6 @@ import com.jinhanyu.jack.langren.entity.RoomInfo;
 import com.jinhanyu.jack.langren.entity.UserInfo;
 import com.jinhanyu.jack.langren.entity.VoteResult;
 import com.parse.Parse;
-import com.parse.ParseACL;
-import com.parse.ParseUser;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -41,12 +40,6 @@ public class MainApplication extends Application {
                 .build()
         );
 
-        ParseUser.enableAutomaticUser();
-        ParseACL defaultACL = new ParseACL();
-        // Optionally enable public read access.
-        // defaultACL.setPublicReadAccess(true);
-        ParseACL.setDefaultACL(defaultACL, true);
-
         initSocket();
     }
 
@@ -71,10 +64,18 @@ public class MainApplication extends Application {
             }).on("serverError", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
+                    Looper.prepare();
                     Toast.makeText(MainApplication.this,"服务器错误："+ args[0], Toast.LENGTH_SHORT).show();
+                    Looper.loop();
+                }
+            }).on(Socket.EVENT_ERROR, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    Looper.prepare();
+                    Toast.makeText(MainApplication.this, "socket error", Toast.LENGTH_SHORT).show();
+                    Looper.loop();
                 }
             });
-            socket.connect();
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -85,8 +86,6 @@ public class MainApplication extends Application {
     public static Socket socket;
     public static List<UserInfo> currentRoomUsers= new ArrayList<UserInfo>();
     public static List<VoteResult> voteResults = new ArrayList<>();
-    public static String login_preference_name = "login";
-
 
 
     public static UserInfo findUserInRoom(String userId){
@@ -98,7 +97,7 @@ public class MainApplication extends Application {
         throw new RuntimeException("客户端：  用户未找到");
     }
 
-    public static ParseUser user;
+
 
 
     private static final String myServer = "http://172.168.0.10:3000/msg";

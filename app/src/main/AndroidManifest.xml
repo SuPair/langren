@@ -22,7 +22,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        >
         <activity android:name=".ui.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,7 +38,7 @@
         <activity android:name=".ui.UserNameActivity" />
         <activity android:name=".ui.UserHeadActivity" />
         <activity android:name=".ui.SelectRoomActivity" />
-        <activity android:name=".ui.RoomActivity" />
+        <activity android:name=".ui.RoomActivity"/>
         <activity android:name=".ui.GameMainActivity">
 
         </activity>
@@ -50,6 +51,12 @@
         <activity android:name=".ui.WizardActivity" />
         <activity android:name=".ui.WolfActivity" />
         <activity android:name=".ui.VoteResultActivity"></activity>
+        <receiver android:name=".NetWorkStateReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -17,6 +17,7 @@ import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
@@ -104,13 +105,12 @@ public class UserHeadActivity extends Activity implements View.OnClickListener {
                     e.printStackTrace();
                     Toast.makeText(UserHeadActivity.this, "上传头像失败", Toast.LENGTH_SHORT).show();
                 }else {
-                    MainApplication.user.put("head",file);
-                    MainApplication.user.saveInBackground(new SaveCallback() {
+                    ParseUser.getCurrentUser().put("head",file);
+                    ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
                             if(e==null) {
                                 Toast.makeText(UserHeadActivity.this, "上传头像成功！", Toast.LENGTH_SHORT).show();
-
                                 Intent intent = new Intent(UserHeadActivity.this, SelectRoomActivity.class);
                                 startActivity(intent);
                                 finish();

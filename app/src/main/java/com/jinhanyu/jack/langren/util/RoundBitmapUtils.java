@@ -11,7 +11,7 @@ import android.graphics.RectF;
 /**
  * Created by anzhuo on 2016/9/13.
  */
-public class RoundBitmap {
+public class RoundBitmapUtils {
 
     public static Bitmap getRoundedCornerBitmap(Bitmap bitmap) {
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),

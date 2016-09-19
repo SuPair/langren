@@ -21,6 +21,7 @@ import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.adapter.SelectRoomAdapter;
 import com.jinhanyu.jack.langren.entity.RoomInfo;
+import com.jinhanyu.jack.langren.util.ScreenUtils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -56,9 +57,11 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
         createRoom.setOnClickListener(this);
         game_top.setOnClickListener(this);
         head.setOnClickListener(this);
+        head.setImageURI(MainApplication.userInfo.getHead());
         view = getLayoutInflater().inflate(R.layout.create_room, null);
         profile=getLayoutInflater().inflate(R.layout.user_detail,null);
         userHead= (SimpleDraweeView) profile.findViewById(R.id.sdv_userInfo_userHead);
+        userHead.setImageURI(MainApplication.userInfo.getHead());
         username= (TextView) profile.findViewById(R.id.tv_userInfo_username);
         account= (TextView) profile.findViewById(R.id.tv_userInfo_account);
         scoreText= (TextView) profile.findViewById(R.id.tv_userInfo_score);
@@ -111,6 +114,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
     }
 
     protected void prepareSocket() {
+
         MainApplication.socket
                 .on("login", new Emitter.Listener() {
                     @Override
@@ -195,7 +199,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                     }
                 });
 
-
+        MainApplication.socket.connect();
         MainApplication.socket.emit("login", MainApplication.userInfo.getUserId());
     }
 
@@ -220,12 +224,12 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                 startActivity(intent);
                 break;
             case R.id.sdv_userHead:
-                PopupWindow popupWindow=new PopupWindow(profile, ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.MATCH_PARENT);
+                PopupWindow popupWindow=new PopupWindow(profile, ScreenUtils.getScreenWidth(this)*3/4,ScreenUtils.getScreenHeight(this)*2/3);
                 popupWindow.setFocusable(true);
                 popupWindow.setTouchable(true);
                 popupWindow.setOutsideTouchable(true);
-                popupWindow.setBackgroundDrawable(new BitmapDrawable());
-                popupWindow.showAtLocation(view, Gravity.LEFT,0,0);
+                popupWindow.setBackgroundDrawable(getResources().getDrawable(R.color.gray));
+                popupWindow.showAtLocation(view,Gravity.CENTER,0,0);
                 break;
             case R.id.iv_userInfo_settings:
             //这里点击切换账号

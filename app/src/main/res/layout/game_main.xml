@@ -22,6 +22,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1.6">
+                <TextView
+                    android:textColor="@color/colorPrimaryDark"
+                    android:id="@+id/identification_label"
+                    android:textSize="20sp"
+                    android:layout_margin="5dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="您的身份是：狼人"/>
 
                 <ImageView
                     android:id="@+id/iv_gameStage_gameRule"
@@ -33,6 +42,7 @@
 
                 <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/iv_playStage_bigHead"
+                    android:layout_below="@+id/identification_label"
                     android:layout_width="300dp"
                     android:layout_height="300dp"
                     android:layout_centerInParent="true"

@@ -52,7 +52,7 @@ public class UserNameActivity extends AppCompatActivity implements View.OnClickL
                 final ParseUser user = new ParseUser();
                 user.setUsername(username);
                 user.setPassword(password);
-                user.put("mickname",gamename);
+                user.put("nickname",gamename);
                 user.put("score",0);
                 user.signUpInBackground(new SignUpCallback() {
                     @Override
@@ -61,26 +61,12 @@ public class UserNameActivity extends AppCompatActivity implements View.OnClickL
                             e.printStackTrace();
                             Toast.makeText(UserNameActivity.this, "注册失败"+" code:"+e.getCode(), Toast.LENGTH_SHORT).show();
                         }else{
-                            user.logInInBackground(username, password, new LogInCallback() {
-                                @Override
-                                public void done(ParseUser user, ParseException e) {
-                                    if (e != null) {
-                                        e.printStackTrace();
-                                        Toast.makeText(UserNameActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        MainApplication.userInfo.setUserId(user.getObjectId());
-                                        MainApplication.userInfo.setName(username);
-                                        MainApplication.userInfo.setScore((Integer) user.get("score"));
-                                        MainApplication.user = user;
-                                        //把登录信息保存到preferences里
-                                        getSharedPreferences(MainApplication.login_preference_name, MODE_APPEND).edit().putString("username", username).putString("password", password).putBoolean("login",true).commit();
-                                        Intent intent = new Intent(UserNameActivity.this, UserHeadActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                }
-                            });
-
+                           MainApplication.userInfo.setUserId(user.getObjectId());
+                           MainApplication.userInfo.setName(user.getUsername());
+                           MainApplication.userInfo.setScore((Integer) user.get("score"));
+                           Intent intent = new Intent(UserNameActivity.this, UserHeadActivity.class);
+                           startActivity(intent);
+                           finish();
                         }
                     }
                 });

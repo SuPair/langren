@@ -18,7 +18,7 @@ import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.adapter.GalleryAdapter;
 import com.jinhanyu.jack.langren.entity.UserInfo;
-import com.jinhanyu.jack.langren.util.RoundBitmap;
+import com.jinhanyu.jack.langren.util.RoundBitmapUtils;
 
 import org.json.JSONArray;
 
@@ -36,6 +36,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
     private View gameRuleBg;
 
     private View game_bg;
+    private TextView identification_label;
 
     private boolean click = true;
 
@@ -47,6 +48,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
         gameRule = (ImageView) findViewById(R.id.iv_gameStage_gameRule);
         voiceLevel = (ImageView) findViewById(R.id.iv_playStage_voiceLevel);
         identification = (TextView) findViewById(R.id.tv_playStage_identification);
+        identification_label = (TextView) findViewById(R.id.identification_label);
         adapter = new GalleryAdapter(this, MainApplication.currentRoomUsers);
         gallery.setAdapter(adapter);
         gameRule.setOnClickListener(this);
@@ -54,7 +56,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
         gameRuleBg = findViewById(R.id.game_rule_bg);
         game_bg = findViewById(R.id.game_bg);
         BitmapDrawable bitmapDrawable = (BitmapDrawable) gameRuleBg.getBackground();
-        gameRuleBg.setBackground(new BitmapDrawable(RoundBitmap.getRoundedCornerBitmap(bitmapDrawable.getBitmap())));
+        gameRuleBg.setBackground(new BitmapDrawable(RoundBitmapUtils.getRoundedCornerBitmap(bitmapDrawable.getBitmap())));
     }
 
     protected void prepareSocket() {
@@ -65,6 +67,13 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         int type = (int) args[0];
                         MainApplication.userInfo.setType(type);
                         Log.i("你的身份是", MainApplication.userInfo.getType().getName());
+                        identification_label.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                identification_label.setText("您的身份是: "+MainApplication.userInfo.getType().getName());
+                            }
+                        });
+
                     }
                 })
                 .on("company", new Emitter.Listener() {
@@ -72,7 +81,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                     public void call(Object... args) {
                         try {
                             JSONArray array = (JSONArray) args[0];
-                            List<String> companyNames = new ArrayList<String>();
+                            final List<String> companyNames = new ArrayList<String>();
                             for (int i = 0; i < array.length(); i++) {
                                 String userId = (String) array.get(i);
                                 for (UserInfo info : MainApplication.currentRoomUsers) {
@@ -85,6 +94,13 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             }
 
                             Log.i("你的同伴是", companyNames.toString());
+                            identification_label.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(GameMainActivity.this, "你的同伴是"+companyNames.toString(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -116,14 +132,24 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
             @Override
             public void call(Object... args) {
                 //开始选警长。
-                Toast.makeText(GameMainActivity.this, "开始选警长。。。", Toast.LENGTH_SHORT).show();
+                identification_label.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(GameMainActivity.this, "开始选警长。。。", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 startActivity(new Intent(GameMainActivity.this,VoteActivity.class).putExtra("type",0));
             }
         }).on("voteWolf", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
                 //开始票坏人。
-                Toast.makeText(GameMainActivity.this, "开始票坏人。。。", Toast.LENGTH_SHORT).show();
+                identification_label.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(GameMainActivity.this, "开始票坏人。。。", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 startActivity(new Intent(GameMainActivity.this,VoteActivity.class).putExtra("type",1));
             }
         })
@@ -150,38 +176,71 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
             public void call(Object... args) {
                 String userId1 = (String) args[0];
                 String userId2 = (String) args[1];
-                StringBuilder sb = new StringBuilder();
-                if(userId1==null&&userId2==null)
-                    Toast.makeText(GameMainActivity.this, "今晚是平安夜", Toast.LENGTH_SHORT).show();
+                final StringBuilder sb = new StringBuilder();
+                if(userId1==null&&userId2==null){
+                    identification_label.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(GameMainActivity.this, "今晚是平安夜", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
                 else {
                     if(userId1!=null)
                         sb.append(MainApplication.findUserInRoom(userId1).getName()+"被杀  ");
                     if(userId2!=null)
                         sb.append(MainApplication.findUserInRoom(userId2).getName()+"被杀  ");
-
-                    Toast.makeText(GameMainActivity.this, sb.toString(), Toast.LENGTH_SHORT).show();
+                    identification_label.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(GameMainActivity.this, sb.toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
         }).on("startSpeak", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                Toast.makeText(GameMainActivity.this, "现在发言开始", Toast.LENGTH_SHORT).show();
+                identification_label.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(GameMainActivity.this, "现在发言开始", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
             }
         }).on("speak", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                String userId = (String) args[0];
-                Toast.makeText(GameMainActivity.this, "现在"+MainApplication.findUserInRoom(userId).getName()+"开始发言", Toast.LENGTH_SHORT).show();
+                final String userId = (String) args[0];
+                identification_label.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(GameMainActivity.this, "现在"+MainApplication.findUserInRoom(userId).getName()+"开始发言", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
             }
         }).on("youSpeak", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                Toast.makeText(GameMainActivity.this, "现在轮到你发言", Toast.LENGTH_SHORT).show();
+                identification_label.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(GameMainActivity.this, "现在轮到你发言", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
             }
         }).on("endSpeak", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                Toast.makeText(GameMainActivity.this, "发言结束", Toast.LENGTH_SHORT).show();
+                identification_label.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(GameMainActivity.this, "发言结束", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         })
         ;

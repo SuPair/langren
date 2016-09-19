@@ -60,14 +60,8 @@ public class LoginActivty extends AppCompatActivity implements View.OnClickListe
                             MainApplication.userInfo.setUserId(user.getObjectId());
                             ParseFile file = (ParseFile) user.get("head");
                             MainApplication.userInfo.setHead(file.getUrl());
-                            MainApplication.userInfo.setName(username);
+                            MainApplication.userInfo.setName(user.getUsername());
                             MainApplication.userInfo.setScore((Integer) user.get("score"));
-
-                            MainApplication.user = user;
-
-                            //把登录信息保存到preferences里
-                            getSharedPreferences(MainApplication.login_preference_name, MODE_APPEND).edit().putString("username", username).putString("password", password).putBoolean("login",true).commit();
-
                             Intent intent1 = new Intent(LoginActivty.this, SelectRoomActivity.class);
                             startActivity(intent1);
                             finish();
