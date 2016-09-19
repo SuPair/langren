@@ -66,7 +66,7 @@ public class UserHeadActivity extends Activity implements View.OnClickListener {
                 gotosystempic(v);
 
                 break;
-            case R.id.complete://完成 跳转到主页面(可以用线程做下计时)
+            case R.id.complete://完成 跳转到主页面
                 uploadHead(v);
         }
 
