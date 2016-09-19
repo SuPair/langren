@@ -11,7 +11,7 @@ import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.adapter.HunterAdapter;
 
 public class HunterActivity extends AppCompatActivity {
-  private ListView listView;
+    private ListView listView;
     private HunterAdapter adapter;
 
     @Override
@@ -19,8 +19,8 @@ public class HunterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hunter);
         listView = (ListView) findViewById(R.id.hunter_listView);
-        adapter = new HunterAdapter(this,MainApplication.currentRoomUsers);
-       listView.setAdapter(adapter);
+        adapter = new HunterAdapter(this, MainApplication.currentRoomUsers);
+        listView.setAdapter(adapter);
 
     }
 }

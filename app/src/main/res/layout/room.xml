@@ -23,9 +23,10 @@
         <ImageView
             android:id="@+id/ib_waitRoom_cancel"
             style="@style/ChooseButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
             android:layout_marginRight="60dp"
+            android:background="@drawable/shape"
             android:src="@mipmap/ic_launcher" />
 
         <ToggleButton
@@ -33,6 +34,8 @@
             style="@style/ChooseButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/shape"
+            android:textColor="#ffffff"
             android:checked="false"
             android:textOff="准 备"
             android:textOn="取消准备"

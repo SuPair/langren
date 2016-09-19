@@ -39,7 +39,7 @@ public class SplashActivity extends AppCompatActivity {
                                 if(file!=null)
                                   MainApplication.userInfo.setHead(file.getUrl());
                                 else{
-                                    MainApplication.userInfo.setHead("res://com.jinhanyu.jack.langren/"+R.mipmap.ic_launcher);
+                                    MainApplication.userInfo.setHead("res://com.jinhanyu.jack.langren/"+R.mipmap.d_doge);
                                 }
                                 MainApplication.userInfo.setName(user.getUsername());
                                 MainApplication.userInfo.setScore((Integer) user.get("score"));
