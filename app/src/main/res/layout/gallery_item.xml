@@ -3,14 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-    <com.jinhanyu.jack.langren.RoundImageViewByXfermode
+ 
+    <com.facebook.drawee.view.SimpleDraweeView
+        xmlns:fresco="http://schemas.android.com/apk/res-auto"
+        fresco:roundAsCircle="true"
         android:id="@+id/iv_playStage_smallHead"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"
         android:layout_margin="10dp"
-        android:layout_centerInParent="true"
         android:src="@mipmap/lang"/>
 
    <TextView

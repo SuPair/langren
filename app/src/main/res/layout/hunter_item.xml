@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:padding="5dp">
 
         <com.facebook.drawee.view.SimpleDraweeView
@@ -21,21 +22,22 @@
 
         <TextView
             android:id="@+id/gameHunter_item_name"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1.7"
+            android:ems="4"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:text="玩家1号"
             android:textColor="#080808"
             android:textSize="19sp" />
 
         <TextView
             android:id="@+id/gameHunter_item_state"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
-            android:layout_weight="1"
             android:text="状态"
             android:textColor="#080808"
             android:textSize="18sp" />
@@ -50,11 +52,11 @@
 
         <TextView
             android:id="@+id/gameHunter_item_shoot"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
             android:text="枪杀"
             android:textColor="@color/state"
             android:textSize="21sp" />
