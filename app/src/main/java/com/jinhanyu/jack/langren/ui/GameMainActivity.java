@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.DialogInterface;
 
 import android.graphics.drawable.BitmapDrawable;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -34,6 +35,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
     private TextView identification;
     private GalleryAdapter adapter;
     private View gameRuleBg;
+    private DrawerLayout drawerLayout;//侧滑（显示玩家详细信息）
 
     private View game_bg;
     private TextView identification_label;
@@ -55,6 +57,30 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
         identification.setOnClickListener(this);
         gameRuleBg = findViewById(R.id.game_rule_bg);
         game_bg = findViewById(R.id.game_bg);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+
+        drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                drawerView.setClickable(true);  //动态设置Clickbale可以解决穿透点击事件
+        }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
+
         BitmapDrawable bitmapDrawable = (BitmapDrawable) gameRuleBg.getBackground();
         gameRuleBg.setBackground(new BitmapDrawable(RoundBitmapUtils.getRoundedCornerBitmap(bitmapDrawable.getBitmap())));
     }

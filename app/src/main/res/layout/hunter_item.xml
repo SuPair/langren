@@ -14,8 +14,8 @@
         <com.facebook.drawee.view.SimpleDraweeView
             xmlns:fresco="http://schemas.android.com/apk/res-auto"
             android:id="@+id/gameHunter_item_head"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="20dp"
             fresco:roundAsCircle="true"/>
@@ -30,25 +30,26 @@
             android:singleLine="true"
             android:text="玩家1号"
             android:textColor="#080808"
-            android:textSize="19sp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/gameHunter_item_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="5dp"
             android:text="状态"
             android:textColor="#080808"
-            android:textSize="18sp" />
+            android:textSize="15sp" />
 
         <Spinner
             android:id="@+id/gameHunter_item_marker"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="15dp"
-            android:layout_weight="1" />
+            android:layout_marginLeft="5dp"
+             />
 
         <TextView
             android:id="@+id/gameHunter_item_shoot"
@@ -59,7 +60,7 @@
             android:layout_marginRight="10dp"
             android:text="枪杀"
             android:textColor="@color/state"
-            android:textSize="21sp" />
+            android:textSize="15sp" />
     </LinearLayout>
 
 

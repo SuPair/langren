@@ -15,8 +15,8 @@
             xmlns:fresco="http://schemas.android.com/apk/res-auto"
             fresco:roundAsCircle="true"
             android:id="@+id/gameWolf_item_head"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="10dp"
             />
@@ -31,38 +31,36 @@
             android:ellipsize="end"
             android:ems="4"
             android:textColor="#080808"
-            android:textSize="20sp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/gameWolf_item_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_weight="1"
             android:layout_marginLeft="5dp"
             android:text="状态"
             android:textColor="#080808"
-            android:textSize="20sp" />
+            android:textSize="15sp" />
 
         <Spinner
             android:id="@+id/gameWolf_item_marker"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="15dp"
-            android:layout_weight="1"
-            android:text="标记"
-            android:textColor="#0b0b0b"
-            android:textSize="20sp" />
+            android:layout_marginLeft="5dp"
+            />
 
         <CheckBox
             android:clickable="true"
             android:textColor="@color/red"
-            android:textSize="20sp"
+            android:textSize="15sp"
             android:id="@+id/gameWolf_item_choose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:text="@string/wolfSkill"
             android:background="@drawable/button"
