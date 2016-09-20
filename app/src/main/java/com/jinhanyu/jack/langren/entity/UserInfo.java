@@ -1,15 +1,57 @@
 package com.jinhanyu.jack.langren.entity;
 
+import com.jinhanyu.jack.langren.R;
+import com.parse.ParseFile;
+import com.parse.ParseUser;
+
 /**
  * Created by anzhuo on 2016/9/10.
  */
 public class UserInfo {
-private String head,name,userId;
+private String head ="res://com.jinhanyu.jack.langren/"+ R.mipmap.ic_launcher;
+    private String name;
+    private String userId;
+    private String nickname;
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    private String title;
     private int vote_police;
     private int vote_kill;
     private int vote_wolf;
     private int score;
     private Type type;
+
+
+
+    public void populateFromParseServer(ParseUser parseUser){
+        setUserId(parseUser.getObjectId());
+        ParseFile file = (ParseFile) parseUser.get("head");
+        if(file!=null)
+           setHead(file.getUrl());
+        setName(parseUser.getUsername());
+        setScore((Integer) parseUser.get("score"));
+        setTitle((String) parseUser.get("title"));
+        setNickname((String) parseUser.get("nickname"));
+    }
+
+    public static void reset(UserInfo userInfo){
+        userInfo = new UserInfo();
+    }
 
     public Type getType() {
         return type;

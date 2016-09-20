@@ -15,7 +15,6 @@ import com.jinhanyu.jack.langren.entity.UserInfo;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -23,7 +22,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.socket.emitter.Emitter;
 
@@ -33,6 +34,7 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
     private WaitRoomAdapter adapter;
     private ImageView cancel;
     private ToggleButton ready;
+    private boolean isForwarding;
 
     @Override
     protected void prepareViews() {
@@ -57,33 +59,24 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
 
                             ParseQuery<ParseUser> query = ParseUser.getQuery();
                             List<String> userIds = new ArrayList<String>();
-                            final List<Boolean> readys = new ArrayList<Boolean>();
+                            final Map<String,Boolean> readys = new HashMap<>();
 
                             JSONArray array = (JSONArray) args[0];
                             for (int i = 0; i < array.length(); i++) {
                                 JSONObject user = array.getJSONObject(i);
                                 String userId = (String) user.get("userId");
                                 userIds.add(userId);
-                                readys.add(user.getBoolean("ready"));
+                                readys.put(userId,user.getBoolean("ready"));
 
                             }
 
                             query.whereContainedIn("objectId", userIds).findInBackground(new FindCallback<ParseUser>() {
                                 @Override
                                 public void done(List<ParseUser> objects, ParseException e) {
-                                    for (int i =0;i<objects.size();i++) {
+                                    for (ParseUser parseUser : objects) {
                                         UserInfo info = new UserInfo();
-                                        ParseUser parseUser   =objects.get(i);
-                                        info.setUserId(parseUser.getObjectId());
-                                        ParseFile head = (ParseFile) parseUser.get("head");
-                                        if(head!=null)
-                                            info.setHead(head.getUrl());
-                                        else{
-                                            info.setHead("res://com.jinhanyu.jack.langren/"+R.mipmap.ic_launcher);
-                                        }
-                                        info.setName((String) parseUser.get("username"));
-                                        info.setScore((Integer) parseUser.get("score"));
-                                        info.setReady(readys.get(i));
+                                        info.populateFromParseServer(parseUser);
+                                        info.setReady(readys.get(parseUser.getObjectId()));
                                         MainApplication.currentRoomUsers.add(info);
                                     }
 
@@ -106,13 +99,8 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                             @Override
                             public void done(ParseUser parseUser, ParseException e) {
                                 UserInfo info = new UserInfo();
-                                info.setUserId(parseUser.getObjectId());
-                                ParseFile head = (ParseFile) parseUser.get("head");
-                                info.setHead(head.getUrl());
-                                info.setName((String) parseUser.get("username"));
-                                info.setScore((Integer) parseUser.get("score"));
+                                info.populateFromParseServer(parseUser);
                                 MainApplication.currentRoomUsers.add(info);
-
                                 refreshUI(adapter);
                             }
 
@@ -156,6 +144,7 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                     @Override
                     public void call(Object... args) {
                         startActivity(new Intent(RoomActivity.this, GameMainActivity.class));
+                        isForwarding =true;
                         finish();
                     }
                 });
@@ -200,7 +189,8 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        MainApplication.currentRoomUsers.clear();
+        if(!isForwarding)
+           MainApplication.currentRoomUsers.clear();
     }
 
     @Override

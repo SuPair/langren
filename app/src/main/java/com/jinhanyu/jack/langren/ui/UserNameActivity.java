@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
-import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -48,12 +47,11 @@ public class UserNameActivity extends AppCompatActivity implements View.OnClickL
             case R.id.next://注册页面的 账号及密码 保存到数据库
                 final String username = game_number.getText().toString();
                 final String password = game_password.getText().toString();
-                final String gamename = game_name.getText().toString();
+                final String nickname = game_name.getText().toString();
                 final ParseUser user = new ParseUser();
                 user.setUsername(username);
                 user.setPassword(password);
-                user.put("nickname",gamename);
-                user.put("score",0);
+                user.put("nickname",nickname);
                 user.signUpInBackground(new SignUpCallback() {
                     @Override
                     public void done(ParseException e) {
@@ -61,9 +59,7 @@ public class UserNameActivity extends AppCompatActivity implements View.OnClickL
                             e.printStackTrace();
                             Toast.makeText(UserNameActivity.this, "注册失败"+" code:"+e.getCode(), Toast.LENGTH_SHORT).show();
                         }else{
-                           MainApplication.userInfo.setUserId(user.getObjectId());
-                           MainApplication.userInfo.setName(user.getUsername());
-                           MainApplication.userInfo.setScore((Integer) user.get("score"));
+                           MainApplication.userInfo.populateFromParseServer(user);
                            Intent intent = new Intent(UserNameActivity.this, UserHeadActivity.class);
                            startActivity(intent);
                            finish();

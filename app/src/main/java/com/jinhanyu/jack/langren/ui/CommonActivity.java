@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.baoyz.actionsheet.ActionSheet;
 import com.jinhanyu.jack.langren.MainApplication;
+import com.jinhanyu.jack.langren.entity.UserInfo;
 import com.parse.ParseUser;
 
 /**
@@ -83,6 +84,7 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
             case 1:
                 ParseUser.getCurrentUser().logOut();
                 MainApplication.socket.disconnect();
+                UserInfo.reset(MainApplication.userInfo);
                 startActivity(new Intent(this, LoginActivty.class));
                 finish();
                 break;

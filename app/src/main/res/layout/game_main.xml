@@ -6,16 +6,14 @@
 
 
     <FrameLayout
-        android:id="@+id/game_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/light">
-
-
+        >
         <LinearLayout
+            android:id="@+id/game_bg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#ffffff"
+            android:background="@color/light"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -77,13 +75,13 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#bbf165"/>
+                android:background="#475876"/>
 
             <Gallery
                 android:id="@+id/gallery_players_head"
-                android:layout_weight="0.85"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:spacing="15dp"
                 android:unselectedAlpha="0.6">
             </Gallery>
 
@@ -91,7 +89,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#bbf165"/>
+                android:background="#475876"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

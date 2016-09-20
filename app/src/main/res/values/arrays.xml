@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-      <string-array name="sign">
-             <item>村民</item>
-            <item>狼人</item>
-          <item>女巫</item>
-      </string-array>
+    <string-array name="sign_type">
+        <item>村民</item>
+        <item>狼人</item>
+        <item>预言家</item>
+        <item>女巫</item>
+        <item>守卫</item>
+        <item>猎人</item>
+    </string-array>
 </resources>

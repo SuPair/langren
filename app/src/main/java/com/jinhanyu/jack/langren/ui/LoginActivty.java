@@ -13,7 +13,6 @@ import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 public class LoginActivty extends AppCompatActivity implements View.OnClickListener {
@@ -57,11 +56,7 @@ public class LoginActivty extends AppCompatActivity implements View.OnClickListe
                             e.printStackTrace();
                             Toast.makeText(LoginActivty.this, "登录失败", Toast.LENGTH_SHORT).show();
                         } else {
-                            MainApplication.userInfo.setUserId(user.getObjectId());
-                            ParseFile file = (ParseFile) user.get("head");
-                            MainApplication.userInfo.setHead(file.getUrl());
-                            MainApplication.userInfo.setName(user.getUsername());
-                            MainApplication.userInfo.setScore((Integer) user.get("score"));
+                            MainApplication.userInfo.populateFromParseServer(user);
                             Intent intent1 = new Intent(LoginActivty.this, SelectRoomActivity.class);
                             startActivity(intent1);
                             finish();

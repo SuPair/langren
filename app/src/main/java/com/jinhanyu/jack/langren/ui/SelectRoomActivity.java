@@ -38,10 +38,11 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
     private ImageView createRoom,settings;
     private TextView game_top;
     private SimpleDraweeView head,userHead;
-    private TextView username,account,scoreText,rank;
+    private TextView username,nickname,scoreText,title;
     private View view,profile;
     private EditText et_room_name;
     private AlertDialog dialog;
+    private PopupWindow popupWindow;
 
 
     @Override
@@ -58,39 +59,30 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
         game_top.setOnClickListener(this);
         head.setOnClickListener(this);
         head.setImageURI(MainApplication.userInfo.getHead());
-        view = getLayoutInflater().inflate(R.layout.create_room, null);
+
+        //个人信息popupWindow
         profile=getLayoutInflater().inflate(R.layout.user_detail,null);
         userHead= (SimpleDraweeView) profile.findViewById(R.id.sdv_userInfo_userHead);
         userHead.setImageURI(MainApplication.userInfo.getHead());
+        nickname= (TextView) profile.findViewById(R.id.tv_userInfo_nickname);
+        nickname.setText(MainApplication.userInfo.getNickname());
         username= (TextView) profile.findViewById(R.id.tv_userInfo_username);
-        account= (TextView) profile.findViewById(R.id.tv_userInfo_account);
+        username.setText(MainApplication.userInfo.getName());
         scoreText= (TextView) profile.findViewById(R.id.tv_userInfo_score);
-        rank= (TextView) profile.findViewById(R.id.tv_userInfo_rank);
+        scoreText.setText(MainApplication.userInfo.getScore()+"");
+        title= (TextView) profile.findViewById(R.id.tv_userInfo_title);
+        title.setText(MainApplication.userInfo.getTitle());
         settings= (ImageView) profile.findViewById(R.id.iv_userInfo_settings);
-
         settings.setOnClickListener(this);
-        int score=Integer.valueOf(scoreText.getText().toString());
-        if(score<10){
-            rank.setText("默默无名");
-        }else if (score < 20) {
-            rank.setText("初为人知");
-        }else if(score<30){
-            rank.setText("小有名气");
-        }else if(score<40){
-            rank.setText("受到尊敬");
-        }else if(score<50){
-            rank.setText("耳熟能详");
-        }else if(score<60){
-            rank.setText("广为人知");
-        }else if(score<80){
-            rank.setText("远近驰名");
-        }else if(score<100){
-            rank.setText("不可企及");
-        }else if (score<150){
-            rank.setText("传说中的");
-        }else{
-            rank.setText("上 帝");
-        }
+        popupWindow = new PopupWindow(profile, ScreenUtils.getScreenWidth(this)*3/4,ScreenUtils.getScreenHeight(this)*2/3);
+        popupWindow.setFocusable(true);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+
+
+        //创建房间对话框
+        view = getLayoutInflater().inflate(R.layout.create_room, null);
         et_room_name = (EditText) view.findViewById(R.id.et_room_name);
         dialog = new AlertDialog.Builder(this).setTitle("创建房间")
                 .setView(view)
@@ -224,11 +216,6 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                 startActivity(intent);
                 break;
             case R.id.sdv_userHead:
-                PopupWindow popupWindow=new PopupWindow(profile, ScreenUtils.getScreenWidth(this)*3/4,ScreenUtils.getScreenHeight(this)*2/3);
-                popupWindow.setFocusable(true);
-                popupWindow.setTouchable(true);
-                popupWindow.setOutsideTouchable(true);
-                popupWindow.setBackgroundDrawable(getResources().getDrawable(R.color.gray));
                 popupWindow.showAtLocation(view,Gravity.CENTER,0,0);
                 break;
             case R.id.iv_userInfo_settings:

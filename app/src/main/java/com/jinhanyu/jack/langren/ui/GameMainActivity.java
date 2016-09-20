@@ -112,6 +112,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                           game_bg.post(new Runnable() {
                               @Override
                               public void run() {
+                                  Toast.makeText(GameMainActivity.this, "天黑了,兄弟们搞事情吧", Toast.LENGTH_SHORT).show();
                                   game_bg.setBackgroundResource(R.color.dark);
                               }
                           });
@@ -123,6 +124,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         game_bg.post(new Runnable() {
                             @Override
                             public void run() {
+                                Toast.makeText(GameMainActivity.this, "天亮了,快别睡了", Toast.LENGTH_SHORT).show();
                                 game_bg.setBackgroundResource(R.color.light);
                             }
                         });

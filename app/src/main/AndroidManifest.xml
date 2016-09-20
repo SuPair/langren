@@ -34,7 +34,7 @@
         <activity android:name=".ParseActivity" />
         <activity android:name=".TakePhotoActivity" />
         <activity android:name=".RecordActivity" />
-        <activity android:name=".ui.LoginActivty" />
+        <activity android:name=".ui.LoginActivty" android:launchMode="singleTask"/>
         <activity android:name=".ui.UserNameActivity" />
         <activity android:name=".ui.UserHeadActivity" />
         <activity android:name=".ui.SelectRoomActivity" />
