@@ -10,8 +10,8 @@
     <color name="red">#ff1100</color>
 
     <color name="text_color">#08cf0b</color>
-    <color name="light">#fff</color>
-    <color name="dark">#555</color>
+    <color name="light">#ffffff</color>
+    <color name="dark">#3b3131</color>
     <color name="green">#0c0</color>
 
 </resources>

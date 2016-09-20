@@ -3,9 +3,9 @@ package com.jinhanyu.jack.langren.ui;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.ToggleButton;
 
 import com.jinhanyu.jack.langren.MainApplication;
@@ -32,7 +32,7 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
 
     private GridView waitList;
     private WaitRoomAdapter adapter;
-    private ImageView cancel;
+    private Button cancel;
     private ToggleButton ready;
     private boolean isForwarding;
 
@@ -41,7 +41,7 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
         setContentView(R.layout.room);
 
         waitList = (GridView) findViewById(R.id.gv_waitingList);
-        cancel = (ImageView) findViewById(R.id.ib_waitRoom_cancel);
+        cancel = (Button) findViewById(R.id.ib_waitRoom_cancel);
         ready = (ToggleButton) findViewById(R.id.tb_waitRoom_ready);
         adapter = new WaitRoomAdapter(this, MainApplication.currentRoomUsers);
         waitList.setAdapter(adapter);
