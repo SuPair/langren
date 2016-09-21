@@ -80,6 +80,9 @@
                 android:background="#e1faf2"
                 android:hint="必填..."
                 android:maxLength="11"
+                android:ems="4"
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:maxLines="1"
                 android:padding="5dp" />
         </LinearLayout>

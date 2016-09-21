@@ -1,10 +1,8 @@
 package com.jinhanyu.jack.langren.ui;
 
 
-import android.content.Intent;
-
 import android.content.DialogInterface;
-
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
@@ -18,7 +16,6 @@ import android.widget.Toast;
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.adapter.GalleryAdapter;
-import com.jinhanyu.jack.langren.entity.UserInfo;
 import com.jinhanyu.jack.langren.util.RoundBitmapUtils;
 
 import org.json.JSONArray;

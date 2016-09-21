@@ -7,12 +7,9 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
-import android.widget.Adapter;
 import android.widget.BaseAdapter;
-import android.widget.Toast;
 
 import com.baoyz.actionsheet.ActionSheet;
 import com.jinhanyu.jack.langren.MainApplication;
@@ -89,6 +86,7 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
                 finish();
                 break;
             case 2:
+
                 break;
         }
     }

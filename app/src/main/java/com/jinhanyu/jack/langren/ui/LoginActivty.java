@@ -43,7 +43,7 @@ public class LoginActivty extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.forget_password:
-
+                Toast.makeText(LoginActivty.this, "请联系管理员！", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.game_login:
 
