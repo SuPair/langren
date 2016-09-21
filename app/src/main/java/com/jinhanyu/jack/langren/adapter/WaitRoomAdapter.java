@@ -30,13 +30,14 @@ public class WaitRoomAdapter extends CommonAdapter<UserInfo> {
             viewHolder=new ViewHolderForUser();
             viewHolder.portrait= (SimpleDraweeView) convertView.findViewById(R.id.iv_waitRoom_item_portrait);
             viewHolder.userName= (TextView) convertView.findViewById(R.id.tv_waitRoom_item_userId);
-            viewHolder.iv_overlay = (ImageView) convertView.findViewById(R.id.iv_overlay);
+            viewHolder.iv_overlay = (SimpleDraweeView) convertView.findViewById(R.id.iv_overlay);
             convertView.setTag(viewHolder);
         }else {
             viewHolder= (ViewHolderForUser) convertView.getTag();
         }
         userInfo=data.get(position);
         viewHolder.portrait.setImageURI(userInfo.getHead());
+        viewHolder.iv_overlay.setImageURI("res://com.jinhanyu.jack.langren/"+ R.mipmap.prepare);
         viewHolder.userName.setText(userInfo.getUsername());
         if(userInfo.getGameRole().isReady()){
             //Toast.makeText(context, "prepare", Toast.LENGTH_SHORT).show();
@@ -52,6 +53,6 @@ public class WaitRoomAdapter extends CommonAdapter<UserInfo> {
     class ViewHolderForUser{
         SimpleDraweeView portrait;
         TextView userName;
-        ImageView iv_overlay;
+        SimpleDraweeView iv_overlay;
     }
 }

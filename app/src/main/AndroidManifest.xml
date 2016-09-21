@@ -31,9 +31,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ParseActivity" />
-        <activity android:name=".TakePhotoActivity" />
-        <activity android:name=".RecordActivity" />
         <activity android:name=".ui.LoginActivty" android:launchMode="singleTask"/>
         <activity android:name=".ui.UserNameActivity" />
         <activity android:name=".ui.UserHeadActivity" />

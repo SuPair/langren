@@ -22,7 +22,13 @@
             android:textColor="@color/red"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tom出局"/>
+            android:text="Tom"/>
+        <TextView
+            android:id="@+id/tv_vote_result_type"
+            android:textColor="@color/red"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="被淘汰"/>
     </LinearLayout>
 
     <View

@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape>
+            <corners android:radius="15dp"></corners>
+            <padding android:bottom="10dp" />
+            <padding android:left="10dp" />
+            <padding android:right="10dp" />
+            <padding android:top="10dp" />
+            <solid android:color="#d00b3479" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <corners android:radius="15dp"></corners>
+            <padding android:bottom="10dp" />
+            <padding android:left="10dp" />
+            <padding android:right="10dp" />
+            <padding android:top="10dp" />
+            <solid android:color="#d03e71a4" />
+        </shape>
 
-    <corners android:radius="15dp"></corners>
-    <padding android:bottom="10dp"/>
-    <padding android:left="10dp"/>
-    <padding android:right="10dp"/>
-    <padding android:top="10dp"/>
-    <solid  android:color="#d0bbf165"/>
-  
-</shape>
+    </item>
+</selector>

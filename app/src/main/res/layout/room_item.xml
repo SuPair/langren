@@ -24,7 +24,6 @@
                 android:id="@+id/iv_waitRoom_item_portrait"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@mipmap/lang"
                 fresco:roundAsCircle ="true"
                 fresco:placeholderImage="@mipmap/ic_launcher"/>
 
@@ -38,11 +37,12 @@
                 android:text="狼王_JY"
                 android:textSize="18dp" />
         </LinearLayout>
-
-        <com.jinhanyu.jack.langren.RoundImageViewByXfermode
+        <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/iv_overlay"
+            xmlns:fresco = "http://schemas.android.com/apk/res-auto"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@mipmap/prepare" />
+            fresco:roundAsCircle ="true"
+            />
     </FrameLayout>
 </LinearLayout>

@@ -1,5 +1,7 @@
 package com.jinhanyu.jack.langren.entity;
 
+import com.jinhanyu.jack.langren.MainApplication;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,24 @@ public class RoomInfo implements Serializable{
         for (UserInfo info : users) {
             if (info.getUserId().equals(userId)) {
                 return info;
+            }
+        }
+        throw new RuntimeException("客户端：  用户未找到");
+    }
+
+    public     int    findUserIndexInRoom(String userId){
+        for (int i=0;i<users.size();i++) {
+            if (users.get(i).getUserId().equals(userId)) {
+                return i;
+            }
+        }
+        throw new RuntimeException("客户端：  用户未找到");
+    }
+
+    public int    findMyIndexInRoom(){
+        for (int i=0;i<users.size();i++) {
+            if (users.get(i).getUserId().equals(MainApplication.userInfo.getUserId())) {
+                return i;
             }
         }
         throw new RuntimeException("客户端：  用户未找到");
@@ -59,13 +79,7 @@ public class RoomInfo implements Serializable{
     private List<VoteResult> voteResults = new ArrayList<>();
     private List<UserInfo> users= new ArrayList<UserInfo>();
 
-    public void resetUsers(){
-         users = new ArrayList<>();
-    }
 
-    public void resetVoteResults(){
-        voteResults = new ArrayList<>();
-    }
 
     public List<UserInfo> getUsers() {
         return users;
@@ -112,4 +126,9 @@ public class RoomInfo implements Serializable{
     public void changePeopleNum(int diff){
         this.currentCount +=diff;
     }
+
+
+    public static final int VOTE_POLICE = 0;
+    public static final int VOTE_WOLF = 1;
+    public static final int VOTE_KILL = 2;
 }

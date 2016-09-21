@@ -14,6 +14,7 @@ import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.TickTimer;
 import com.jinhanyu.jack.langren.adapter.WolfAdapter;
+import com.jinhanyu.jack.langren.entity.RoomInfo;
 import com.jinhanyu.jack.langren.entity.VoteResult;
 
 import org.json.JSONArray;
@@ -85,7 +86,7 @@ public class WolfActivity extends CommonActivity implements ActionPerformer{
                     }
                     Intent intent =new Intent(WolfActivity.this, VoteResultActivity.class);
                     if(finalUserId!=null)
-                        intent.putExtra("finalUserName",MainApplication.roomInfo.findUserInRoom(finalUserId).getUsername());
+                        intent.putExtra("finalUserName",MainApplication.roomInfo.findUserInRoom(finalUserId).getUsername()).putExtra("type", RoomInfo.VOTE_KILL);
                     startActivity(intent);
                     finish();
                 }catch (Exception e){

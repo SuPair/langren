@@ -96,9 +96,40 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1.2"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:visibility="invisible"
+                    android:id="@+id/speak_time_label"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:textSize="20sp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="剩余时间:" />
+                    <TextView
+                        android:id="@+id/time_label"
+                        android:textSize="20sp"
+                        android:textColor="@color/red"
+                        android:layout_marginLeft="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="15秒" />
+                    <TextView
+                        android:layout_marginLeft="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="抓紧时间发言"/>
+                </LinearLayout>
 
                 <Button
+                    android:enabled="false"
+                    android:id="@+id/bt_endSpeak"
                     style="@style/ChooseButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

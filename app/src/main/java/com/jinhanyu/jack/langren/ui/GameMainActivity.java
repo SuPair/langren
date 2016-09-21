@@ -1,24 +1,37 @@
 package com.jinhanyu.jack.langren.ui;
 
 
-import android.content.DialogInterface;
 import android.content.Intent;
+
+import android.content.DialogInterface;
+
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.jinhanyu.jack.langren.AudioCodec;
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
+import com.jinhanyu.jack.langren.TickTimer;
+import com.jinhanyu.jack.langren.VoiceManager;
 import com.jinhanyu.jack.langren.adapter.GalleryAdapter;
+import com.jinhanyu.jack.langren.entity.GameRole;
+import com.jinhanyu.jack.langren.entity.RoomInfo;
+import com.jinhanyu.jack.langren.entity.UserInfo;
 import com.jinhanyu.jack.langren.util.RoundBitmapUtils;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,23 +42,43 @@ import io.socket.emitter.Emitter;
 public class GameMainActivity extends CommonActivity implements View.OnClickListener {
     Gallery gallery;
     private ImageView gameRule, voiceLevel;
+    private AnimationDrawable speakAnim;
     private TextView identification;
     private GalleryAdapter adapter;
     private View gameRuleBg;
     private DrawerLayout drawerLayout;//侧滑（显示玩家详细信息）
 
+
+    private SimpleDraweeView bigHead;
+
     private View game_bg;
     private TextView identification_label;
+    private View bt_endSpeak;
+    private TextView time_label;
+    private TickTimer tickTimer;
+    private View speak_time_label;
 
     private boolean click = true;
 
+    private VoiceManager voiceManager = VoiceManager.getInstance(MainApplication.socket);
 
     @Override
     protected void prepareViews() {
         setContentView(R.layout.game_main);
+        time_label = (TextView) findViewById(R.id.time_label);
+        speak_time_label = findViewById(R.id.speak_time_label);
+        tickTimer =new TickTimer(time_label,40,null){
+            @Override
+            protected void onTimeEnd() {
+                super.onTimeEnd();
+                MainApplication.socket.emit("pass", MainApplication.roomInfo.getRoomId());
+            }
+        };
         gallery = (Gallery) findViewById(R.id.gallery_players_head);
+        bigHead = (SimpleDraweeView) findViewById(R.id.iv_playStage_bigHead);
         gameRule = (ImageView) findViewById(R.id.iv_gameStage_gameRule);
         voiceLevel = (ImageView) findViewById(R.id.iv_playStage_voiceLevel);
+        speakAnim = (AnimationDrawable) voiceLevel.getDrawable();
         identification = (TextView) findViewById(R.id.tv_playStage_identification);
         identification_label = (TextView) findViewById(R.id.identification_label);
         adapter = new GalleryAdapter(this, MainApplication.roomInfo.getUsers());
@@ -55,6 +88,32 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
         gameRuleBg = findViewById(R.id.game_rule_bg);
         game_bg = findViewById(R.id.game_bg);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+        bt_endSpeak = findViewById(R.id.bt_endSpeak);
+
+        bt_endSpeak.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bt_endSpeak.setEnabled(false);
+                voiceManager.stopRecord();
+                MainApplication.socket.emit("pass", MainApplication.roomInfo.getRoomId());
+                tickTimer.cancel();
+                speak_time_label.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        gallery.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        bigHead.setImageURI(MainApplication.roomInfo.getUsers().get(i).getHead());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        gallery.setSelection(MainApplication.roomInfo.findMyIndexInRoom());
 
         drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
@@ -65,7 +124,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
             @Override
             public void onDrawerOpened(View drawerView) {
                 drawerView.setClickable(true);  //动态设置Clickbale可以解决穿透点击事件
-        }
+            }
 
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -93,7 +152,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         identification_label.post(new Runnable() {
                             @Override
                             public void run() {
-                                identification_label.setText("您的身份是: "+MainApplication.userInfo.getGameRole().getType().getName());
+                                identification_label.setText("您的身份是: " + MainApplication.userInfo.getGameRole().getType().getName());
                             }
                         });
 
@@ -114,7 +173,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             identification_label.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(GameMainActivity.this, "你的同伴是"+companyNames.toString(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(GameMainActivity.this, "你的同伴是" + companyNames.toString(), Toast.LENGTH_SHORT).show();
                                 }
                             });
 
@@ -126,13 +185,13 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                 .on("dark", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
-                          game_bg.post(new Runnable() {
-                              @Override
-                              public void run() {
-                                  Toast.makeText(GameMainActivity.this, "天黑了,兄弟们搞事情吧", Toast.LENGTH_SHORT).show();
-                                  game_bg.setBackgroundResource(R.color.dark);
-                              }
-                          });
+                        game_bg.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(GameMainActivity.this, "天黑了,兄弟们搞事情吧", Toast.LENGTH_SHORT).show();
+                                game_bg.setBackgroundResource(R.color.dark);
+                            }
+                        });
                     }
                 })
                 .on("roomInfo", new Emitter.Listener() {
@@ -152,135 +211,194 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                startActivity(new Intent(GameMainActivity.this,GameMainActivity.class));
+                                startActivity(new Intent(GameMainActivity.this, GameMainActivity.class));
                                 Toast.makeText(GameMainActivity.this, "天亮了,快别睡了", Toast.LENGTH_SHORT).show();
                                 game_bg.setBackgroundResource(R.color.light);
                             }
                         });
                     }
                 })
-        .on("votePolice", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                //开始选警长。
-                identification_label.post(new Runnable() {
+                .on("votePolice", new Emitter.Listener() {
                     @Override
-                    public void run() {
-                        Toast.makeText(GameMainActivity.this, "开始选警长。。。", Toast.LENGTH_SHORT).show();
+                    public void call(Object... args) {
+                        //开始选警长。
+                        identification_label.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(GameMainActivity.this, "开始选警长。。。", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        startActivity(new Intent(GameMainActivity.this, VoteActivity.class).putExtra("type", RoomInfo.VOTE_POLICE));
                     }
-                });
-                startActivity(new Intent(GameMainActivity.this,VoteActivity.class).putExtra("type",0));
-            }
-        }).on("voteWolf", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                //开始票坏人。
-                identification_label.post(new Runnable() {
+                })
+                .on("voteWolf", new Emitter.Listener() {
                     @Override
-                    public void run() {
-                        Toast.makeText(GameMainActivity.this, "开始票坏人。。。", Toast.LENGTH_SHORT).show();
+                    public void call(Object... args) {
+                        //开始票坏人。
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(GameMainActivity.this, "开始票坏人。。。", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(GameMainActivity.this, VoteActivity.class).putExtra("type", RoomInfo.VOTE_WOLF));
+                            }
+                        });
                     }
-                });
-                startActivity(new Intent(GameMainActivity.this,VoteActivity.class).putExtra("type",1));
-            }
-        })
-        .on("action", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                switch (MainApplication.userInfo.getGameRole().getType()){
-                    case Wolf:
-                        startActivity(new Intent(getApplicationContext(),WolfActivity.class));
-                        break;
-                    case Guard:
-                        startActivity(new Intent(getApplicationContext(),GuardActivity.class));
-                        break;
-                    case Wizard:
-                        startActivity(new Intent(getApplicationContext(),WizardActivity.class));
-                        break;
-                    case Predictor:
-                        startActivity(new Intent(getApplicationContext(),PredictorActivity.class));
-                        break;
-                }
-            }
-        }).on("darkResult", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                String userId1 = (String) args[0];
-                String userId2 = (String) args[1];
-                final StringBuilder sb = new StringBuilder();
-                if(userId1==null&&userId2==null){
-                    identification_label.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(GameMainActivity.this, "今晚是平安夜", Toast.LENGTH_SHORT).show();
+                })
+                .on("action", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        switch (MainApplication.userInfo.getGameRole().getType()) {
+                            case Wolf:
+                                startActivity(new Intent(getApplicationContext(), WolfActivity.class));
+                                break;
+                            case Guard:
+                                startActivity(new Intent(getApplicationContext(), GuardActivity.class));
+                                break;
+                            case Wizard:
+                                startActivity(new Intent(getApplicationContext(), WizardActivity.class));
+                                break;
+                            case Predictor:
+                                startActivity(new Intent(getApplicationContext(), PredictorActivity.class));
+                                break;
                         }
-                    });
-                }
-                else {
-                    if(userId1!=null)
-                        sb.append(MainApplication.roomInfo.findUserInRoom(userId1).getUsername()+"被杀  ");
-                    if(userId2!=null)
-                        sb.append(MainApplication.roomInfo.findUserInRoom(userId2).getUsername()+"被杀  ");
-                    identification_label.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(GameMainActivity.this, sb.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .on("darkResult", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        String userId1 = (String) args[0];
+                        String userId2 = (String) args[1];
+                        final StringBuilder sb = new StringBuilder();
+                        if (userId1 == null && userId2 == null) {
+                            identification_label.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(GameMainActivity.this, "今晚是平安夜", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else {
+                            if (userId1 != null)
+                                sb.append(MainApplication.roomInfo.findUserInRoom(userId1).getUsername() + "被杀  ");
+                            if (userId2 != null)
+                                sb.append(MainApplication.roomInfo.findUserInRoom(userId2).getUsername() + "被杀  ");
+                            identification_label.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(GameMainActivity.this, sb.toString(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }
-                    });
-                }
-            }
-        }).on("startSpeak", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                identification_label.post(new Runnable() {
+                    }
+                })
+                .on("startSpeak", new Emitter.Listener() {
                     @Override
-                    public void run() {
-                        Toast.makeText(GameMainActivity.this, "现在发言开始", Toast.LENGTH_SHORT).show();
+                    public void call(Object... args) {
+                        identification_label.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(GameMainActivity.this, "现在发言开始", Toast.LENGTH_SHORT).show();
+                                speakAnim.start();
+                            }
+                        });
+
+                    }
+                })
+                .on("speak", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        final String userId = (String) args[0];
+                        identification_label.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                voiceManager.startPlay();
+                                gallery.setSelection(MainApplication.roomInfo.findUserIndexInRoom(userId));
+                                Toast.makeText(GameMainActivity.this, "现在" + MainApplication.roomInfo.findUserInRoom(userId).getUsername() + "开始发言", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                    }
+                })
+                .on("youSpeak", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        identification_label.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                voiceManager.startRecord();
+                                bt_endSpeak.setEnabled(true);
+                                gallery.setSelection(MainApplication.roomInfo.findMyIndexInRoom());
+                                speak_time_label.setVisibility(View.INVISIBLE);
+                                tickTimer.startTick();
+                                Toast.makeText(GameMainActivity.this, "现在轮到你发言", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                    }
+                })
+                .on("endSpeak", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        identification_label.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(GameMainActivity.this, "发言结束", Toast.LENGTH_SHORT).show();
+                                speakAnim.stop();
+                            }
+                        });
+                    }
+                })
+                .on("blob", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        byte[] buffer = (byte[]) args[0];
+                        voiceManager.speak(buffer);
+                    }
+                })
+                .on("gameOver", new Emitter.Listener() {
+                    @Override
+                    public void call(final Object... args) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    JSONObject gameResult = (JSONObject) args[0];
+                                    int victory = gameResult.getInt("victory");
+                                    if(victory==0){
+                                        Toast.makeText(GameMainActivity.this, "狼人胜利", Toast.LENGTH_SHORT).show();
+                                    }else if(victory==1){
+                                        Toast.makeText(GameMainActivity.this, "好人胜利", Toast.LENGTH_SHORT).show();
+                                    }
+                                    JSONArray array = gameResult.getJSONArray("returnResults");
+                                    for(int i=0;i<array.length();i++){
+                                        JSONObject obj = (JSONObject) array.get(i);
+                                        String userId = obj.getString("userId");
+                                        int type =obj.getInt("type");
+                                        int score = obj.getInt("score");
+                                        GameRole gameRole =MainApplication.roomInfo.findUserInRoom(userId).getGameRole();
+                                        gameRole.setType(type);
+                                        gameRole.setScore(score);
+
+                                    }
+                                    startActivity(new Intent(GameMainActivity.this,GameOverActivity.class));
+                                    finish();
+
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+
                     }
                 });
 
-            }
-        }).on("speak", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                final String userId = (String) args[0];
-                identification_label.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(GameMainActivity.this, "现在"+MainApplication.roomInfo.findUserInRoom(userId).getUsername()+"开始发言", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            }
-        }).on("youSpeak", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                identification_label.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(GameMainActivity.this, "现在轮到你发言", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            }
-        }).on("endSpeak", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                identification_label.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(GameMainActivity.this, "发言结束", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        })
-        ;
     }
 
 
     @Override
     protected void unbindSocket() {
-        MainApplication.socket.off("start").off("company");
+        voiceManager.stopPlay();
+        voiceManager.stopRecord();
+        MainApplication.socket.off("start").off("company").off("blob");
     }
 
     @Override

@@ -20,7 +20,8 @@ public class TickTimer extends Timer {
                 cancel();
                 timeLabel.setText("时间到");
                 onTimeEnd();
-                actionPerformer.doAction();
+                if(actionPerformer!=null)
+                   actionPerformer.doAction();
             }else{
                 timeLabel.setText(totalTime--+"秒");
             }
