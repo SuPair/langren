@@ -39,7 +39,7 @@ public class GameTopAdapter extends CommonAdapter<UserInfo> {
         }
         UserInfo userInfo=data.get(position);
         viewHolder.portrait.setImageURI(userInfo.getHead());
-        viewHolder.playerName.setText(userInfo.getName());
+        viewHolder.playerName.setText(userInfo.getUsername());
         viewHolder.score.setText(userInfo.getScore()+"");
         int score=userInfo.getScore();
         if(score<10){

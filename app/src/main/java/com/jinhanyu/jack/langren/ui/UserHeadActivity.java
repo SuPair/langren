@@ -111,6 +111,9 @@ public class UserHeadActivity extends Activity implements View.OnClickListener {
                         public void done(ParseException e) {
                             if(e==null) {
                                 Toast.makeText(UserHeadActivity.this, "上传头像成功！", Toast.LENGTH_SHORT).show();
+                                ParseFile parseFile = (ParseFile) ParseUser.getCurrentUser().get("head");
+                                if(parseFile!=null)
+                                    MainApplication.userInfo.setHead(parseFile.getUrl());
                                 Intent intent = new Intent(UserHeadActivity.this, SelectRoomActivity.class);
                                 startActivity(intent);
                                 finish();

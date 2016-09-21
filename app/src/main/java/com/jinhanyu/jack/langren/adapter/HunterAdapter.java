@@ -54,8 +54,8 @@ public class HunterAdapter extends CommonAdapter<UserInfo> {
         final UserInfo userInfo = data.get(i);
 
         viewHolder.head.setImageURI(userInfo.getHead());
-        viewHolder.name.setText(userInfo.getName());
-        if (userInfo.isDead()) {
+        viewHolder.name.setText(userInfo.getUsername());
+        if (userInfo.getGameRole().isDead()) {
             viewHolder.state.setText(R.string.isDead);
         } else {
             viewHolder.state.setText(R.string.isLiving);
@@ -64,7 +64,7 @@ public class HunterAdapter extends CommonAdapter<UserInfo> {
         viewHolder.type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                userInfo.setType(position);
+                userInfo.getGameRole().setType(position);
             }
 
             @Override

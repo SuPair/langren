@@ -36,7 +36,7 @@ public class GalleryAdapter extends CommonAdapter<UserInfo> {
         }
         UserInfo info=data.get(position);
         viewHolder.portrait.setImageURI(info.getHead());
-        viewHolder.userName.setText(info.getName());
+        viewHolder.userName.setText(info.getUsername());
         return convertView;
     }
 

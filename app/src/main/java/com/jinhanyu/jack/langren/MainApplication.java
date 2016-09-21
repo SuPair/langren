@@ -84,18 +84,7 @@ public class MainApplication extends Application {
     public static UserInfo userInfo = new UserInfo();
     public static RoomInfo roomInfo;
     public static Socket socket;
-    public static List<UserInfo> currentRoomUsers= new ArrayList<UserInfo>();
-    public static List<VoteResult> voteResults = new ArrayList<>();
 
-
-    public static UserInfo findUserInRoom(String userId){
-        for (UserInfo info : MainApplication.currentRoomUsers) {
-            if (info.getUserId().equals(userId)) {
-               return info;
-            }
-        }
-        throw new RuntimeException("客户端：  用户未找到");
-    }
 
 
 

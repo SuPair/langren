@@ -37,8 +37,8 @@ public class WaitRoomAdapter extends CommonAdapter<UserInfo> {
         }
         userInfo=data.get(position);
         viewHolder.portrait.setImageURI(userInfo.getHead());
-        viewHolder.userName.setText(userInfo.getName());
-        if(userInfo.isReady()){
+        viewHolder.userName.setText(userInfo.getUsername());
+        if(userInfo.getGameRole().isReady()){
             //Toast.makeText(context, "prepare", Toast.LENGTH_SHORT).show();
             viewHolder.iv_overlay.setVisibility(View.VISIBLE);
         }else{

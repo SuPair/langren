@@ -3,12 +3,10 @@ package com.jinhanyu.jack.langren.ui;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -67,7 +65,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
         nickname= (TextView) profile.findViewById(R.id.tv_userInfo_nickname);
         nickname.setText(MainApplication.userInfo.getNickname());
         username= (TextView) profile.findViewById(R.id.tv_userInfo_username);
-        username.setText(MainApplication.userInfo.getName());
+        username.setText(MainApplication.userInfo.getUsername());
         scoreText= (TextView) profile.findViewById(R.id.tv_userInfo_score);
         scoreText.setText(MainApplication.userInfo.getScore()+"");
         title= (TextView) profile.findViewById(R.id.tv_userInfo_title);
@@ -117,8 +115,8 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                                 JSONObject obj = (JSONObject) array.get(i);
                                 RoomInfo info = new RoomInfo();
                                 info.setRoomId(obj.getString("roomId"));
-                                info.setRoomName(obj.getString("name"));
-                                info.setPeopleNum(obj.getInt("currentCount"));
+                                info.setName(obj.getString("name"));
+                                info.setCurrentCount(obj.getInt("currentCount"));
                                 info.setMaxCount(obj.getInt("maxCount"));
                                 list.add(info);
                             }
@@ -133,8 +131,8 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                     public void call(Object... args) {
                         RoomInfo info = new RoomInfo();
                         info.setRoomId((String) args[0]);
-                        info.setRoomName((String) args[1]);
-                        info.setPeopleNum((Integer) args[2]);
+                        info.setName((String) args[1]);
+                        info.setCurrentCount((Integer) args[2]);
 
                         list.add(info);
                         refreshUI(adapter);
@@ -155,9 +153,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                             if (list.get(i).getRoomId().equals(roomId))
                                 break;
                         }
-
                         list.remove(i);
-
                         refreshUI(adapter);
                     }
                 })
@@ -166,8 +162,8 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                     public void call(Object... args) {
                         RoomInfo info = new RoomInfo();
                         info.setRoomId((String) args[0]);
-                        info.setRoomName((String) args[1]);
-                        info.setPeopleNum((Integer) args[2]);
+                        info.setName((String) args[1]);
+                        info.setCurrentCount((Integer) args[2]);
 
                         list.add(info);
 

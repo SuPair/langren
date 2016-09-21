@@ -1,14 +1,79 @@
 package com.jinhanyu.jack.langren.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by anzhuo on 2016/9/10.
  */
 public class RoomInfo implements Serializable{
-    private  String roomId;
 
+
+    //voteRecord:[{fromUserId,toUserId}], vote:{userId:voteCount}, voteCounter // 投票计数器，都投完票就计算投票结果
+    // users:[{userId, socket, dead, type}],   const hasSaved, const hasPoisoned, const lastGuardedUserId
+
+    private  String roomId;
     private int maxCount;
+    private int currentCount;
+    private String name;
+    private boolean hasSaved;
+    private boolean hasPoisoned;
+    private String  lastGuardedUserId;
+
+
+    public  UserInfo findUserInRoom(String userId){
+        for (UserInfo info : users) {
+            if (info.getUserId().equals(userId)) {
+                return info;
+            }
+        }
+        throw new RuntimeException("客户端：  用户未找到");
+    }
+
+
+    public boolean isHasPoisoned() {
+        return hasPoisoned;
+    }
+
+    public void setHasPoisoned(boolean hasPoisoned) {
+        this.hasPoisoned = hasPoisoned;
+    }
+
+    public String getLastGuardedUserId() {
+        return lastGuardedUserId;
+    }
+
+    public void setLastGuardedUserId(String lastGuardedUserId) {
+        this.lastGuardedUserId = lastGuardedUserId;
+    }
+
+    public boolean isHasSaved() {
+        return hasSaved;
+    }
+
+    public void setHasSaved(boolean hasSaved) {
+        this.hasSaved = hasSaved;
+    }
+
+    private List<VoteResult> voteResults = new ArrayList<>();
+    private List<UserInfo> users= new ArrayList<UserInfo>();
+
+    public void resetUsers(){
+         users = new ArrayList<>();
+    }
+
+    public void resetVoteResults(){
+        voteResults = new ArrayList<>();
+    }
+
+    public List<UserInfo> getUsers() {
+        return users;
+    }
+
+    public List<VoteResult> getVoteResults() {
+        return voteResults;
+    }
 
     public int getMaxCount() {
         return maxCount;
@@ -26,27 +91,25 @@ public class RoomInfo implements Serializable{
         this.roomId = roomId;
     }
 
-    private String roomName;
 
-    public int getPeopleNum() {
-        return peopleNum;
+
+    public int getCurrentCount() {
+        return currentCount;
     }
 
-    public void setPeopleNum(int peopleNum) {
-        this.peopleNum = peopleNum;
+    public void setCurrentCount(int currentCount) {
+        this.currentCount = currentCount;
     }
 
-    public String getRoomName() {
-        return roomName;
+    public String getName() {
+        return name;
     }
 
-    public void setRoomName(String roomName) {
-        this.roomName = roomName;
+    public void setName(String name) {
+        this.name = name;
     }
-
-    private int peopleNum;
 
     public void changePeopleNum(int diff){
-        this.peopleNum+=diff;
+        this.currentCount +=diff;
     }
 }

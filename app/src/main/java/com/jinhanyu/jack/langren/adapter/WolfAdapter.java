@@ -7,50 +7,36 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.jinhanyu.jack.langren.ActionPerformer;
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.entity.UserInfo;
 
 import java.util.List;
-import java.util.Timer;
 
 /**
  * Created by anzhuo on 2016/9/9.
  */
-public class WolfAdapter extends CommonAdapter<UserInfo> {
+public class WolfAdapter extends CommonAdapter<UserInfo> implements ActionPerformer {
 
 
-//    private String [] types={"村民","狼人","预言家","女巫","守卫","猎人"};  //0: 村民，1：狼人，2：预言家，3：女巫，4：守卫，5：猎人
-    private ArrayAdapter arrayAdapter;
-    private Timer timer;
+
     private boolean timerCanceled;
 
     private boolean hasVoted;
 
 
 
-    public void notifyTimerCancel(){
-         this.timerCanceled = true;
-    }
 
     public WolfAdapter(Context context, List<UserInfo> data) {
         super(context, data);
-        arrayAdapter=new ArrayAdapter(context,android.R.layout.simple_list_item_1,context.getResources().getStringArray(R.array.sign_type));
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     }
 
-    public WolfAdapter(Context context, List<UserInfo> data, Timer timer){
-        this(context,data);
-        this.timer = timer;
-
-
-    }
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
@@ -69,18 +55,18 @@ public class WolfAdapter extends CommonAdapter<UserInfo> {
         }
         final UserInfo info=data.get(i);
         viewHolder.head.setImageURI(info.getHead());
-        viewHolder.username.setText(info.getName());
-        if(info.isDead()){
+        viewHolder.username.setText(info.getUsername());
+        if(info.getGameRole().isDead()){
             viewHolder.state.setText(R.string.isDead);
         }else{
             viewHolder.state.setText(R.string.isLiving);
         }
-        viewHolder.type.setAdapter(arrayAdapter);
-        viewHolder.type.setSelection(info.getSign_type());
+
+        viewHolder.type.setSelection(info.getGameRole().getSign_type());
         viewHolder.type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                info.setSign_type(position);
+                info.getGameRole().setSign_type(position);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -101,10 +87,9 @@ public class WolfAdapter extends CommonAdapter<UserInfo> {
                     dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            WolfAdapter.this.timer.cancel();
                             viewHolder.choose.setEnabled(false);
-                            if(!timerCanceled)
-                                MainApplication.socket.emit("wolf",MainApplication.roomInfo.getRoomId(),MainApplication.userInfo.getUserId(),info.getUserId());
+                            viewHolder.choose.setBackgroundResource(R.drawable.button_clicked);
+                            ((ActionPerformer)context).doAction(info.getUserId());
                             hasVoted = true;
                         }
                     });
@@ -119,6 +104,11 @@ public class WolfAdapter extends CommonAdapter<UserInfo> {
             }
         });
         return view;
+    }
+
+    @Override
+    public void doAction(Object... params) {
+        timerCanceled = true;
     }
 
     class ViewHolder{

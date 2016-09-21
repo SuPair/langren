@@ -1,8 +1,6 @@
 package com.jinhanyu.jack.langren.ui;
 
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -11,55 +9,29 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jinhanyu.jack.langren.ActionPerformer;
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
+import com.jinhanyu.jack.langren.TickTimer;
 import com.jinhanyu.jack.langren.adapter.WolfAdapter;
 import com.jinhanyu.jack.langren.entity.VoteResult;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import io.socket.emitter.Emitter;
 
-public class WolfActivity extends CommonActivity {
+public class WolfActivity extends CommonActivity implements ActionPerformer{
     private TextView tv_content;
     private EditText et_msg;
     private TextView time_label;
     private WolfAdapter wolfAdapter;
     private ListView listView;
     private StringBuilder sb= new StringBuilder();
-    Timer timer = new Timer();
 
-    int time = 15; //计时器的秒数
-    Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if(time==0){     //时间到还未投票就直接谁都不投，发消息给服务器
-                timer.cancel();
-                time_label.setText("时间到");
-                MainApplication.socket.emit("wolf",MainApplication.roomInfo.getRoomId(),MainApplication.userInfo.getUserId(),null);
-                wolfAdapter.notifyTimerCancel();
-            }else{
-                time_label.setText(time--+"");
-            }
-        }
-    };
+    private TickTimer tickTimer;
 
-    TimerTask task = new TimerTask() {
-
-        @Override
-        public void run() {
-            // 需要做的事:发送消息
-            Message message = new Message();
-            message.what = 1;
-            handler.sendMessage(message);
-        }
-    };
-
+    private String toKillUserId;
 
     @Override
     protected void prepareViews() {
@@ -67,13 +39,20 @@ public class WolfActivity extends CommonActivity {
         tv_content = (TextView) findViewById(R.id.tv_content);
         et_msg = (EditText) findViewById(R.id.et_msg);
         time_label = (TextView) findViewById(R.id.time_label);
-        wolfAdapter = new WolfAdapter(this,MainApplication.currentRoomUsers,timer);
+        wolfAdapter = new WolfAdapter(this,MainApplication.roomInfo.getUsers());
         listView = (ListView) findViewById(R.id.wolf_listView);
         listView.setAdapter(wolfAdapter);
 
 
         Toast.makeText(WolfActivity.this, "今晚你想刀谁？开始吧", Toast.LENGTH_SHORT).show();
-        timer.schedule(task,0,1000);
+        tickTimer = new TickTimer(time_label,15,wolfAdapter){
+            @Override
+            protected void onTimeEnd() {
+                super.onTimeEnd();
+                MainApplication.socket.emit("wolf",MainApplication.roomInfo.getRoomId(),MainApplication.userInfo.getUserId(),toKillUserId);
+            }
+        };
+        tickTimer.startTick();
     }
 
     @Override
@@ -84,7 +63,7 @@ public class WolfActivity extends CommonActivity {
                  String userId= (String) args[0];
                  Log.i("userid",userId);
                  String msg = (String) args[1];
-                 sb.append(MainApplication.findUserInRoom(userId).getName()+" 说: "+msg+"\n");
+                 sb.append(MainApplication.roomInfo.findUserInRoom(userId).getUsername()+" 说: "+msg+"\n");
                  tv_content.post(new Runnable() {
                      @Override
                      public void run() {
@@ -97,15 +76,17 @@ public class WolfActivity extends CommonActivity {
             public void call(Object... args) {
                 try {
                     String finalUserId = (String) args[0];
-                    Log.i("finalUserId",finalUserId);
                     JSONArray array = (JSONArray) args[1];
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject obj = (JSONObject) array.get(i);
                         String fromUserId = (String) obj.get("fromUserId");
                         String toUserId = (String) obj.get("toUserId");
-                        MainApplication.voteResults.add(new VoteResult(MainApplication.findUserInRoom(fromUserId).getName(),MainApplication.findUserInRoom(toUserId).getName()));
+                        MainApplication.roomInfo.getVoteResults().add(new VoteResult(MainApplication.roomInfo.findUserInRoom(fromUserId).getUsername(),MainApplication.roomInfo.findUserInRoom(toUserId).getUsername()));
                     }
-                    startActivity(new Intent(WolfActivity.this, VoteResultActivity.class).putExtra("finalUserName",MainApplication.findUserInRoom(finalUserId).getName()));
+                    Intent intent =new Intent(WolfActivity.this, VoteResultActivity.class);
+                    if(finalUserId!=null)
+                        intent.putExtra("finalUserName",MainApplication.roomInfo.findUserInRoom(finalUserId).getUsername());
+                    startActivity(intent);
                     finish();
                 }catch (Exception e){
                     e.printStackTrace();
@@ -125,5 +106,11 @@ public class WolfActivity extends CommonActivity {
             return;
         et_msg.setText("");
         MainApplication.socket.emit("langrenMsg",MainApplication.roomInfo.getRoomId(),MainApplication.userInfo.getUserId(),msg);
+    }
+
+    @Override
+    public void doAction(Object... params) {
+        toKillUserId = (String) params[0];
+        time_label.setText("击杀完成，等待其他人...");
     }
 }

@@ -1,22 +1,107 @@
 package com.jinhanyu.jack.langren.ui;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.jinhanyu.jack.langren.ActionPerformer;
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
+import com.jinhanyu.jack.langren.TickTimer;
 import com.jinhanyu.jack.langren.adapter.WizardAdapter;
 
-public class WizardActivity extends AppCompatActivity {
- private ListView listView;
+import io.socket.emitter.Emitter;
+
+public class WizardActivity extends CommonActivity implements ActionPerformer{
+    private ListView listView;
     private WizardAdapter adapter;
+
+    private TickTimer tickTimer;
+    private TextView time_label;
+
+
+    private String saveUserId;
+    private String poisonUserId;
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void prepareViews() {
         setContentView(R.layout.wizard);
         listView= (ListView) findViewById(R.id.wizard_listView);
-        adapter=new WizardAdapter(this, MainApplication.currentRoomUsers);
+        time_label = (TextView) findViewById(R.id.time_label);
+        adapter=new WizardAdapter(this, MainApplication.roomInfo.getUsers());
         listView.setAdapter(adapter);
+
+        tickTimer = new TickTimer(time_label,10,adapter){
+            @Override
+            protected void onTimeEnd() {
+                super.onTimeEnd();
+                MainApplication.socket.emit("wizard",MainApplication.roomInfo.getRoomId(),saveUserId,poisonUserId);
+            }
+        };
+        tickTimer.startTick();
+    }
+
+    @Override
+    protected void prepareSocket() {
+        MainApplication.socket.on("wizard", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                  final String userId = (String) args[0];
+                  Log.i("killUserId",userId);
+                  runOnUiThread(new Runnable() {
+                      @Override
+                      public void run() {
+                          if(userId==null)
+                              Toast.makeText(WizardActivity.this, "狼人今晚没有杀人，您不需要使用解药", Toast.LENGTH_SHORT).show();
+                          else{
+                              AlertDialog.Builder dialog = new AlertDialog.Builder(WizardActivity.this);
+                              dialog.setTitle("救人：");
+                              if(MainApplication.roomInfo.isHasSaved()) {
+                                  dialog.setMessage("很遗憾，您的解药用完了，不能救他");
+                                  dialog.setNegativeButton("确定", new DialogInterface.OnClickListener() {
+                                      @Override
+                                      public void onClick(DialogInterface dialog, int which) {
+                                          dialog.dismiss();
+                                      }
+                                  });
+                              }else{
+                                  dialog.setMessage("狼人杀了 "+ MainApplication.roomInfo.findUserInRoom(userId).getNickname()+",您要救他吗？");
+                                  dialog.setPositiveButton("救", new DialogInterface.OnClickListener() {
+                                      @Override
+                                      public void onClick(DialogInterface dialog, int which) {
+                                          saveUserId = userId;
+                                      }
+                                  });
+                                  dialog.setNegativeButton("算了", new DialogInterface.OnClickListener() {
+                                      @Override
+                                      public void onClick(DialogInterface dialog, int which) {
+                                          dialog.dismiss();
+                                      }
+                                  });
+                              }
+
+                              dialog.show();
+                          }
+                      }
+                  });
+            }
+        });
+    }
+
+    @Override
+    protected void unbindSocket() {
+          MainApplication.socket.off("wizard");
+    }
+
+    @Override
+    public void doAction(Object... params) {
+        poisonUserId = (String) params[0];
+        time_label.setText("毒人成功");
     }
 }

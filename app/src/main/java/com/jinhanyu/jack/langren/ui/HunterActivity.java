@@ -19,7 +19,7 @@ public class HunterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hunter);
         listView = (ListView) findViewById(R.id.hunter_listView);
-        adapter = new HunterAdapter(this, MainApplication.currentRoomUsers);
+        adapter = new HunterAdapter(this, MainApplication.roomInfo.getUsers());
         listView.setAdapter(adapter);
 
     }

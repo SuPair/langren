@@ -25,10 +25,12 @@ public class VoteResultActivity extends AppCompatActivity {
         tv_voteResult = (TextView) findViewById(R.id.tv_vote_result);
 
         String finalUserName = getIntent().getStringExtra("finalUserName");
-        Log.i("今晚刀的人：",finalUserName);
-        tv_voteResult.setText(getIntent().getStringExtra("finalUserName"));
+        if(finalUserName==null)
+            tv_voteResult.setText("今晚谁都不杀");
+        else
+            tv_voteResult.setText(finalUserName+" 被杀");
 
-        adapter = new VoteResultAdapter(this,MainApplication.voteResults);
+        adapter = new VoteResultAdapter(this,MainApplication.roomInfo.getVoteResults());
         listView.setAdapter(adapter);
 
     }
@@ -36,6 +38,6 @@ public class VoteResultActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        MainApplication.voteResults.clear();
+        MainApplication.roomInfo.getVoteResults().clear();
     }
 }

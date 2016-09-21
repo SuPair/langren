@@ -43,7 +43,7 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
         waitList = (GridView) findViewById(R.id.gv_waitingList);
         cancel = (Button) findViewById(R.id.ib_waitRoom_cancel);
         ready = (ToggleButton) findViewById(R.id.tb_waitRoom_ready);
-        adapter = new WaitRoomAdapter(this, MainApplication.currentRoomUsers);
+        adapter = new WaitRoomAdapter(this, MainApplication.roomInfo.getUsers());
         waitList.setAdapter(adapter);
         cancel.setOnClickListener(this);
         ready.setOnCheckedChangeListener(this);
@@ -76,8 +76,8 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                                     for (ParseUser parseUser : objects) {
                                         UserInfo info = new UserInfo();
                                         info.populateFromParseServer(parseUser);
-                                        info.setReady(readys.get(parseUser.getObjectId()));
-                                        MainApplication.currentRoomUsers.add(info);
+                                        info.getGameRole().setReady(readys.get(parseUser.getObjectId()));
+                                        MainApplication.roomInfo.getUsers().add(info);
                                     }
 
                                     refreshUI(adapter);
@@ -100,7 +100,7 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                             public void done(ParseUser parseUser, ParseException e) {
                                 UserInfo info = new UserInfo();
                                 info.populateFromParseServer(parseUser);
-                                MainApplication.currentRoomUsers.add(info);
+                                MainApplication.roomInfo.getUsers().add(info);
                                 refreshUI(adapter);
                             }
 
@@ -112,13 +112,8 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                     @Override
                     public void call(Object... args) {
                         String userId = (String) args[0];
-                        int i;
-                        for (i = 0; i < MainApplication.currentRoomUsers.size(); i++) {
-                            if (MainApplication.currentRoomUsers.get(i).getUserId().equals(userId))
-                                break;
-                        }
-                        MainApplication.currentRoomUsers.remove(i);
-
+                        UserInfo userInfo = MainApplication.roomInfo.findUserInRoom(userId);
+                        MainApplication.roomInfo.getUsers().remove(userInfo);
                         refreshUI(adapter);
                     }
                 })
@@ -126,8 +121,7 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                     @Override
                     public void call(Object... args) {
                         String userId = (String) args[0];
-                        MainApplication.findUserInRoom(userId).setReady(true);
-
+                        MainApplication.roomInfo.findUserInRoom(userId).getGameRole().setReady(true);
                         refreshUI(adapter);
                     }
                 })
@@ -135,8 +129,7 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                     @Override
                     public void call(Object... args) {
                         String userId = (String) args[0];
-                        MainApplication.findUserInRoom(userId).setReady(false);
-
+                        MainApplication.roomInfo.findUserInRoom(userId).getGameRole().setReady(false);
                         refreshUI(adapter);
                     }
                 })
@@ -190,7 +183,7 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
     protected void onDestroy() {
         super.onDestroy();
         if(!isForwarding)
-           MainApplication.currentRoomUsers.clear();
+           MainApplication.roomInfo.getUsers().clear();
     }
 
     @Override

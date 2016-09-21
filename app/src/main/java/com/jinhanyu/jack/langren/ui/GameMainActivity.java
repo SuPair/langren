@@ -51,7 +51,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
         voiceLevel = (ImageView) findViewById(R.id.iv_playStage_voiceLevel);
         identification = (TextView) findViewById(R.id.tv_playStage_identification);
         identification_label = (TextView) findViewById(R.id.identification_label);
-        adapter = new GalleryAdapter(this, MainApplication.currentRoomUsers);
+        adapter = new GalleryAdapter(this, MainApplication.roomInfo.getUsers());
         gallery.setAdapter(adapter);
         gameRule.setOnClickListener(this);
         identification.setOnClickListener(this);
@@ -91,12 +91,12 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                     @Override
                     public void call(Object... args) {
                         int type = (int) args[0];
-                        MainApplication.userInfo.setType(type);
-                        Log.i("你的身份是", MainApplication.userInfo.getType().getName());
+                        MainApplication.userInfo.getGameRole().setType(type);
+                        Log.i("你的身份是", MainApplication.userInfo.getGameRole().getType().getName());
                         identification_label.post(new Runnable() {
                             @Override
                             public void run() {
-                                identification_label.setText("您的身份是: "+MainApplication.userInfo.getType().getName());
+                                identification_label.setText("您的身份是: "+MainApplication.userInfo.getGameRole().getType().getName());
                             }
                         });
 
@@ -110,13 +110,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             final List<String> companyNames = new ArrayList<String>();
                             for (int i = 0; i < array.length(); i++) {
                                 String userId = (String) array.get(i);
-                                for (UserInfo info : MainApplication.currentRoomUsers) {
-                                    if (info.getUserId().equals(userId)) {
-                                        info.setType(1);
-                                        companyNames.add(info.getName());
-                                        break;
-                                    }
-                                }
+                                companyNames.add(MainApplication.roomInfo.findUserInRoom(userId).getNickname());
                             }
 
                             Log.i("你的同伴是", companyNames.toString());
@@ -144,12 +138,24 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                           });
                     }
                 })
+                .on("roomInfo", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        boolean hasSaved = (boolean) args[0];
+                        boolean hasPoisoned = (boolean) args[1];
+                        String lastGuardedUserId = (String) args[2];
+                        MainApplication.roomInfo.setHasSaved(hasSaved);
+                        MainApplication.roomInfo.setHasPoisoned(hasPoisoned);
+                        MainApplication.roomInfo.setLastGuardedUserId(lastGuardedUserId);
+                    }
+                })
                 .on("light", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
-                        game_bg.post(new Runnable() {
+                        runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                startActivity(new Intent(GameMainActivity.this,GameMainActivity.class));
                                 Toast.makeText(GameMainActivity.this, "天亮了,快别睡了", Toast.LENGTH_SHORT).show();
                                 game_bg.setBackgroundResource(R.color.light);
                             }
@@ -184,7 +190,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
         .on("action", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                switch (MainApplication.userInfo.getType()){
+                switch (MainApplication.userInfo.getGameRole().getType()){
                     case Wolf:
                         startActivity(new Intent(getApplicationContext(),WolfActivity.class));
                         break;
@@ -215,9 +221,9 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                 }
                 else {
                     if(userId1!=null)
-                        sb.append(MainApplication.findUserInRoom(userId1).getName()+"被杀  ");
+                        sb.append(MainApplication.roomInfo.findUserInRoom(userId1).getUsername()+"被杀  ");
                     if(userId2!=null)
-                        sb.append(MainApplication.findUserInRoom(userId2).getName()+"被杀  ");
+                        sb.append(MainApplication.roomInfo.findUserInRoom(userId2).getUsername()+"被杀  ");
                     identification_label.post(new Runnable() {
                         @Override
                         public void run() {
@@ -244,7 +250,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                 identification_label.post(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(GameMainActivity.this, "现在"+MainApplication.findUserInRoom(userId).getName()+"开始发言", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(GameMainActivity.this, "现在"+MainApplication.roomInfo.findUserInRoom(userId).getUsername()+"开始发言", Toast.LENGTH_SHORT).show();
                     }
                 });
 

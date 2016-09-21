@@ -84,7 +84,7 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
             case 1:
                 ParseUser.getCurrentUser().logOut();
                 MainApplication.socket.disconnect();
-                UserInfo.reset(MainApplication.userInfo);
+                MainApplication.userInfo = new UserInfo();
                 startActivity(new Intent(this, LoginActivty.class));
                 finish();
                 break;

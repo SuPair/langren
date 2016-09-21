@@ -43,7 +43,7 @@ public class SelectRoomAdapter extends CommonAdapter<RoomInfo> {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(roomInfo.getPeopleNum()==roomInfo.getMaxCount())
+                if(roomInfo.getCurrentCount()==roomInfo.getMaxCount())
                     Toast.makeText(context, "房间已满", Toast.LENGTH_SHORT).show();
                 else {
                     MainApplication.roomInfo = roomInfo;
@@ -52,8 +52,8 @@ public class SelectRoomAdapter extends CommonAdapter<RoomInfo> {
             }
         });
 
-        viewHolder.peopleNum.setText(roomInfo.getPeopleNum()+"");
-        viewHolder.roomName.setText(roomInfo.getRoomName());
+        viewHolder.peopleNum.setText(roomInfo.getCurrentCount()+"");
+        viewHolder.roomName.setText(roomInfo.getName());
         return view;
     }
 
