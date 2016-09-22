@@ -1,12 +1,11 @@
 package com.jinhanyu.jack.langren.ui;
 
 
-import android.content.Intent;
-
 import android.content.DialogInterface;
-
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.MediaPlayer;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -18,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.jinhanyu.jack.langren.AudioCodec;
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.TickTimer;
@@ -30,7 +28,6 @@ import com.jinhanyu.jack.langren.entity.UserInfo;
 import com.jinhanyu.jack.langren.util.RoundBitmapUtils;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -47,6 +44,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
     private GalleryAdapter adapter;
     private View gameRuleBg;
     private DrawerLayout drawerLayout;//侧滑（显示玩家详细信息）
+    MediaPlayer player;
 
 
     private SimpleDraweeView bigHead;
@@ -200,8 +198,10 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         game_bg.post(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(GameMainActivity.this, "天黑了,兄弟们搞事情吧", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(GameMainActivity.this, "天黑!  请闭眼....", Toast.LENGTH_SHORT).show();
                                 game_bg.setBackgroundResource(R.color.dark);
+                                player = MediaPlayer.create(GameMainActivity.this, R.raw.dark);
+                                player.start();
                             }
                         });
                     }
