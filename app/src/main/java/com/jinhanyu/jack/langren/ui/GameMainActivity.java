@@ -57,23 +57,28 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
     private TextView time_label;
     private TickTimer tickTimer;
     private View speak_time_label;
+    private View bt_wolf_destroy;
 
     private boolean click = true;
 
     private VoiceManager voiceManager = VoiceManager.getInstance(MainApplication.socket);
+
+
+    private void finishSpeak(){
+        bt_endSpeak.setEnabled(false);
+        bt_wolf_destroy.setEnabled(false);
+        voiceManager.stopRecord();
+        if(tickTimer!=null)
+           tickTimer.cancel();
+        speak_time_label.setVisibility(View.INVISIBLE);
+    }
 
     @Override
     protected void prepareViews() {
         setContentView(R.layout.game_main);
         time_label = (TextView) findViewById(R.id.time_label);
         speak_time_label = findViewById(R.id.speak_time_label);
-        tickTimer =new TickTimer(time_label,40,null){
-            @Override
-            protected void onTimeEnd() {
-                super.onTimeEnd();
-                MainApplication.socket.emit("pass", MainApplication.roomInfo.getRoomId());
-            }
-        };
+        bt_wolf_destroy = findViewById(R.id.bt_wolf_destroy);
         gallery = (Gallery) findViewById(R.id.gallery_players_head);
         bigHead = (SimpleDraweeView) findViewById(R.id.iv_playStage_bigHead);
         gameRule = (ImageView) findViewById(R.id.iv_gameStage_gameRule);
@@ -93,11 +98,16 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
         bt_endSpeak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bt_endSpeak.setEnabled(false);
-                voiceManager.stopRecord();
+                finishSpeak();
                 MainApplication.socket.emit("pass", MainApplication.roomInfo.getRoomId());
-                tickTimer.cancel();
-                speak_time_label.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        bt_wolf_destroy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finishSpeak();
+                MainApplication.socket.emit("wolfDestroy",MainApplication.roomInfo.getRoomId(),MainApplication.userInfo.getUserId());
             }
         });
 
@@ -146,13 +156,15 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                 .on("start", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
-                        int type = (int) args[0];
+                        final int type = (int) args[0];
                         MainApplication.userInfo.getGameRole().setType(type);
                         Log.i("你的身份是", MainApplication.userInfo.getGameRole().getType().getName());
                         identification_label.post(new Runnable() {
                             @Override
                             public void run() {
                                 identification_label.setText("您的身份是: " + MainApplication.userInfo.getGameRole().getType().getName());
+                                if(MainApplication.userInfo.getGameRole().getType()== GameRole.Type.Wolf)
+                                    bt_wolf_destroy.setVisibility(View.VISIBLE);
                             }
                         });
 
@@ -296,6 +308,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         identification_label.post(new Runnable() {
                             @Override
                             public void run() {
+                                startActivity(new Intent(GameMainActivity.this, GameMainActivity.class));
                                 Toast.makeText(GameMainActivity.this, "现在发言开始", Toast.LENGTH_SHORT).show();
                                 speakAnim.start();
                             }
@@ -325,10 +338,19 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             @Override
                             public void run() {
                                 voiceManager.startRecord();
-                                bt_endSpeak.setEnabled(true);
                                 gallery.setSelection(MainApplication.roomInfo.findMyIndexInRoom());
-                                speak_time_label.setVisibility(View.INVISIBLE);
+                                tickTimer =new TickTimer(time_label,40,null){
+                                    @Override
+                                    protected void onTimeEnd() {
+                                        super.onTimeEnd();
+                                        MainApplication.socket.emit("pass", MainApplication.roomInfo.getRoomId());
+                                    }
+                                };
                                 tickTimer.startTick();
+                                speak_time_label.setVisibility(View.INVISIBLE);
+                                bt_endSpeak.setEnabled(true);
+                                if(MainApplication.userInfo.getGameRole().getType()== GameRole.Type.Wolf)
+                                    bt_wolf_destroy.setEnabled(true);
                                 Toast.makeText(GameMainActivity.this, "现在轮到你发言", Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -389,6 +411,21 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         });
 
                     }
+                })
+                .on("wolfDestroy", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        final String wolfId = (String) args[0];
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                UserInfo wolf = MainApplication.roomInfo.findUserInRoom(wolfId);
+                                wolf.getGameRole().setType(1);
+                                Toast.makeText(GameMainActivity.this, "狼人 "+ wolf.getNickname()+" 自爆了", Toast.LENGTH_SHORT).show();
+                                finishSpeak();
+                            }
+                        });
+                    }
                 });
 
     }
@@ -398,6 +435,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
     protected void unbindSocket() {
         voiceManager.stopPlay();
         voiceManager.stopRecord();
+        voiceManager.release();
         MainApplication.socket.off("start").off("company").off("blob");
     }
 

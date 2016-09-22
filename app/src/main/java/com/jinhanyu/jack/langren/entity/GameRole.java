@@ -18,7 +18,6 @@ public class GameRole {
      */
     private int     sign_type;
     private boolean isDead;
-    private boolean isSpeaking;
     private boolean isReady;
     private int score;
 
@@ -47,13 +46,6 @@ public class GameRole {
         isDead = dead;
     }
 
-    public boolean isSpeaking() {
-        return isSpeaking;
-    }
-
-    public void setSpeaking(boolean speaking) {
-        isSpeaking = speaking;
-    }
 
 
 

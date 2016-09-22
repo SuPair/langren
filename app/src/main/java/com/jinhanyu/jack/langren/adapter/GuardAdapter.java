@@ -67,38 +67,41 @@ public class GuardAdapter extends CommonAdapter<UserInfo> implements ActionPerfo
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-        viewHolder.choose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (hasGuarded) {
-                    Toast.makeText(context, "你已经守卫过一次了", Toast.LENGTH_SHORT).show();
-                }else if(info.getUserId().equals(MainApplication.roomInfo.getLastGuardedUserId())){
-                    Toast.makeText(context, "不能连续两个夜晚守卫同一个人！", Toast.LENGTH_SHORT).show();
-                }else if (timerCanceled) {
-                    Toast.makeText(context, "时间已经到啦，等待结果吧", Toast.LENGTH_SHORT).show();
-                } else {
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-                    dialog.setTitle("请做出您的选择：");
-                    dialog.setMessage("您确定要验证该玩家的身份吗?");
-                    dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            viewHolder.choose.setEnabled(false);
-                            viewHolder.choose.setBackgroundResource(R.drawable.button_clicked);
-                            ((ActionPerformer) context).doAction(info.getUserId());
-                            hasGuarded = true;
-                        }
-                    });
-                    dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    dialog.show();
+        if(info.getUserId().equals(MainApplication.roomInfo.getLastGuardedUserId())){
+            viewHolder.choose.setEnabled(false);
+        }else{
+            viewHolder.choose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (hasGuarded) {
+                        Toast.makeText(context, "你已经守卫过一次了", Toast.LENGTH_SHORT).show();
+                    }else if (timerCanceled) {
+                        Toast.makeText(context, "时间已经到啦，等待结果吧", Toast.LENGTH_SHORT).show();
+                    } else {
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+                        dialog.setTitle("请做出您的选择：");
+                        dialog.setMessage("您确定要验证该玩家的身份吗?");
+                        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                viewHolder.choose.setEnabled(false);
+                                viewHolder.choose.setBackgroundResource(R.drawable.button_clicked);
+                                ((ActionPerformer) context).doAction(info.getUserId());
+                                hasGuarded = true;
+                            }
+                        });
+                        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
+                    }
                 }
-            }
-        });
+            });
+        }
+
         return view;
     }
 

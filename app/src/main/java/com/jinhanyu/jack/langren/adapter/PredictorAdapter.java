@@ -72,7 +72,7 @@ public class PredictorAdapter extends CommonAdapter<UserInfo> implements ActionP
             @Override
             public void onClick(View v) {
                 if (hasChecked) {
-                    Toast.makeText(context, "你已经击杀过一次了", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "你已经验过一次了", Toast.LENGTH_SHORT).show();
                 } else if (timerCanceled) {
                     Toast.makeText(context, "时间已经到啦，等待结果吧", Toast.LENGTH_SHORT).show();
                 } else {
@@ -85,8 +85,7 @@ public class PredictorAdapter extends CommonAdapter<UserInfo> implements ActionP
                             viewHolder.choose.setEnabled(false);
                             viewHolder.choose.setBackgroundResource(R.drawable.button_clicked);
                             if (!timerCanceled)
-                                MainApplication.socket.emit("predictor", MainApplication.roomInfo.getRoomId(), info.getUserId());
-                            ((ActionPerformer) context).doAction();
+                            ((ActionPerformer) context).doAction(info.getUserId());
                             hasChecked = true;
                         }
                     });

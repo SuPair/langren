@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.entity.UserInfo;
 
@@ -17,14 +18,16 @@ public class GameOverActivity extends AppCompatActivity implements View.OnClickL
     private Button back_hall;//返回大厅
     private Button again;//再来一局
     private ListView listView;
-    private List<UserInfo> list;
+
+
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_over);
-        list=new ArrayList<>();
+
         listView= (ListView) findViewById(R.id.game_over_listView);
 
         back_hall = (Button) findViewById(R.id.back_hall);
@@ -38,12 +41,13 @@ public class GameOverActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.back_hall:
-                Intent intent = new Intent(this, SelectRoomActivity.class);
-                startActivity(intent);
+                MainApplication.socket.emit("leaveRoom",MainApplication.roomInfo.getRoomId(),MainApplication.userInfo.getUserId());
+                finish();
                 break;
             case R.id.again:
-                Intent intent1 = new Intent(this, RoomActivity.class);
+                Intent intent1 = new Intent(this, RoomActivity.class).putExtra("gameOverJump",true);
                 startActivity(intent1);
+                finish();
                 break;
         }
     }

@@ -57,6 +57,7 @@ public class VoiceManager {
     }
 
     public void startRecord(){
+
         audioRecord.startRecording();
         isRecording = true;
         new Thread(new Runnable() {
@@ -70,9 +71,12 @@ public class VoiceManager {
                     //Log.i("record","编码前: "+bufferReadResult+"   编码后: "+encodeSize);
                 }
                 audioRecord.stop();
-                audioRecord.release();
             }
         }).start();
+    }
+
+    public void release(){
+        audioRecord.release();
     }
 
     public byte[] copyBuffer(byte[] inputData,int actualSize){

@@ -32,12 +32,7 @@ public class TickTimer extends Timer {
 
     }
 
-    private TimerTask task = new TimerTask() {
-        @Override
-        public void run() {
-            handler.sendEmptyMessage(0);
-        }
-    };
+
 
     private ActionPerformer actionPerformer;
     private int totalTime;
@@ -52,6 +47,12 @@ public class TickTimer extends Timer {
 
 
     public void startTick(){
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                handler.sendEmptyMessage(0);
+            }
+        };
         schedule(task,0,1000);
     }
 }

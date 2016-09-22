@@ -68,11 +68,11 @@ public class VoteActivity extends CommonActivity implements ActionPerformer{
                                 JSONObject obj = (JSONObject) array.get(i);
                                 String fromUserId = (String) obj.get("fromUserId");
                                 String toUserId = (String) obj.get("toUserId");
-                                MainApplication.roomInfo.getVoteResults().add(new VoteResult(MainApplication.roomInfo.findUserInRoom(fromUserId).getUsername(), MainApplication.roomInfo.findUserInRoom(toUserId).getUsername()));
+                                MainApplication.roomInfo.getVoteResults().add(new VoteResult(MainApplication.roomInfo.findUserInRoom(fromUserId), MainApplication.roomInfo.findUserInRoom(toUserId)));
                             }
-                            Intent intent =new Intent(VoteActivity.this, VoteResultActivity.class);
+                            Intent intent =new Intent(VoteActivity.this, VoteResultActivity.class).putExtra("type",type);
                             if(policeUserId!=null)
-                                intent.putExtra("finalUserName",MainApplication.roomInfo.findUserInRoom(policeUserId).getUsername()).putExtra("type",type);
+                                intent.putExtra("finalUserName",MainApplication.roomInfo.findUserInRoom(policeUserId).getUsername());
                             startActivity(intent);
                             finish();
                         }catch (Exception e){
@@ -91,11 +91,11 @@ public class VoteActivity extends CommonActivity implements ActionPerformer{
                                 JSONObject obj = (JSONObject) array.get(i);
                                 String fromUserId = (String) obj.get("fromUserId");
                                 String toUserId = (String) obj.get("toUserId");
-                                MainApplication.roomInfo.getVoteResults().add(new VoteResult(MainApplication.roomInfo.findUserInRoom(fromUserId).getUsername(), MainApplication.roomInfo.findUserInRoom(toUserId).getUsername()));
+                                MainApplication.roomInfo.getVoteResults().add(new VoteResult(MainApplication.roomInfo.findUserInRoom(fromUserId), MainApplication.roomInfo.findUserInRoom(toUserId)));
                             }
-                            Intent intent =new Intent(VoteActivity.this, VoteResultActivity.class);
+                            Intent intent =new Intent(VoteActivity.this, VoteResultActivity.class).putExtra("type",type);
                             if(voteOutUserId!=null)
-                                intent.putExtra("finalUserName",MainApplication.roomInfo.findUserInRoom(voteOutUserId).getUsername()).putExtra("type",type);
+                                intent.putExtra("finalUserName",MainApplication.roomInfo.findUserInRoom(voteOutUserId).getUsername());
                             startActivity(intent);
                             finish();
                         }catch (Exception e){

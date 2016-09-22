@@ -3,8 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10dp">
-
+    android:padding="10dp"
+    android:background="@color/dark">
+    <TextView
+        android:id="@+id/action_done_label"
+        android:layout_marginBottom="5dp"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="先知"/>
     <ListView
         android:id="@+id/predictor_listView"
         android:layout_width="match_parent"

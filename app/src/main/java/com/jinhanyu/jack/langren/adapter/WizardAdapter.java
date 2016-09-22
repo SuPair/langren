@@ -25,6 +25,7 @@ import java.util.List;
 public class WizardAdapter extends CommonAdapter<UserInfo> implements ActionPerformer{
 
     private boolean timerCanceled;
+    private boolean hasPoisoned;
 
     public WizardAdapter(Context context, List<UserInfo> data) {
         super(context, data);
@@ -67,13 +68,16 @@ public class WizardAdapter extends CommonAdapter<UserInfo> implements ActionPerf
             }
         });
 
-        viewHolder.poison.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    if (MainApplication.roomInfo.isHasPoisoned()) {
-                        Toast.makeText(context, "你的毒药用完了", Toast.LENGTH_SHORT).show();
-                    } else if (timerCanceled) {
+        if(MainApplication.roomInfo.isHasPoisoned()){
+            viewHolder.poison.setEnabled(false);
+        }else {
+            viewHolder.poison.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (timerCanceled) {
                         Toast.makeText(context, "时间已经到啦，等待结果吧", Toast.LENGTH_SHORT).show();
+                    }else if(hasPoisoned){
+                        Toast.makeText(context, "你已经用过毒了", Toast.LENGTH_SHORT).show();
                     } else {
                         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
                         dialog.setTitle("请做出您的选择：");
@@ -84,6 +88,7 @@ public class WizardAdapter extends CommonAdapter<UserInfo> implements ActionPerf
                                 viewHolder.poison.setEnabled(false);
                                 viewHolder.poison.setBackgroundResource(R.drawable.button_clicked);
                                 ((ActionPerformer) context).doAction(info.getUserId());
+                                hasPoisoned = true;
                             }
                         });
                         dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -93,8 +98,11 @@ public class WizardAdapter extends CommonAdapter<UserInfo> implements ActionPerf
                             }
                         });
                         dialog.show();
-            }
-        }});
+                    }
+                }});
+        }
+
+
         return view;
     }
 

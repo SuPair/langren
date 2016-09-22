@@ -5,6 +5,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,8 +23,8 @@ public class WizardActivity extends CommonActivity implements ActionPerformer{
     private WizardAdapter adapter;
 
     private TickTimer tickTimer;
-    private TextView time_label;
-
+    private TextView time_label,action_done_label;
+    private ImageView iv_antidote,iv_poison;
 
     private String saveUserId;
     private String poisonUserId;
@@ -34,6 +35,13 @@ public class WizardActivity extends CommonActivity implements ActionPerformer{
         setContentView(R.layout.wizard);
         listView= (ListView) findViewById(R.id.wizard_listView);
         time_label = (TextView) findViewById(R.id.time_label);
+        action_done_label = (TextView) findViewById(R.id.action_done_label);
+        iv_antidote = (ImageView) findViewById(R.id.iv_antidote);
+        iv_poison = (ImageView) findViewById(R.id.iv_poison);
+        if(MainApplication.roomInfo.isHasSaved())
+            iv_antidote.setImageResource(R.mipmap.noantidote);
+        if(MainApplication.roomInfo.isHasPoisoned())
+            iv_poison.setImageResource(R.mipmap.nopoison);
         adapter=new WizardAdapter(this, MainApplication.roomInfo.getUsers());
         listView.setAdapter(adapter);
 
@@ -53,7 +61,6 @@ public class WizardActivity extends CommonActivity implements ActionPerformer{
             @Override
             public void call(Object... args) {
                   final String userId = (String) args[0];
-                  Log.i("killUserId",userId);
                   runOnUiThread(new Runnable() {
                       @Override
                       public void run() {
@@ -102,6 +109,6 @@ public class WizardActivity extends CommonActivity implements ActionPerformer{
     @Override
     public void doAction(Object... params) {
         poisonUserId = (String) params[0];
-        time_label.setText("毒人成功");
+        action_done_label.setText("毒人成功");
     }
 }

@@ -34,8 +34,8 @@
         <activity android:name=".ui.LoginActivty" android:launchMode="singleTask"/>
         <activity android:name=".ui.UserNameActivity" />
         <activity android:name=".ui.UserHeadActivity" />
-        <activity android:name=".ui.SelectRoomActivity" />
-        <activity android:name=".ui.RoomActivity"/>
+        <activity android:name=".ui.SelectRoomActivity" android:launchMode="singleTask"/>
+        <activity android:name=".ui.RoomActivity" android:launchMode="singleTask"/>
         <activity android:name=".ui.GameMainActivity" android:launchMode="singleTask">
 
         </activity>

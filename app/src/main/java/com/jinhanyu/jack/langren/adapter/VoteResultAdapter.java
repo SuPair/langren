@@ -27,8 +27,8 @@ public class VoteResultAdapter extends CommonAdapter<VoteResult> {
         TextView toUserNameTextView = (TextView) view.findViewById(R.id.toUserName);
 
         VoteResult voteResult = data.get(i);
-        fromUserNameTextView.setText(voteResult.getFromUserName());
-        toUserNameTextView.setText(voteResult.getToUserName());
+        fromUserNameTextView.setText(voteResult.getFromUser().getNickname());
+        toUserNameTextView.setText(voteResult.getToUser().getNickname());
 
         return view;
     }

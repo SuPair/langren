@@ -25,7 +25,7 @@ import io.socket.emitter.Emitter;
 public class WolfActivity extends CommonActivity implements ActionPerformer{
     private TextView tv_content;
     private EditText et_msg;
-    private TextView time_label;
+    private TextView time_label,action_done_label;
     private WolfAdapter wolfAdapter;
     private ListView listView;
     private StringBuilder sb= new StringBuilder();
@@ -40,6 +40,7 @@ public class WolfActivity extends CommonActivity implements ActionPerformer{
         tv_content = (TextView) findViewById(R.id.tv_content);
         et_msg = (EditText) findViewById(R.id.et_msg);
         time_label = (TextView) findViewById(R.id.time_label);
+        action_done_label = (TextView) findViewById(R.id.action_done_label);
         wolfAdapter = new WolfAdapter(this,MainApplication.roomInfo.getUsers());
         listView = (ListView) findViewById(R.id.wolf_listView);
         listView.setAdapter(wolfAdapter);
@@ -82,11 +83,11 @@ public class WolfActivity extends CommonActivity implements ActionPerformer{
                         JSONObject obj = (JSONObject) array.get(i);
                         String fromUserId = (String) obj.get("fromUserId");
                         String toUserId = (String) obj.get("toUserId");
-                        MainApplication.roomInfo.getVoteResults().add(new VoteResult(MainApplication.roomInfo.findUserInRoom(fromUserId).getUsername(),MainApplication.roomInfo.findUserInRoom(toUserId).getUsername()));
+                        MainApplication.roomInfo.getVoteResults().add(new VoteResult(MainApplication.roomInfo.findUserInRoom(fromUserId),MainApplication.roomInfo.findUserInRoom(toUserId)));
                     }
-                    Intent intent =new Intent(WolfActivity.this, VoteResultActivity.class);
+                    Intent intent =new Intent(WolfActivity.this, VoteResultActivity.class).putExtra("type",RoomInfo.VOTE_KILL);
                     if(finalUserId!=null)
-                        intent.putExtra("finalUserName",MainApplication.roomInfo.findUserInRoom(finalUserId).getUsername()).putExtra("type", RoomInfo.VOTE_KILL);
+                        intent.putExtra("finalUserName",MainApplication.roomInfo.findUserInRoom(finalUserId).getUsername());
                     startActivity(intent);
                     finish();
                 }catch (Exception e){
@@ -112,6 +113,6 @@ public class WolfActivity extends CommonActivity implements ActionPerformer{
     @Override
     public void doAction(Object... params) {
         toKillUserId = (String) params[0];
-        time_label.setText("击杀完成，等待其他人...");
+        action_done_label.setText("击杀完成，等待其他人...");
     }
 }

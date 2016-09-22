@@ -4,29 +4,34 @@ package com.jinhanyu.jack.langren.entity;
  * Created by anzhuo on 2016/9/18.
  */
 public class VoteResult {
-    public VoteResult(String fromUserName, String toUserName) {
-        this.fromUserName = fromUserName;
-        this.toUserName = toUserName;
+
+
+    private UserInfo fromUser,toUser;
+
+    public VoteResult(UserInfo fromUser, UserInfo toUser) {
+        this.fromUser = fromUser;
+        this.toUser = toUser;
     }
 
-    private String fromUserName,toUserName;
+    public UserInfo getFromUser() {
+        return fromUser;
+    }
+
+    public void setFromUser(UserInfo fromUser) {
+        this.fromUser = fromUser;
+    }
+
+    public UserInfo getToUser() {
+        return toUser;
+    }
+
+    public void setToUser(UserInfo toUser) {
+        this.toUser = toUser;
+    }
 
     public VoteResult() {
+
     }
 
-    public String getFromUserName() {
-        return fromUserName;
-    }
 
-    public void setFromUserName(String fromUserName) {
-        this.fromUserName = fromUserName;
-    }
-
-    public String getToUserName() {
-        return toUserName;
-    }
-
-    public void setToUserName(String toUserName) {
-        this.toUserName = toUserName;
-    }
 }

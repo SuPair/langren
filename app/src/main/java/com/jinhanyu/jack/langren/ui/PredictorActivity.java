@@ -16,19 +16,24 @@ public class PredictorActivity extends CommonActivity implements ActionPerformer
 
     private PredictorAdapter adapter;
     private ListView listView;
-    private TextView time_label;
+    private TextView time_label,action_done_label;
     private TickTimer tickTimer;
+    private boolean hasChecked;
+    private String toCheckUserId;
+
     @Override
     protected void prepareViews() {
         setContentView(R.layout.predictor);
         listView = (ListView) findViewById(R.id.predictor_listView);
         adapter = new PredictorAdapter(this,MainApplication.roomInfo.getUsers());
+        action_done_label = (TextView) findViewById(R.id.action_done_label);
         time_label = (TextView) findViewById(R.id.time_label);
         listView.setAdapter(adapter);
         tickTimer = new TickTimer(time_label,15,adapter){
             @Override
             protected void onTimeEnd() {
                 super.onTimeEnd();
+                if(hasChecked) return;
                 MainApplication.socket.emit("predictor",MainApplication.roomInfo.getRoomId(),MainApplication.userInfo.getUserId(),null);
             }
         };
@@ -50,9 +55,10 @@ public class PredictorActivity extends CommonActivity implements ActionPerformer
                     @Override
                     public void run() {
                         if(type==0){
+                            action_done_label.setText(MainApplication.roomInfo.findUserInRoom(toCheckUserId).getNickname()+"是好人");
                             Toast.makeText(PredictorActivity.this, "您要验的人的身份是好人", Toast.LENGTH_SHORT).show();
-
                         }else if(type==1){
+                            action_done_label.setText(MainApplication.roomInfo.findUserInRoom(toCheckUserId).getNickname()+"是狼人");
                             Toast.makeText(PredictorActivity.this, "您要验的人的身份是坏人", Toast.LENGTH_SHORT).show();
                         }
 
@@ -71,7 +77,9 @@ public class PredictorActivity extends CommonActivity implements ActionPerformer
 
     @Override
     public void doAction(Object... params) {
-        tickTimer.cancel();
-        time_label.setText("验证完成");
+        toCheckUserId = (String) params[0];
+        MainApplication.socket.emit("predictor",MainApplication.roomInfo.getRoomId(),MainApplication.userInfo.getUserId(), toCheckUserId);
+        hasChecked =true;
+        action_done_label.setText("等待法官确认...");
     }
 }

@@ -99,7 +99,7 @@
                 android:gravity="center"
                 android:orientation="vertical">
                 <LinearLayout
-                    android:visibility="invisible"
+                    android:visibility="visible"
                     android:id="@+id/speak_time_label"
                     android:layout_marginBottom="10dp"
                     android:gravity="center"
@@ -119,7 +119,7 @@
                         android:layout_marginLeft="20dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="15秒" />
+                        android:text="40秒" />
                     <TextView
                         android:layout_marginLeft="20dp"
                         android:layout_width="wrap_content"
@@ -140,6 +140,15 @@
                     android:background="@drawable/shape"
                     android:text="@string/endRecorder"
                     android:textSize="22dp" />
+                <TextView
+                    android:visibility="gone"
+                    android:enabled="false"
+                    android:id="@+id/bt_wolf_destroy"
+                    android:textColor="@color/light"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button"
+                    android:text="自爆"/>
             </LinearLayout>
 
 
