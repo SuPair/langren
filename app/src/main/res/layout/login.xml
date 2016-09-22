@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/backgtound"
+    android:background="@mipmap/wolf_bg"
     android:orientation="vertical">
 
     <LinearLayout
@@ -19,7 +19,7 @@
             android:layout_marginLeft="20dp"
             android:inputType="text"
             android:text="游戏账号:"
-            android:textColor="#000000"
+            android:textColor="@color/state"
             android:textSize="24sp" />
 
         <EditText
@@ -31,7 +31,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="20dp"
             android:singleLine="true"
-            android:background="@drawable/edit_text_style"
+            android:background="@drawable/edit_text_style_dark"
             android:ellipsize="end"
             android:maxLength="11"
             android:padding="5dp" />
@@ -50,7 +50,7 @@
             android:layout_gravity="center"
             android:layout_marginLeft="20dp"
             android:text="游戏密码:"
-            android:textColor="#000000"
+            android:textColor="@color/state"
             android:textSize="24sp" />
 
         <EditText
@@ -61,7 +61,7 @@
             android:hint="请输入密码..."
             android:layout_marginLeft="10dp"
             android:layout_marginRight="20dp"
-            android:background="@drawable/edit_text_style"
+            android:background="@drawable/edit_text_style_dark"
             android:inputType="numberPassword"
             android:singleLine="true"
             android:padding="5dp" />
@@ -74,6 +74,7 @@
         android:layout_gravity="end"
         android:layout_marginRight="15dp"
         android:text="忘记密码"
+        android:textColor="@color/state"
         android:textSize="18sp" />
 
     <LinearLayout
@@ -98,7 +99,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="10dp"
-        android:textColor="#66ccff"
+        android:textColor="@color/state"
         android:text="注册账号"
         android:textSize="18sp" />
 

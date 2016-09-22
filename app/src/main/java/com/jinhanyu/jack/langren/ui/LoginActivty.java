@@ -1,7 +1,6 @@
 package com.jinhanyu.jack.langren.ui;
 
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -13,6 +12,7 @@ import android.widget.Toast;
 
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
+import com.jinhanyu.jack.langren.SoundEffectManager;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -23,7 +23,7 @@ public class LoginActivty extends AppCompatActivity implements View.OnClickListe
     private TextView forget_password;
     private ImageButton game_login;
     private TextView game_register;
-    private MediaPlayer player;
+
 
 
     @Override
@@ -48,6 +48,7 @@ public class LoginActivty extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.forget_password:
                 final Toast toast = Toast.makeText(LoginActivty.this, "", Toast.LENGTH_SHORT);
+                SoundEffectManager.getInstance(this).play(R.raw.forget_password);//音效
                 toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 100);
                 toast.setText("请联系管理员！");
                 toast.setDuration(Toast.LENGTH_SHORT);
@@ -61,8 +62,7 @@ public class LoginActivty extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void done(ParseUser user, ParseException e) {
                         if (e != null) {
-                            player = MediaPlayer.create(LoginActivty.this, R.raw.ohno);
-                            player.start();
+                            SoundEffectManager.getInstance(LoginActivty.this).play(R.raw.login_failure);//音效
                             e.printStackTrace();
                             Toast toast1 = Toast.makeText(LoginActivty.this, "登录失败", Toast.LENGTH_SHORT);
                             toast1.setGravity(Gravity.CENTER_HORIZONTAL, 0, 100);
@@ -70,8 +70,7 @@ public class LoginActivty extends AppCompatActivity implements View.OnClickListe
                             toast1.show();
 
                         } else {
-                            player = MediaPlayer.create(LoginActivty.this, R.raw.good);
-                            player.start();
+                            SoundEffectManager.getInstance(LoginActivty.this).play(R.raw.enter_hall);//音效
                             MainApplication.userInfo.populateFromParseServer(user);
                             Intent intent1 = new Intent(LoginActivty.this, SelectRoomActivity.class);
                             startActivity(intent1);

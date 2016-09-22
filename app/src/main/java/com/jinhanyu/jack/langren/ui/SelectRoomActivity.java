@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
+import com.jinhanyu.jack.langren.SoundEffectManager;
 import com.jinhanyu.jack.langren.adapter.SelectRoomAdapter;
 import com.jinhanyu.jack.langren.entity.RoomInfo;
 import com.jinhanyu.jack.langren.util.ScreenUtils;
@@ -212,7 +213,8 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                 startActivity(intent);
                 break;
             case R.id.sdv_userHead:
-                popupWindow.showAtLocation(view,Gravity.CENTER,0,0);
+                SoundEffectManager.getInstance(SelectRoomActivity.this).play(R.raw.user_detail);
+                popupWindow.showAtLocation(view,Gravity.CENTER,0,140);
                 break;
             case R.id.iv_userInfo_settings:
             //这里点击切换账号

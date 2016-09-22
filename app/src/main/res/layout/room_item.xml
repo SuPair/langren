@@ -32,7 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textColor="#000000"
+                android:textColor="@color/state"
                 android:layout_margin="10dp"
                 android:text="狼王_JY"
                 android:textSize="18dp" />

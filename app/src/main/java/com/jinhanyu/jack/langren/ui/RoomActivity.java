@@ -10,6 +10,7 @@ import android.widget.ToggleButton;
 
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
+import com.jinhanyu.jack.langren.SoundEffectManager;
 import com.jinhanyu.jack.langren.adapter.WaitRoomAdapter;
 import com.jinhanyu.jack.langren.entity.UserInfo;
 import com.parse.FindCallback;
@@ -56,7 +57,7 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                     @Override
                     public void call(Object... args) {
                         try {
-
+                            SoundEffectManager.getInstance(RoomActivity.this).play(R.raw.enter_room);//音效
                             ParseQuery<ParseUser> query = ParseUser.getQuery();
                             List<String> userIds = new ArrayList<String>();
                             final Map<String,Boolean> readys = new HashMap<>();
@@ -83,6 +84,7 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                                     refreshUI(adapter);
                                 }
                             });
+
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
