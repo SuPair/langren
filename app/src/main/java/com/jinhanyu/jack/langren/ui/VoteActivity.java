@@ -3,6 +3,7 @@ package com.jinhanyu.jack.langren.ui;
 import android.content.Intent;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jinhanyu.jack.langren.ActionPerformer;
 import com.jinhanyu.jack.langren.MainApplication;
@@ -80,6 +81,26 @@ public class VoteActivity extends CommonActivity implements ActionPerformer{
                         }
                     }
                 })
+                .on("continueVotePolice", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        adapter.reset();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(VoteActivity.this, "没有任何人投票,必须投出警长", Toast.LENGTH_SHORT).show();
+                                tickTimer = new TickTimer(time_label,10,adapter){
+                                    @Override
+                                    protected void onTimeEnd() {
+                                        super.onTimeEnd();
+                                        MainApplication.socket.emit("votePolice",MainApplication.roomInfo.getRoomId(),MainApplication.userInfo.getUserId(),toVoteUserId);
+                                    }
+                                };
+                                tickTimer.startTick();
+                            }
+                        });
+                    }
+                })
                 .on("lightResult", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
@@ -107,7 +128,7 @@ public class VoteActivity extends CommonActivity implements ActionPerformer{
 
     @Override
     protected void unbindSocket() {
-            MainApplication.socket.off("policeResult").off("lightResult");
+            MainApplication.socket.off("policeResult").off("lightResult").off("continueVotePolice");
     }
 
     @Override

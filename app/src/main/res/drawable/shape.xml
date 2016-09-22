@@ -3,20 +3,24 @@
     <item android:state_pressed="true">
         <shape>
             <corners android:radius="5dp"></corners>
-            <padding android:bottom="10dp" />
-            <padding android:left="10dp" />
-            <padding android:right="10dp" />
-            <padding android:top="10dp" />
+            <padding android:bottom="10dp" android:left="10dp" android:top="10dp" android:right="10dp"/>
             <solid android:color="#d00b3479" />
+        </shape>
+    </item>
+    <item android:state_enabled="false">
+        <shape>
+        <corners android:radius="5dp"></corners>
+        <padding android:bottom="10dp" />
+        <padding android:left="10dp" />
+        <padding android:right="10dp" />
+        <padding android:top="10dp" />
+        <solid android:color="#fb909396" />
         </shape>
     </item>
     <item>
         <shape>
             <corners android:radius="5dp"></corners>
-            <padding android:bottom="10dp" />
-            <padding android:left="10dp" />
-            <padding android:right="10dp" />
-            <padding android:top="10dp" />
+            <padding android:bottom="10dp" android:left="10dp" android:top="10dp" android:right="10dp"/>
             <solid android:color="#d03e71a4" />
         </shape>
 

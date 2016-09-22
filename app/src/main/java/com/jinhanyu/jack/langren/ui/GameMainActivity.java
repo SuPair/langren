@@ -9,10 +9,13 @@ import android.media.MediaPlayer;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Gallery;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +29,7 @@ import com.jinhanyu.jack.langren.entity.GameRole;
 import com.jinhanyu.jack.langren.entity.RoomInfo;
 import com.jinhanyu.jack.langren.entity.UserInfo;
 import com.jinhanyu.jack.langren.util.RoundBitmapUtils;
+import com.jinhanyu.jack.langren.util.ScreenUtils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -42,7 +46,6 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
     private AnimationDrawable speakAnim;
     private TextView identification;
     private GalleryAdapter adapter;
-    private View gameRuleBg;
     private DrawerLayout drawerLayout;//侧滑（显示玩家详细信息）
     MediaPlayer player;
 
@@ -57,9 +60,10 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
     private View speak_time_label;
     private View bt_wolf_destroy;
 
-    private boolean click = true;
+
 
     private VoiceManager voiceManager = VoiceManager.getInstance(MainApplication.socket);
+    private PopupWindow popupWindow;
 
 
     private void finishSpeak(){
@@ -74,25 +78,43 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
     @Override
     protected void prepareViews() {
         setContentView(R.layout.game_main);
+
+        //杂项: 计时器相关、游戏背景、声音动画、身份、标记
         time_label = (TextView) findViewById(R.id.time_label);
         speak_time_label = findViewById(R.id.speak_time_label);
-        bt_wolf_destroy = findViewById(R.id.bt_wolf_destroy);
-        gallery = (Gallery) findViewById(R.id.gallery_players_head);
-        bigHead = (SimpleDraweeView) findViewById(R.id.iv_playStage_bigHead);
-        gameRule = (ImageView) findViewById(R.id.iv_gameStage_gameRule);
+        game_bg = findViewById(R.id.game_bg);
         voiceLevel = (ImageView) findViewById(R.id.iv_playStage_voiceLevel);
         speakAnim = (AnimationDrawable) voiceLevel.getDrawable();
         identification = (TextView) findViewById(R.id.tv_playStage_identification);
         identification_label = (TextView) findViewById(R.id.identification_label);
+        identification.setOnClickListener(this);
+
+        //画廊
+        gallery = (Gallery) findViewById(R.id.gallery_players_head);
         adapter = new GalleryAdapter(this, MainApplication.roomInfo.getUsers());
         gallery.setAdapter(adapter);
-        gameRule.setOnClickListener(this);
-        identification.setOnClickListener(this);
-        gameRuleBg = findViewById(R.id.game_rule_bg);
-        game_bg = findViewById(R.id.game_bg);
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
-        bt_endSpeak = findViewById(R.id.bt_endSpeak);
+        gallery.setSelection(MainApplication.roomInfo.findMyIndexInRoom());
 
+        //大头像
+        bigHead = (SimpleDraweeView) findViewById(R.id.iv_playStage_bigHead);
+
+        //游戏规则
+        gameRule = (ImageView) findViewById(R.id.iv_gameStage_gameRule);
+        gameRule.setOnClickListener(this);
+        View gameRuleBg = getLayoutInflater().inflate(R.layout.game_rule,null);
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) gameRuleBg.getBackground();
+        gameRuleBg.setBackground(new BitmapDrawable(RoundBitmapUtils.getRoundedCornerBitmap(bitmapDrawable.getBitmap())));
+        popupWindow = new PopupWindow(gameRuleBg, ScreenUtils.getScreenWidth(this)*3/4,ScreenUtils.getScreenHeight(this)*2/3);
+        popupWindow.setFocusable(true);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+
+
+
+
+        //结束发言按钮
+        bt_endSpeak = findViewById(R.id.bt_endSpeak);
         bt_endSpeak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,28 +123,36 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
             }
         });
 
+        //自爆按钮
+        bt_wolf_destroy = findViewById(R.id.bt_wolf_destroy);
         bt_wolf_destroy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finishSpeak();
-                MainApplication.socket.emit("wolfDestroy",MainApplication.roomInfo.getRoomId(),MainApplication.userInfo.getUserId());
+                AlertDialog.Builder dialog = new AlertDialog.Builder(GameMainActivity.this);
+                dialog.setTitle("请做出您的选择：");
+                dialog.setMessage("您确定要自爆吗?自爆可以终止发言阶段,直接进入天黑");
+                dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finishSpeak();
+                        MainApplication.socket.emit("wolfDestroy",MainApplication.roomInfo.getRoomId(),MainApplication.userInfo.getUserId());
+                    }
+                });
+                dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
             }
         });
 
-        gallery.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        bigHead.setImageURI(MainApplication.roomInfo.getUsers().get(i).getHead());
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
 
-            }
-        });
 
-        gallery.setSelection(MainApplication.roomInfo.findMyIndexInRoom());
-
+        //侧边栏
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -145,8 +175,6 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
             }
         });
 
-        BitmapDrawable bitmapDrawable = (BitmapDrawable) gameRuleBg.getBackground();
-        gameRuleBg.setBackground(new BitmapDrawable(RoundBitmapUtils.getRoundedCornerBitmap(bitmapDrawable.getBitmap())));
     }
 
     protected void prepareSocket() {
@@ -324,6 +352,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             @Override
                             public void run() {
                                 voiceManager.startPlay();
+                                bigHead.setImageURI(MainApplication.roomInfo.findUserInRoom(userId).getHead());
                                 gallery.setSelection(MainApplication.roomInfo.findUserIndexInRoom(userId));
                                 Toast.makeText(GameMainActivity.this, "现在" + MainApplication.roomInfo.findUserInRoom(userId).getUsername() + "开始发言", Toast.LENGTH_SHORT).show();
                             }
@@ -338,6 +367,9 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             @Override
                             public void run() {
                                 voiceManager.startRecord();
+                                speak_time_label.setVisibility(View.VISIBLE);
+                                bt_endSpeak.setEnabled(true);
+                                bigHead.setImageURI(MainApplication.userInfo.getHead());
                                 gallery.setSelection(MainApplication.roomInfo.findMyIndexInRoom());
                                 tickTimer =new TickTimer(time_label,40,null){
                                     @Override
@@ -347,8 +379,6 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                     }
                                 };
                                 tickTimer.startTick();
-                                speak_time_label.setVisibility(View.INVISIBLE);
-                                bt_endSpeak.setEnabled(true);
                                 if(MainApplication.userInfo.getGameRole().getType()== GameRole.Type.Wolf)
                                     bt_wolf_destroy.setEnabled(true);
                                 Toast.makeText(GameMainActivity.this, "现在轮到你发言", Toast.LENGTH_SHORT).show();
@@ -439,16 +469,13 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
         MainApplication.socket.off("start").off("company").off("blob");
     }
 
+
+    //弹出游戏规则；标记身份
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_gameStage_gameRule:
-                if (click) {
-                    gameRuleBg.setVisibility(View.VISIBLE);
-                    click = false;
-                } else {
-                    onBackPressed();
-                }
+                popupWindow.showAtLocation(v, Gravity.CENTER,0,0);
                 break;
             case R.id.tv_playStage_identification:
                 Identification();
@@ -456,11 +483,10 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
         }
     }
 
-    //【游戏规则】是否可见
+
     @Override
     public void onBackPressed() {
-        gameRuleBg.setVisibility(View.INVISIBLE);
-        click = true;
+
     }
 
     //标记玩家身份

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,12 +35,15 @@ public class WolfActivity extends CommonActivity implements ActionPerformer{
 
     private String toKillUserId;
 
+    private ScrollView msg_scroll;
+
     @Override
     protected void prepareViews() {
         setContentView(R.layout.wolf);
         tv_content = (TextView) findViewById(R.id.tv_content);
         et_msg = (EditText) findViewById(R.id.et_msg);
         time_label = (TextView) findViewById(R.id.time_label);
+        msg_scroll = (ScrollView) findViewById(R.id.msg_scroll);
         action_done_label = (TextView) findViewById(R.id.action_done_label);
         wolfAdapter = new WolfAdapter(this,MainApplication.roomInfo.getUsers());
         listView = (ListView) findViewById(R.id.wolf_listView);
@@ -70,6 +74,7 @@ public class WolfActivity extends CommonActivity implements ActionPerformer{
                      @Override
                      public void run() {
                          tv_content.setText(sb.toString());
+                         msg_scroll.fullScroll(ScrollView.FOCUS_DOWN);//滚动到底部
                      }
                  });
             }

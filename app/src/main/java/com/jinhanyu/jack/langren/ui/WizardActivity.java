@@ -29,6 +29,8 @@ public class WizardActivity extends CommonActivity implements ActionPerformer{
     private String saveUserId;
     private String poisonUserId;
 
+    private AlertDialog.Builder dialog;
+
 
     @Override
     protected void prepareViews() {
@@ -53,6 +55,7 @@ public class WizardActivity extends CommonActivity implements ActionPerformer{
             }
         };
         tickTimer.startTick();
+        dialog = new AlertDialog.Builder(WizardActivity.this);
     }
 
     @Override
@@ -67,7 +70,6 @@ public class WizardActivity extends CommonActivity implements ActionPerformer{
                           if(userId==null)
                               Toast.makeText(WizardActivity.this, "狼人今晚没有杀人，您不需要使用解药", Toast.LENGTH_SHORT).show();
                           else{
-                              AlertDialog.Builder dialog = new AlertDialog.Builder(WizardActivity.this);
                               dialog.setTitle("救人：");
                               if(MainApplication.roomInfo.isHasSaved()) {
                                   dialog.setMessage("很遗憾，您的解药用完了，不能救他");

@@ -103,6 +103,10 @@ public class VoteAdapter extends CommonAdapter<UserInfo> implements ActionPerfor
         timerCanceled = true;
     }
 
+    public void reset(){
+        timerCanceled = false;
+    }
+
     class ViewHolder{
         SimpleDraweeView head;
         TextView username,state,choose;
