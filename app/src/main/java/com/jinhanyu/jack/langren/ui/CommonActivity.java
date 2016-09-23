@@ -86,7 +86,9 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
                 finish();
                 break;
             case 2:
-
+                //退出游戏
+                MainApplication.socket.disconnect();
+                System.exit(0);
                 break;
         }
     }

@@ -67,6 +67,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
     private PopupWindow popupWindow;
 
     private UserInfo currentUser = MainApplication.userInfo;
+    private boolean isLeavingWords = false;
 
     private void finishSpeak() {
         bt_endSpeak.setEnabled(false);
@@ -119,7 +120,11 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
             @Override
             public void onClick(View view) {
                 finishSpeak();
-                MainApplication.socket.emit("pass", MainApplication.roomInfo.getRoomId());
+                if(isLeavingWords){
+                    MainApplication.socket.emit("leaveWordsFinished", MainApplication.roomInfo.getRoomId(),true);
+                }else{
+                    MainApplication.socket.emit("pass", MainApplication.roomInfo.getRoomId());
+                }
             }
         });
 
@@ -341,6 +346,43 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             });
                             SoundEffectManager.play(R.raw.kill);//被杀音效
                         }
+                    }
+                })
+                .on("leaveWords", new Emitter.Listener() {
+                    @Override
+                    public void call(final Object... args) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                String userId = (String) args[0];
+                                Toast.makeText(GameMainActivity.this, "下面请"+MainApplication.roomInfo.findUserInRoom(userId).getNickname()+"发表遗言", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                })
+                .on("youLeaveWords", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                isLeavingWords = true;
+                                voiceManager.startRecord();
+                                speak_time_label.setVisibility(View.VISIBLE);
+                                bt_endSpeak.setEnabled(true);
+                                bigHead.setImageURI(MainApplication.userInfo.getHead());
+                                gallery.setSelection(MainApplication.roomInfo.findMyIndexInRoom());
+                                tickTimer =new TickTimer(time_label,40,null){
+                                    @Override
+                                    protected void onTimeEnd() {
+                                        super.onTimeEnd();
+                                        MainApplication.socket.emit("leaveWordsFinished", MainApplication.roomInfo.getRoomId(),true);
+                                    }
+                                };
+                                tickTimer.startTick();
+                                Toast.makeText(GameMainActivity.this, "你被刀了,请发表遗言", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 })
                 .on("startSpeak", new Emitter.Listener() {
