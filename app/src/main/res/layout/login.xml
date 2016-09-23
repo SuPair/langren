@@ -62,7 +62,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="20dp"
             android:background="@drawable/edit_text_style_dark"
-            android:inputType="numberPassword"
+            android:inputType="text"
             android:singleLine="true"
             android:padding="5dp" />
     </LinearLayout>

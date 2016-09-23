@@ -8,12 +8,9 @@ import android.widget.Toast;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.jinhanyu.jack.langren.entity.RoomInfo;
 import com.jinhanyu.jack.langren.entity.UserInfo;
-import com.jinhanyu.jack.langren.entity.VoteResult;
 import com.parse.Parse;
 
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -41,6 +38,8 @@ public class MainApplication extends Application {
         );
 
         initSocket();
+
+        SoundEffectManager.init(this);
     }
 
     private void initSocket(){

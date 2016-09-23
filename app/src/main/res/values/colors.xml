@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#1d1115</color>
     <color name="lightblue">#008</color>
     <color name="gray">#aeaeb1</color>
     <color name="yellow">#ffdd00</color>
@@ -14,5 +14,5 @@
     <color name="dark">#555</color>
     <color name="green">#0c0</color>
     <color name="game_top">#402c03</color>
-
+    <color name="state">@color/gray</color>
 </resources>

@@ -72,6 +72,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
         title= (TextView) profile.findViewById(R.id.tv_userInfo_title);
         title.setText(MainApplication.userInfo.getTitle());
         settings= (ImageView) profile.findViewById(R.id.iv_userInfo_settings);
+        settings.setVisibility(View.VISIBLE);
         settings.setOnClickListener(this);
         popupWindow = new PopupWindow(profile, ScreenUtils.getScreenWidth(this)*3/4,ScreenUtils.getScreenHeight(this)*2/3);
         popupWindow.setFocusable(true);
@@ -213,11 +214,12 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                 startActivity(intent);
                 break;
             case R.id.sdv_userHead:
-                SoundEffectManager.getInstance(SelectRoomActivity.this).play(R.raw.user_detail);
+                SoundEffectManager.play(R.raw.user_detail);
                 popupWindow.showAtLocation(view,Gravity.CENTER,0,140);
                 break;
             case R.id.iv_userInfo_settings:
-            //这里点击切换账号
+            //这里点击设置账号
+
                 break;
         }
     }

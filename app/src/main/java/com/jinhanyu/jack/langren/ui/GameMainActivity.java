@@ -9,9 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -136,8 +134,9 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                 dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        SoundEffectManager.play(R.raw.wolf_self_destruction);//狼人自爆音效
                         finishSpeak();
-                        MainApplication.socket.emit("wolfDestroy", MainApplication.roomInfo.getRoomId(), MainApplication.userInfo.getUserId());
+                        MainApplication.socket.emit("wolfDestroy",MainApplication.roomInfo.getRoomId(),MainApplication.userInfo.getUserId());
                     }
                 });
                 dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -232,7 +231,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             public void run() {
                                 Toast.makeText(GameMainActivity.this, "天黑!  请闭眼....", Toast.LENGTH_SHORT).show();
                                 game_bg.setBackgroundResource(R.color.dark);
-                                SoundEffectManager.getInstance(GameMainActivity.this).play(R.raw.dark);//音效
+                                SoundEffectManager.play(R.raw.dark);//天黑音效
                             }
                         });
                     }
@@ -256,7 +255,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             public void run() {
                                 startActivity(new Intent(GameMainActivity.this, GameMainActivity.class));
                                 Toast.makeText(GameMainActivity.this, "天亮了,快别睡了", Toast.LENGTH_SHORT).show();
-                                SoundEffectManager.getInstance(GameMainActivity.this).play(R.raw.login_failure);//音效
+                                SoundEffectManager.play(R.raw.light);//天亮音效
                                 game_bg.setBackgroundResource(R.color.light);
                             }
                         });
@@ -269,7 +268,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         identification_label.post(new Runnable() {
                             @Override
                             public void run() {
-                                SoundEffectManager.getInstance(GameMainActivity.this).stop();
+                                SoundEffectManager.stop();//声音停止
                                 Toast.makeText(GameMainActivity.this, "开始选警长。。。", Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -318,7 +317,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             identification_label.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    SoundEffectManager.getInstance(GameMainActivity.this).stop();
+                                    SoundEffectManager.stop();
                                     Toast.makeText(GameMainActivity.this, "今晚是平安夜", Toast.LENGTH_SHORT).show();
                                 }
                             });
@@ -340,6 +339,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                     Toast.makeText(GameMainActivity.this, sb.toString(), Toast.LENGTH_SHORT).show();
                                 }
                             });
+                            SoundEffectManager.play(R.raw.kill);//被杀音效
                         }
                     }
                 })
@@ -386,7 +386,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                 bt_endSpeak.setEnabled(true);
                                 bigHead.setImageURI(MainApplication.userInfo.getHead());
                                 gallery.setSelection(MainApplication.roomInfo.findMyIndexInRoom());
-                                tickTimer = new TickTimer(time_label, 40, null) {
+                                tickTimer =new TickTimer(time_label,40,null){
                                     @Override
                                     protected void onTimeEnd() {
                                         super.onTimeEnd();
@@ -394,7 +394,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                     }
                                 };
                                 tickTimer.startTick();
-                                if (MainApplication.userInfo.getGameRole().getType() == GameRole.Type.Wolf)
+                                if(MainApplication.userInfo.getGameRole().getType()== GameRole.Type.Wolf)
                                     bt_wolf_destroy.setEnabled(true);
                                 Toast.makeText(GameMainActivity.this, "现在轮到你发言", Toast.LENGTH_SHORT).show();
                             }
@@ -430,26 +430,26 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                 try {
                                     JSONObject gameResult = (JSONObject) args[0];
                                     int victory = gameResult.getInt("victory");
-                                    if (victory == 0) {
+                                    if(victory==0){
                                         Toast.makeText(GameMainActivity.this, "狼人胜利", Toast.LENGTH_SHORT).show();
-                                    } else if (victory == 1) {
+                                    }else if(victory==1){
                                         Toast.makeText(GameMainActivity.this, "好人胜利", Toast.LENGTH_SHORT).show();
                                     }
                                     JSONArray array = gameResult.getJSONArray("returnResults");
-                                    for (int i = 0; i < array.length(); i++) {
+                                    for(int i=0;i<array.length();i++){
                                         JSONObject obj = (JSONObject) array.get(i);
                                         String userId = obj.getString("userId");
-                                        int type = obj.getInt("type");
+                                        int type =obj.getInt("type");
                                         int score = obj.getInt("score");
-                                        GameRole gameRole = MainApplication.roomInfo.findUserInRoom(userId).getGameRole();
+                                        GameRole gameRole =MainApplication.roomInfo.findUserInRoom(userId).getGameRole();
                                         gameRole.setType(type);
                                         gameRole.setScore(score);
 
                                     }
-                                    startActivity(new Intent(GameMainActivity.this, GameOverActivity.class));
+                                    startActivity(new Intent(GameMainActivity.this,GameOverActivity.class));
                                     finish();
 
-                                } catch (Exception e) {
+                                }catch (Exception e){
                                     e.printStackTrace();
                                 }
                             }
@@ -466,7 +466,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             public void run() {
                                 UserInfo wolf = MainApplication.roomInfo.findUserInRoom(wolfId);
                                 wolf.getGameRole().setType(1);
-                                Toast.makeText(GameMainActivity.this, "狼人 " + wolf.getNickname() + " 自爆了", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(GameMainActivity.this, "狼人 "+ wolf.getNickname()+" 自爆了", Toast.LENGTH_SHORT).show();
                                 finishSpeak();
                             }
                         });
@@ -490,9 +490,11 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_gameStage_gameRule:
-                popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+                SoundEffectManager.play(R.raw.user_detail);
+                popupWindow.showAtLocation(v, Gravity.CENTER,0,0);
                 break;
             case R.id.tv_playStage_identification:
+                SoundEffectManager.play(R.raw.user_detail);
                 Identification();
                 break;
         }

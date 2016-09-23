@@ -34,7 +34,7 @@ public class GameOverActivity extends AppCompatActivity implements View.OnClickL
 
         back_hall.setOnClickListener(this);
         again.setOnClickListener(this);
-        SoundEffectManager.getInstance(this).play(R.raw.gameover);
+        SoundEffectManager.play(R.raw.gameover);
     }
 
     @Override
@@ -42,12 +42,12 @@ public class GameOverActivity extends AppCompatActivity implements View.OnClickL
         switch (v.getId()) {
             case R.id.back_hall:
                 MainApplication.socket.emit("leaveRoom",MainApplication.roomInfo.getRoomId(),MainApplication.userInfo.getUserId());
-                SoundEffectManager.getInstance(GameOverActivity.this).stop();
+                SoundEffectManager.stop();
                 finish();
                 break;
             case R.id.again:
                 Intent intent1 = new Intent(this, RoomActivity.class);
-                SoundEffectManager.getInstance(GameOverActivity.this).stop();
+                SoundEffectManager.stop();
                 startActivity(intent1);
                 finish();
                 break;

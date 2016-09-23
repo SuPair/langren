@@ -14,7 +14,7 @@
             android:id="@+id/game_bg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/light"
+            android:background="@color/state"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -169,7 +169,6 @@
             android:src="@mipmap/a99" />
 
     </FrameLayout>
-
 
     <LinearLayout
         android:layout_width="match_parent"

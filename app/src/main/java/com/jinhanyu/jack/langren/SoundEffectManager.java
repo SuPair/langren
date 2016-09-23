@@ -10,19 +10,18 @@ import java.io.IOException;
  * Created by anzhuo on 2016/9/22.
  */
 public class SoundEffectManager {
-    private MediaPlayer mediaPlayer;
-    private Context context;
+    private static MediaPlayer mediaPlayer;
+    private static Context context;
 
 
-    private static SoundEffectManager instance;
 
-    public  static SoundEffectManager getInstance(Context context){
-        if(instance==null)
-            instance = new SoundEffectManager(context);
-        return instance;
+    public static void init(Context ctx){
+        mediaPlayer = new MediaPlayer();
+        context = ctx;
     }
 
-    public void play(int resId){
+
+    public static void play(int resId){
         try {
             mediaPlayer.reset();
             mediaPlayer.setDataSource(context, Uri.parse("android.resource://"+context.getPackageName()+"/"+resId));
@@ -32,13 +31,12 @@ public class SoundEffectManager {
             e.printStackTrace();
         }
     }
-    public void stop(){
+    public static void stop(){
         mediaPlayer.stop();
     }
 
-    public SoundEffectManager(Context context){
-        this.context=context;
-        mediaPlayer = new MediaPlayer();
+    public static void looping(boolean choose){
+        mediaPlayer.setLooping(true);
     }
 
 

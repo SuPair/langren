@@ -16,6 +16,7 @@ public class TickTimer extends Timer {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+
             if(totalTime==0){     //时间到还未投票就直接谁都不投，发消息给服务器
                 cancel();
                 timeLabel.setText("时间到");
@@ -29,7 +30,8 @@ public class TickTimer extends Timer {
     };
 
     protected void onTimeEnd(){
-
+            SoundEffectManager.stop();
+            SoundEffectManager.looping(false);
     }
 
 
@@ -45,7 +47,6 @@ public class TickTimer extends Timer {
     }
 
 
-
     public void startTick(){
         TimerTask task = new TimerTask() {
             @Override
@@ -54,5 +55,7 @@ public class TickTimer extends Timer {
             }
         };
         schedule(task,0,1000);
+        SoundEffectManager.looping(true);
+        SoundEffectManager.play(R.raw.timer);
     }
 }

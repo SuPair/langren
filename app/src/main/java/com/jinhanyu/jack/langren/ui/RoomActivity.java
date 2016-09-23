@@ -94,7 +94,7 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                     @Override
                     public void call(Object... args) {
                         try {
-                            SoundEffectManager.getInstance(RoomActivity.this).play(R.raw.enter_room);//音效
+                            SoundEffectManager.play(R.raw.enter_room);//音效
                             ParseQuery<ParseUser> query = ParseUser.getQuery();
                             List<String> userIds = new ArrayList<String>();
                             final Map<String,Boolean> readys = new HashMap<>();
