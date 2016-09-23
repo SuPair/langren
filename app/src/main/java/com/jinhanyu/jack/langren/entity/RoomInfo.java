@@ -22,7 +22,15 @@ public class RoomInfo implements Serializable{
     private boolean hasSaved;
     private boolean hasPoisoned;
     private String  lastGuardedUserId;
+    private UserInfo police;
 
+    public UserInfo getPolice() {
+        return police;
+    }
+
+    public void setPolice(String policeId) {
+        this.police = findUserInRoom(policeId);
+    }
 
     public  UserInfo findUserInRoom(String userId){
         for (UserInfo info : users) {

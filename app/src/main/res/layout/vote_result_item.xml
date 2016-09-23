@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp">
+    android:padding="10dp"
+    android:gravity="center">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/fromUserHead"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        fresco:roundAsCircle="true"/>
 
     <TextView
         android:id="@+id/fromUserName"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Jack"/>
+        android:text="Jack"
+        android:singleLine="true"
+        android:ellipsize="marquee"/>
 
     <TextView
         android:gravity="center"
@@ -17,13 +27,18 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="投给了"/>
-
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/toUserHead"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        fresco:roundAsCircle="true"/>
     <TextView
         android:id="@+id/toUserName"
-        android:gravity="right"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:ellipsize="marquee"
         android:text="Tom"/>
 
 </LinearLayout>

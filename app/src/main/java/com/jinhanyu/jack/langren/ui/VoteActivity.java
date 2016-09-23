@@ -72,10 +72,12 @@ public class VoteActivity extends CommonActivity implements ActionPerformer{
                                 MainApplication.roomInfo.getVoteResults().add(new VoteResult(MainApplication.roomInfo.findUserInRoom(fromUserId), MainApplication.roomInfo.findUserInRoom(toUserId)));
                             }
                             Intent intent =new Intent(VoteActivity.this, VoteResultActivity.class).putExtra("type",type);
-                            if(policeUserId!=null)
-                                intent.putExtra("finalUserName",MainApplication.roomInfo.findUserInRoom(policeUserId).getUsername());
-                            startActivity(intent);
-                            finish();
+                            if(policeUserId!=null) {
+                                MainApplication.roomInfo.setPolice(policeUserId);
+                                intent.putExtra("finalUserName", MainApplication.roomInfo.findUserInRoom(policeUserId).getUsername());
+                                startActivity(intent);
+                                finish();
+                            }
                         }catch (Exception e){
                             e.printStackTrace();
                         }
@@ -115,8 +117,10 @@ public class VoteActivity extends CommonActivity implements ActionPerformer{
                                 MainApplication.roomInfo.getVoteResults().add(new VoteResult(MainApplication.roomInfo.findUserInRoom(fromUserId), MainApplication.roomInfo.findUserInRoom(toUserId)));
                             }
                             Intent intent =new Intent(VoteActivity.this, VoteResultActivity.class).putExtra("type",type);
-                            if(voteOutUserId!=null)
-                                intent.putExtra("finalUserName",MainApplication.roomInfo.findUserInRoom(voteOutUserId).getUsername());
+                            if(voteOutUserId!=null) {
+                                MainApplication.roomInfo.findUserInRoom(voteOutUserId).getGameRole().setDead(true);
+                                intent.putExtra("finalUserName", MainApplication.roomInfo.findUserInRoom(voteOutUserId).getUsername());
+                            }
                             startActivity(intent);
                             finish();
                         }catch (Exception e){
