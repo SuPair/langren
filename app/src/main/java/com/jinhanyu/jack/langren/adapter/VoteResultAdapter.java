@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.entity.VoteResult;
 
@@ -22,14 +23,28 @@ public class VoteResultAdapter extends CommonAdapter<VoteResult> {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        view = LayoutInflater.from(context).inflate(R.layout.vote_result_item,null);
-        TextView fromUserNameTextView = (TextView) view.findViewById(R.id.fromUserName);
-        TextView toUserNameTextView = (TextView) view.findViewById(R.id.toUserName);
+        ViewHolder viewHolder;
+        if(view==null){
+            view = LayoutInflater.from(context).inflate(R.layout.vote_result_item,null);
+            viewHolder = new ViewHolder();
+            viewHolder.fromUserName = (TextView) view.findViewById(R.id.fromUserName);
+            viewHolder.toUserName = (TextView) view.findViewById(R.id.toUserName);
+            viewHolder.fromUserHead = (SimpleDraweeView) view.findViewById(R.id.fromUserHead);
+            viewHolder.toUserHead = (SimpleDraweeView) view.findViewById(R.id.fromUserHead);
+            view.setTag(viewHolder);
+        }
+        viewHolder= (ViewHolder) view.getTag();
 
         VoteResult voteResult = data.get(i);
-        fromUserNameTextView.setText(voteResult.getFromUser().getNickname());
-        toUserNameTextView.setText(voteResult.getToUser().getNickname());
-
+        viewHolder.fromUserName.setText(voteResult.getFromUser().getNickname());
+        viewHolder.toUserName.setText(voteResult.getToUser().getNickname());
+        viewHolder.fromUserHead.setImageURI(voteResult.getFromUser().getHead());
+        viewHolder.toUserHead.setImageURI(voteResult.getToUser().getHead());
         return view;
+    }
+
+    class ViewHolder{
+        public SimpleDraweeView fromUserHead,toUserHead;
+        public TextView fromUserName,toUserName;
     }
 }

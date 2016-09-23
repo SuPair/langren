@@ -1,17 +1,25 @@
 package com.jinhanyu.jack.langren.ui;
 
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.adapter.WaitRoomAdapter;
 import com.jinhanyu.jack.langren.entity.UserInfo;
+import com.jinhanyu.jack.langren.util.ScreenUtils;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -35,6 +43,11 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
     private Button cancel;
     private ToggleButton ready;
     private boolean isForwarding;
+    private TextView username,nickname,scoreText,title;
+    private View profile;
+    private PopupWindow popupWindow;
+    private SimpleDraweeView userHead;
+
 
     @Override
     protected void prepareViews() {
@@ -45,6 +58,30 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
         ready = (ToggleButton) findViewById(R.id.tb_waitRoom_ready);
         adapter = new WaitRoomAdapter(this, MainApplication.roomInfo.getUsers());
         waitList.setAdapter(adapter);
+        //个人信息popupWindow
+        profile=getLayoutInflater().inflate(R.layout.user_detail,null);
+        userHead= (SimpleDraweeView) profile.findViewById(R.id.sdv_userInfo_userHead);
+        nickname= (TextView) profile.findViewById(R.id.tv_userInfo_nickname);
+        username= (TextView) profile.findViewById(R.id.tv_userInfo_username);
+        scoreText= (TextView) profile.findViewById(R.id.tv_userInfo_score);
+        title= (TextView) profile.findViewById(R.id.tv_userInfo_title);
+        popupWindow = new PopupWindow(profile, ScreenUtils.getScreenWidth(this)*3/4,ScreenUtils.getScreenHeight(this)*2/3);
+        popupWindow.setFocusable(true);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        waitList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                UserInfo userInfo = MainApplication.roomInfo.getUsers().get(i);
+                username.setText(userInfo.getUsername());
+                nickname.setText(userInfo.getNickname());
+                userHead.setImageURI(userInfo.getHead());
+                scoreText.setText(userInfo.getScore()+"");
+                title.setText(userInfo.getTitle());
+                popupWindow.showAtLocation(view, Gravity.CENTER,0,0);
+            }
+        });
         cancel.setOnClickListener(this);
         ready.setOnCheckedChangeListener(this);
     }

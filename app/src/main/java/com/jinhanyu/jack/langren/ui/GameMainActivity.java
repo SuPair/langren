@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Gallery;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +26,7 @@ import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.TickTimer;
 import com.jinhanyu.jack.langren.VoiceManager;
 import com.jinhanyu.jack.langren.adapter.GalleryAdapter;
+import com.jinhanyu.jack.langren.adapter.GameDetailAdapter;
 import com.jinhanyu.jack.langren.entity.GameRole;
 import com.jinhanyu.jack.langren.entity.RoomInfo;
 import com.jinhanyu.jack.langren.entity.UserInfo;
@@ -41,11 +43,14 @@ import io.socket.emitter.Emitter;
 
 
 public class GameMainActivity extends CommonActivity implements View.OnClickListener {
-    Gallery gallery;
+    private Gallery gallery;
+    private GalleryAdapter adapter;
+    private ListView gameDetailListview;
+    private GameDetailAdapter gameDetailAdapter;
     private ImageView gameRule, voiceLevel;
     private AnimationDrawable speakAnim;
     private TextView identification;
-    private GalleryAdapter adapter;
+
     private DrawerLayout drawerLayout;//侧滑（显示玩家详细信息）
     MediaPlayer player;
 
@@ -61,17 +66,17 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
     private View bt_wolf_destroy;
 
 
-
     private VoiceManager voiceManager = VoiceManager.getInstance(MainApplication.socket);
     private PopupWindow popupWindow;
 
+    private UserInfo currentUser = MainApplication.userInfo;
 
-    private void finishSpeak(){
+    private void finishSpeak() {
         bt_endSpeak.setEnabled(false);
         bt_wolf_destroy.setEnabled(false);
         voiceManager.stopRecord();
-        if(tickTimer!=null)
-           tickTimer.cancel();
+        if (tickTimer != null)
+            tickTimer.cancel();
         speak_time_label.setVisibility(View.INVISIBLE);
     }
 
@@ -101,16 +106,14 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
         //游戏规则
         gameRule = (ImageView) findViewById(R.id.iv_gameStage_gameRule);
         gameRule.setOnClickListener(this);
-        View gameRuleBg = getLayoutInflater().inflate(R.layout.game_rule,null);
+        View gameRuleBg = getLayoutInflater().inflate(R.layout.game_rule, null);
         BitmapDrawable bitmapDrawable = (BitmapDrawable) gameRuleBg.getBackground();
         gameRuleBg.setBackground(new BitmapDrawable(RoundBitmapUtils.getRoundedCornerBitmap(bitmapDrawable.getBitmap())));
-        popupWindow = new PopupWindow(gameRuleBg, ScreenUtils.getScreenWidth(this)*3/4,ScreenUtils.getScreenHeight(this)*2/3);
+        popupWindow = new PopupWindow(gameRuleBg, ScreenUtils.getScreenWidth(this) * 3 / 4, ScreenUtils.getScreenHeight(this) * 2 / 3);
         popupWindow.setFocusable(true);
         popupWindow.setTouchable(true);
         popupWindow.setOutsideTouchable(true);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
-
-
 
 
         //结束发言按钮
@@ -135,7 +138,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finishSpeak();
-                        MainApplication.socket.emit("wolfDestroy",MainApplication.roomInfo.getRoomId(),MainApplication.userInfo.getUserId());
+                        MainApplication.socket.emit("wolfDestroy", MainApplication.roomInfo.getRoomId(), MainApplication.userInfo.getUserId());
                     }
                 });
                 dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -149,8 +152,6 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
         });
 
 
-
-
         //侧边栏
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
@@ -161,6 +162,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
 
             @Override
             public void onDrawerOpened(View drawerView) {
+                gameDetailAdapter.notifyDataSetChanged();
                 drawerView.setClickable(true);  //动态设置Clickbale可以解决穿透点击事件
             }
 
@@ -174,6 +176,9 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
 
             }
         });
+        gameDetailListview = (ListView) findViewById(R.id.gameDetail_listView);
+        gameDetailAdapter = new GameDetailAdapter(this, MainApplication.roomInfo.getUsers());
+        gameDetailListview.setAdapter(gameDetailAdapter);
 
     }
 
@@ -189,7 +194,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             @Override
                             public void run() {
                                 identification_label.setText("您的身份是: " + MainApplication.userInfo.getGameRole().getType().getName());
-                                if(MainApplication.userInfo.getGameRole().getType()== GameRole.Type.Wolf)
+                                if (MainApplication.userInfo.getGameRole().getType() == GameRole.Type.Wolf)
                                     bt_wolf_destroy.setVisibility(View.VISIBLE);
                             }
                         });
@@ -317,10 +322,17 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                 }
                             });
                         } else {
-                            if (userId1 != null)
-                                sb.append(MainApplication.roomInfo.findUserInRoom(userId1).getUsername() + "被杀  ");
-                            if (userId2 != null)
-                                sb.append(MainApplication.roomInfo.findUserInRoom(userId2).getUsername() + "被杀  ");
+                            if (userId1 != null) {
+                                UserInfo info = MainApplication.roomInfo.findUserInRoom(userId1);
+                                info.getGameRole().setDead(true);
+                                sb.append(info.getUsername() + "被杀  ");
+                            }
+
+                            if (userId2 != null) {
+                                UserInfo info = MainApplication.roomInfo.findUserInRoom(userId2);
+                                info.getGameRole().setDead(true);
+                                sb.append(info.getUsername() + "被杀  ");
+                            }
                             identification_label.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -348,6 +360,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                     @Override
                     public void call(Object... args) {
                         final String userId = (String) args[0];
+                        currentUser = MainApplication.roomInfo.findUserInRoom(userId);
                         identification_label.post(new Runnable() {
                             @Override
                             public void run() {
@@ -363,6 +376,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                 .on("youSpeak", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
+                        currentUser = MainApplication.userInfo;
                         identification_label.post(new Runnable() {
                             @Override
                             public void run() {
@@ -371,7 +385,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                 bt_endSpeak.setEnabled(true);
                                 bigHead.setImageURI(MainApplication.userInfo.getHead());
                                 gallery.setSelection(MainApplication.roomInfo.findMyIndexInRoom());
-                                tickTimer =new TickTimer(time_label,40,null){
+                                tickTimer = new TickTimer(time_label, 40, null) {
                                     @Override
                                     protected void onTimeEnd() {
                                         super.onTimeEnd();
@@ -379,7 +393,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                     }
                                 };
                                 tickTimer.startTick();
-                                if(MainApplication.userInfo.getGameRole().getType()== GameRole.Type.Wolf)
+                                if (MainApplication.userInfo.getGameRole().getType() == GameRole.Type.Wolf)
                                     bt_wolf_destroy.setEnabled(true);
                                 Toast.makeText(GameMainActivity.this, "现在轮到你发言", Toast.LENGTH_SHORT).show();
                             }
@@ -415,26 +429,26 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                 try {
                                     JSONObject gameResult = (JSONObject) args[0];
                                     int victory = gameResult.getInt("victory");
-                                    if(victory==0){
+                                    if (victory == 0) {
                                         Toast.makeText(GameMainActivity.this, "狼人胜利", Toast.LENGTH_SHORT).show();
-                                    }else if(victory==1){
+                                    } else if (victory == 1) {
                                         Toast.makeText(GameMainActivity.this, "好人胜利", Toast.LENGTH_SHORT).show();
                                     }
                                     JSONArray array = gameResult.getJSONArray("returnResults");
-                                    for(int i=0;i<array.length();i++){
+                                    for (int i = 0; i < array.length(); i++) {
                                         JSONObject obj = (JSONObject) array.get(i);
                                         String userId = obj.getString("userId");
-                                        int type =obj.getInt("type");
+                                        int type = obj.getInt("type");
                                         int score = obj.getInt("score");
-                                        GameRole gameRole =MainApplication.roomInfo.findUserInRoom(userId).getGameRole();
+                                        GameRole gameRole = MainApplication.roomInfo.findUserInRoom(userId).getGameRole();
                                         gameRole.setType(type);
                                         gameRole.setScore(score);
 
                                     }
-                                    startActivity(new Intent(GameMainActivity.this,GameOverActivity.class));
+                                    startActivity(new Intent(GameMainActivity.this, GameOverActivity.class));
                                     finish();
 
-                                }catch (Exception e){
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                             }
@@ -451,7 +465,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             public void run() {
                                 UserInfo wolf = MainApplication.roomInfo.findUserInRoom(wolfId);
                                 wolf.getGameRole().setType(1);
-                                Toast.makeText(GameMainActivity.this, "狼人 "+ wolf.getNickname()+" 自爆了", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(GameMainActivity.this, "狼人 " + wolf.getNickname() + " 自爆了", Toast.LENGTH_SHORT).show();
                                 finishSpeak();
                             }
                         });
@@ -475,7 +489,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_gameStage_gameRule:
-                popupWindow.showAtLocation(v, Gravity.CENTER,0,0);
+                popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
                 break;
             case R.id.tv_playStage_identification:
                 Identification();
@@ -491,13 +505,12 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
 
     //标记玩家身份
     public void Identification() {
-        final String[] identity = new String[]{"狼人", "女巫", "猎人", "预言家", "守卫", "村民", "未知"};
         final AlertDialog.Builder builder = new AlertDialog.Builder(GameMainActivity.this);
         builder.setTitle("请标记玩家身份");
-        builder.setSingleChoiceItems(identity, 0, new DialogInterface.OnClickListener() {
+        builder.setSingleChoiceItems(getResources().getStringArray(R.array.sign_type), 0, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(GameMainActivity.this, "成功标记为:" + identity[which], Toast.LENGTH_SHORT).show();
+                currentUser.getGameRole().setSign_type(which);
                 dialog.dismiss();
             }
         });
