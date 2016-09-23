@@ -52,7 +52,7 @@ public class GameDetailAdapter extends CommonAdapter<UserInfo> {
             }
         });
         holder.mark.setSelection(info.getGameRole().getSign_type());
-        return null;
+        return view;
     }
 
     class ViewHolder{

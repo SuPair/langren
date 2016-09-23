@@ -38,7 +38,7 @@ public class GameOverAdapter extends CommonAdapter<UserInfo> {
         viewHolder.iv_head.setImageURI(info.getHead());
         viewHolder.tv_name.setText(info.getNickname());
         viewHolder.identification_label.setText(info.getGameRole().getType().getName());
-        viewHolder.tv_score.setText(info.getGameRole().getScore());
+        viewHolder.tv_score.setText(info.getGameRole().getScore()+"");
 
         return view;
     }

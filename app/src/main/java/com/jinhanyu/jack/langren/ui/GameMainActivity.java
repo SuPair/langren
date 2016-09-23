@@ -66,8 +66,9 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
     private VoiceManager voiceManager = VoiceManager.getInstance(MainApplication.socket);
     private PopupWindow popupWindow;
 
-    private UserInfo currentUser = MainApplication.userInfo;
+
     private boolean isLeavingWords = false;
+    private UserInfo currentUser = MainApplication.roomInfo.findUserInRoom(MainApplication.userInfo.getUserId());
 
     private void finishSpeak() {
         bt_endSpeak.setEnabled(false);
@@ -419,7 +420,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                 .on("youSpeak", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
-                        currentUser = MainApplication.userInfo;
+                        currentUser = MainApplication.roomInfo.findUserInRoom(MainApplication.userInfo.getUserId());
                         identification_label.post(new Runnable() {
                             @Override
                             public void run() {
@@ -432,6 +433,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                     @Override
                                     protected void onTimeEnd() {
                                         super.onTimeEnd();
+                                        finishSpeak();
                                         MainApplication.socket.emit("pass", MainApplication.roomInfo.getRoomId());
                                     }
                                 };

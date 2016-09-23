@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -20,7 +19,7 @@ public class UserNameActivity extends AppCompatActivity implements View.OnClickL
     private EditText game_number;
     private EditText game_password;
     private EditText game_name;
-    private Button next;
+    private View next;
     private ImageView showPassword;
     private boolean click;//判断是否显示密码
 
@@ -33,7 +32,7 @@ public class UserNameActivity extends AppCompatActivity implements View.OnClickL
         game_number = (EditText) findViewById(R.id.game_number);
         game_password = (EditText) findViewById(R.id.game_password);
         game_name = (EditText) findViewById(R.id.game_name);
-        next = (Button) findViewById(R.id.next);
+        next =  findViewById(R.id.next);
         showPassword = (ImageView) findViewById(R.id.showPassword);
 
         next.setOnClickListener(this);

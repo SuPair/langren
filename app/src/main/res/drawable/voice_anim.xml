@@ -3,25 +3,25 @@
 
     <item
         android:drawable="@mipmap/v1"
-        android:duration="100" />
+        android:duration="30" />
     <item
         android:drawable="@mipmap/v2"
-        android:duration="100" />
+        android:duration="30" />
     <item
         android:drawable="@mipmap/v3"
-        android:duration="100" />
+        android:duration="30" />
     <item
         android:drawable="@mipmap/v4"
-        android:duration="100" />
+        android:duration="30" />
     <item
         android:drawable="@mipmap/v5"
-        android:duration="100" />
+        android:duration="30" />
     <item
         android:drawable="@mipmap/v6"
-        android:duration="100" />
+        android:duration="30" />
     <item
         android:drawable="@mipmap/v7"
-        android:duration="100" />
+        android:duration="30" />
 
 
 </animation-list>

@@ -1,6 +1,7 @@
 package com.jinhanyu.jack.langren.ui;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -27,6 +28,7 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         prepareViews();
         prepareSocket();

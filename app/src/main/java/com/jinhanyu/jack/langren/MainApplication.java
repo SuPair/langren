@@ -32,7 +32,7 @@ public class MainApplication extends Application {
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId("langrensha")
                 .clientKey("")
-                .server("http://172.168.0.10:3000/parse")
+                .server(ServerHost+"/parse")
                 .enableLocalDataStore()
                 .build()
         );
@@ -45,7 +45,7 @@ public class MainApplication extends Application {
     private void initSocket(){
         try {
             if(socket==null) {
-                socket = IO.socket(myServer);
+                socket = IO.socket(ServerHost+"/msg");
             }
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
@@ -88,5 +88,7 @@ public class MainApplication extends Application {
 
 
 
-    private static final String myServer = "http://172.168.0.10:3000/msg";
+    private static final String ServerHost = "http://172.168.0.10:3000";
+//    private static final String ServerHost = "http://langren.applinzi.com";
+
 }
