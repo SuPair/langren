@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
@@ -17,6 +18,7 @@ public class GameOverActivity extends AppCompatActivity implements View.OnClickL
     private Button again;//再来一局
     private ListView listView;
     private GameOverAdapter adapter;
+    private TextView game_win;
 
 
 
@@ -28,6 +30,8 @@ public class GameOverActivity extends AppCompatActivity implements View.OnClickL
         listView= (ListView) findViewById(R.id.game_over_listView);
         adapter = new GameOverAdapter(this,MainApplication.roomInfo.getUsers());
         listView.setAdapter(adapter);
+        game_win = (TextView) findViewById(R.id.game_win);
+        game_win.setText(getIntent().getStringExtra("victory"));
 
         back_hall = (Button) findViewById(R.id.back_hall);
         again = (Button) findViewById(R.id.again);

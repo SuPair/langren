@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="20dp"
-        android:text="狼人胜利"
+        android:text=""
         android:textColor="#ffdd00"
         android:textSize="50sp"
         android:textStyle="italic|bold" />
