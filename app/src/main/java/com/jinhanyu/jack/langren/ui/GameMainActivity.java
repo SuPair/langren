@@ -57,7 +57,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
     private View game_bg;
     private TextView identification_label;
     private View bt_endSpeak;
-    private TextView time_label;
+    private TextView time_label,tv_game_hint;
     private TickTimer tickTimer;
     private View speak_time_label;
     private View bt_wolf_destroy;
@@ -77,6 +77,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
         if (tickTimer != null)
             tickTimer.cancel();
         speak_time_label.setVisibility(View.INVISIBLE);
+        tv_game_hint.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -85,6 +86,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
 
         //杂项: 计时器相关、游戏背景、声音动画、身份、标记
         time_label = (TextView) findViewById(R.id.time_label);
+        tv_game_hint = (TextView) findViewById(R.id.tv_game_hint);
         speak_time_label = findViewById(R.id.speak_time_label);
         game_bg = findViewById(R.id.game_bg);
         voiceLevel = (ImageView) findViewById(R.id.iv_playStage_voiceLevel);
@@ -161,12 +163,12 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
         drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
-
+                  if(slideOffset==10)
+                      gameDetailAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
-                gameDetailAdapter.notifyDataSetChanged();
                 drawerView.setClickable(true);  //动态设置Clickbale可以解决穿透点击事件
             }
 
@@ -235,7 +237,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         game_bg.post(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(GameMainActivity.this, "天黑!  请闭眼....", Toast.LENGTH_SHORT).show();
+                                tv_game_hint.setText("天黑!  请闭眼....");
                                 game_bg.setBackgroundResource(R.color.dark);
                                 SoundEffectManager.play(R.raw.dark);//天黑音效
                             }
@@ -260,7 +262,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             @Override
                             public void run() {
                                 startActivity(new Intent(GameMainActivity.this, GameMainActivity.class));
-                                Toast.makeText(GameMainActivity.this, "天亮了,快别睡了", Toast.LENGTH_SHORT).show();
+                                tv_game_hint.setText("天亮了");
                                 SoundEffectManager.play(R.raw.light);//天亮音效
                                 game_bg.setBackgroundResource(R.color.light);
                             }
@@ -275,7 +277,6 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             @Override
                             public void run() {
                                 SoundEffectManager.stop();//声音停止
-                                Toast.makeText(GameMainActivity.this, "开始选警长。。。", Toast.LENGTH_SHORT).show();
                             }
                         });
                         startActivity(new Intent(GameMainActivity.this, VoteActivity.class).putExtra("type", RoomInfo.VOTE_POLICE));
@@ -288,7 +289,6 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(GameMainActivity.this, "开始票坏人。。。", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(GameMainActivity.this, VoteActivity.class).putExtra("type", RoomInfo.VOTE_WOLF));
                             }
                         });
@@ -324,7 +324,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                 @Override
                                 public void run() {
                                     SoundEffectManager.stop();
-                                    Toast.makeText(GameMainActivity.this, "今晚是平安夜", Toast.LENGTH_SHORT).show();
+                                    tv_game_hint.setText("今晚是平安夜");
                                 }
                             });
                         } else {
@@ -342,7 +342,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             identification_label.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(GameMainActivity.this, sb.toString(), Toast.LENGTH_SHORT).show();
+                                    tv_game_hint.setText(sb.toString());
                                 }
                             });
                             SoundEffectManager.play(R.raw.kill);//被杀音效
@@ -356,7 +356,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             @Override
                             public void run() {
                                 String userId = (String) args[0];
-                                Toast.makeText(GameMainActivity.this, "下面请"+MainApplication.roomInfo.findUserInRoom(userId).getNickname()+"发表遗言", Toast.LENGTH_SHORT).show();
+                                tv_game_hint.setText("下面请"+MainApplication.roomInfo.findUserInRoom(userId).getNickname()+"发表遗言");
                             }
                         });
                     }
@@ -393,7 +393,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             @Override
                             public void run() {
                                 startActivity(new Intent(GameMainActivity.this, GameMainActivity.class));
-                                Toast.makeText(GameMainActivity.this, "现在发言开始", Toast.LENGTH_SHORT).show();
+                                tv_game_hint.setText("现在发言开始");
                                 speakAnim.start();
                             }
                         });
@@ -411,7 +411,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                 voiceManager.startPlay();
                                 bigHead.setImageURI(MainApplication.roomInfo.findUserInRoom(userId).getHead());
                                 gallery.setSelection(MainApplication.roomInfo.findUserIndexInRoom(userId));
-                                Toast.makeText(GameMainActivity.this, "现在" + MainApplication.roomInfo.findUserInRoom(userId).getUsername() + "开始发言", Toast.LENGTH_SHORT).show();
+                                tv_game_hint.setText("现在" + MainApplication.roomInfo.findUserInRoom(userId).getUsername() + "开始发言");
                             }
                         });
 
@@ -426,6 +426,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             public void run() {
                                 voiceManager.startRecord();
                                 speak_time_label.setVisibility(View.VISIBLE);
+                                tv_game_hint.setVisibility(View.INVISIBLE);
                                 bt_endSpeak.setEnabled(true);
                                 bigHead.setImageURI(MainApplication.userInfo.getHead());
                                 gallery.setSelection(MainApplication.roomInfo.findMyIndexInRoom());
@@ -474,10 +475,11 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                 try {
                                     JSONObject gameResult = (JSONObject) args[0];
                                     int victory = gameResult.getInt("victory");
+                                    Intent intent=new Intent(GameMainActivity.this,GameOverActivity.class);
                                     if(victory==0){
-                                        Toast.makeText(GameMainActivity.this, "狼人胜利", Toast.LENGTH_SHORT).show();
+                                        intent.putExtra("victory","狼人胜利");
                                     }else if(victory==1){
-                                        Toast.makeText(GameMainActivity.this, "好人胜利", Toast.LENGTH_SHORT).show();
+                                        intent.putExtra("victory","好人胜利");
                                     }
                                     JSONArray array = gameResult.getJSONArray("returnResults");
                                     for(int i=0;i<array.length();i++){
@@ -490,7 +492,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                         gameRole.setScore(score);
 
                                     }
-                                    startActivity(new Intent(GameMainActivity.this,GameOverActivity.class));
+                                    startActivity(intent);
                                     finish();
 
                                 }catch (Exception e){

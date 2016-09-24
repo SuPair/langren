@@ -38,10 +38,11 @@
         android:text="/"/>
 
     <TextView
+        android:id="@+id/tv_room_totalNum"
         android:layout_marginRight="10dp"
         android:layout_width="wrap_content"
         android:textSize="17sp"
         android:layout_height="wrap_content"
         android:textColor="@color/light"
-        android:text="12"/>
+        android:text="2"/>
 </LinearLayout>

@@ -40,7 +40,7 @@ public class VoteActivity extends CommonActivity implements ActionPerformer{
         listView.setAdapter(adapter);
         time_label = (TextView) findViewById(R.id.time_label);
 
-        tickTimer = new TickTimer(time_label,10,adapter){
+        tickTimer = new TickTimer(time_label,15,adapter){
             @Override
             protected void onTimeEnd() {
                 super.onTimeEnd();

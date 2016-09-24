@@ -33,6 +33,7 @@ public class SelectRoomAdapter extends CommonAdapter<RoomInfo> {
             viewHolder = new ViewHolder();
             viewHolder.roomName = (TextView) view.findViewById(R.id.tv_room_name);
             viewHolder.peopleNum = (TextView) view.findViewById(R.id.tv_room_peopleNum);
+            viewHolder.totalNum = (TextView) view.findViewById(R.id.tv_room_totalNum);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
@@ -53,6 +54,7 @@ public class SelectRoomAdapter extends CommonAdapter<RoomInfo> {
         });
 
         viewHolder.peopleNum.setText(roomInfo.getCurrentCount()+"");
+        viewHolder.totalNum.setText(roomInfo.getMaxCount());
         viewHolder.roomName.setText(roomInfo.getName());
         return view;
     }
@@ -62,5 +64,6 @@ public class SelectRoomAdapter extends CommonAdapter<RoomInfo> {
     class ViewHolder {
         TextView roomName;
         TextView peopleNum;
+        TextView totalNum;
     }
 }

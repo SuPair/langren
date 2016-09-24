@@ -47,7 +47,7 @@ public class WizardActivity extends CommonActivity implements ActionPerformer{
         adapter=new WizardAdapter(this, MainApplication.roomInfo.getUsers());
         listView.setAdapter(adapter);
 
-        tickTimer = new TickTimer(time_label,10,adapter){
+        tickTimer = new TickTimer(time_label,15,adapter){
             @Override
             protected void onTimeEnd() {
                 super.onTimeEnd();
