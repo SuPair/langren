@@ -66,7 +66,7 @@ public class UserHeadActivity extends Activity implements View.OnClickListener {
                 gotosystempic(v);
 
                 break;
-            case R.id.complete://完成 跳转到主页面
+            case R.id.complete://完成 跳转到主页面或者玩家设置页面
                 uploadHead(v);
         }
 
@@ -114,8 +114,6 @@ public class UserHeadActivity extends Activity implements View.OnClickListener {
                                 ParseFile parseFile = (ParseFile) ParseUser.getCurrentUser().get("head");
                                 if(parseFile!=null)
                                     MainApplication.userInfo.setHead(parseFile.getUrl());
-                                Intent intent = new Intent(UserHeadActivity.this, SelectRoomActivity.class);
-                                startActivity(intent);
                                 finish();
                             }
                         }

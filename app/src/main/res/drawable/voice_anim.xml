@@ -3,22 +3,22 @@
 
     <item
         android:drawable="@mipmap/v1"
-        android:duration="30" />
+        android:duration="630" />
     <item
         android:drawable="@mipmap/v2"
-        android:duration="30" />
+        android:duration="530" />
     <item
         android:drawable="@mipmap/v3"
-        android:duration="30" />
+        android:duration="430" />
     <item
         android:drawable="@mipmap/v4"
-        android:duration="30" />
+        android:duration="330" />
     <item
         android:drawable="@mipmap/v5"
-        android:duration="30" />
+        android:duration="230" />
     <item
         android:drawable="@mipmap/v6"
-        android:duration="30" />
+        android:duration="130" />
     <item
         android:drawable="@mipmap/v7"
         android:duration="30" />

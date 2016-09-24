@@ -219,7 +219,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                 break;
             case R.id.iv_userInfo_settings:
             //这里点击设置账号
-
+              startActivity(new Intent(SelectRoomActivity.this,PlayerSetActivity.class));
                 break;
         }
     }
