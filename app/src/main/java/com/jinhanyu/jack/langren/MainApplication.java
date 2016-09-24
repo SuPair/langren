@@ -28,7 +28,7 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        progressDialog = new ProgressDialog(getApplicationContext());
+
 
         Fresco.initialize(getApplicationContext());
 
@@ -46,9 +46,7 @@ public class MainApplication extends Application {
         SoundEffectManager.init(this);
     }
 
-    private ProgressDialog progressDialog;
 
-    private Handler handler=new Handler();
 
     private void initSocket() {
         try {
@@ -59,94 +57,9 @@ public class MainApplication extends Application {
                         @Override
                         public void call(Object... args) {
                             Log.i("connected to socket io", "nice");
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    progressDialog.dismiss();
-                                    Toast.makeText(MainApplication.this, "成功连上服务器", Toast.LENGTH_SHORT).show();
-                                }
-                            });
                         }
 
                     })
-                      .on(Socket.EVENT_CONNECTING, new Emitter.Listener() {
-                          @Override
-                          public void call(Object... args) {
-                              handler.post(new Runnable() {
-                                  @Override
-                                  public void run() {
-                                      progressDialog.setMessage("正在连接服务器...");
-                                      progressDialog.show();
-                                  }
-                              });
-
-                          }
-                      })
-                      .on(Socket.EVENT_CONNECT_TIMEOUT, new Emitter.Listener() {
-                          @Override
-                          public void call(Object... args) {
-                              handler.post(new Runnable() {
-                                  @Override
-                                  public void run() {
-                                      Toast.makeText(MainApplication.this, "连接超时", Toast.LENGTH_SHORT).show();
-                                  }
-                              });
-
-                          }
-                      })
-                      .on(Socket.EVENT_CONNECT_ERROR, new Emitter.Listener() {
-                          @Override
-                          public void call(Object... args) {
-                              handler.post(new Runnable() {
-                                  @Override
-                                  public void run() {
-                                      Toast.makeText(MainApplication.this, "连接错误", Toast.LENGTH_SHORT).show();
-                                  }
-                              });
-                          }
-                      })
-                    .on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
-
-                        @Override
-                        public void call(Object... args) {
-                            Log.i("disconnected to socket", "sorry");
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(MainApplication.this, "连接不稳定", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-
-                    })
-                    .on(Socket.EVENT_RECONNECTING, new Emitter.Listener() {
-                          @Override
-                          public void call(Object... args) {
-                              handler.post(new Runnable() {
-                                  @Override
-                                  public void run() {
-                                      progressDialog.setMessage("正在重连服务器...");
-                                      progressDialog.show();
-                                  }
-                              });
-                          }
-                      })
-                     .on(Socket.EVENT_RECONNECT,new Emitter.Listener(){
-
-                         @Override
-                         public void call(Object... args) {
-                             handler.post(new Runnable() {
-                                 @Override
-                                 public void run() {
-                                     progressDialog.dismiss();
-
-                                     Toast.makeText(MainApplication.this, "重连成功", Toast.LENGTH_SHORT).show();
-
-                                 }
-                             });
-
-                         }
-                     })
                     .on("serverError", new Emitter.Listener() {
                         @Override
                         public void call(Object... args) {
@@ -160,6 +73,14 @@ public class MainApplication extends Application {
                         public void call(Object... args) {
                             Looper.prepare();
                             Toast.makeText(MainApplication.this, "socket error", Toast.LENGTH_SHORT).show();
+                            Looper.loop();
+                        }
+                    })
+                    .on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+                        @Override
+                        public void call(Object... args) {
+                            Looper.prepare();
+                            Toast.makeText(MainApplication.this, "SOCKET 已断开", Toast.LENGTH_SHORT).show();
                             Looper.loop();
                         }
                     });
