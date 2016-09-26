@@ -16,7 +16,9 @@ import java.util.List;
  * Created by kinpowoo on 9/13/16.
  */
 public class GameTopAdapter extends CommonAdapter<UserInfo> {
-
+         private int color[]={R.color.one,R.color.two,R.color.three,R.color.four,
+         R.color.five,R.color.six,R.color.seven,R.color.eight,R.color.nice,
+         R.color.ten};
 
     public GameTopAdapter(Context context, List<UserInfo> data) {
         super(context, data);
@@ -63,6 +65,9 @@ public class GameTopAdapter extends CommonAdapter<UserInfo> {
         }else{
             viewHolder.title.setText("上 帝");
         }
+
+        convertView.setBackgroundResource(color[position]);//排行榜每个item从上到下颜色渐变
+        position++;
 
         return convertView;
     }

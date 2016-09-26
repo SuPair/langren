@@ -3,9 +3,12 @@
 package com.jinhanyu.jack.langren.ui;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -26,7 +29,6 @@ import java.io.ByteArrayOutputStream;
  * Created by anzhuo on 2016/9/7.
  */
 public class UserHeadActivity extends Activity implements View.OnClickListener {
-
     ImageView cameraView;
     private ImageView system_camera;
     private ImageView photo;
@@ -73,6 +75,11 @@ public class UserHeadActivity extends Activity implements View.OnClickListener {
     }
 
     private void gotosystempic(View v) {
+        Intent intent=new Intent(Intent.ACTION_GET_CONTENT,null);
+        intent.setType("image/*");
+        intent.putExtra("return-data", true);
+        startActivityForResult(intent,2);
+
     }
 
     public void gototakephoto(View view) {
@@ -87,6 +94,17 @@ public class UserHeadActivity extends Activity implements View.OnClickListener {
         if(requestCode==1 && resultCode==RESULT_OK){
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
             cameraView.setImageBitmap(bitmap);
+        }else if(requestCode==2 && resultCode==RESULT_OK){
+            Uri uri = data.getData();
+            ContentResolver cr = this.getContentResolver();
+            try {
+                Bitmap bitmap2 = BitmapFactory.decodeStream(cr.openInputStream(uri));
+                System.out.println("the bmp toString: " + bitmap2);
+                cameraView.setImageBitmap(bitmap2);
+            } catch (Exception e) {
+
+                e.printStackTrace();
+            }
         }
     }
 

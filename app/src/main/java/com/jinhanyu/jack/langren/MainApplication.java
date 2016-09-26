@@ -1,14 +1,11 @@
 package com.jinhanyu.jack.langren;
 
 import android.app.Application;
-import android.app.ProgressDialog;
-import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.components.DraweeEventTracker;
 import com.jinhanyu.jack.langren.entity.RoomInfo;
 import com.jinhanyu.jack.langren.entity.UserInfo;
 import com.parse.Parse;
@@ -50,7 +47,10 @@ public class MainApplication extends Application {
     private void initSocket() {
         try {
             if (socket == null) {
-                socket = IO.socket(ServerHost + "/msg");
+                IO.Options options = new IO.Options();
+                options.reconnection = true;
+                options.reconnectionAttempts=5;
+                socket = IO.socket(ServerHost + "/msg",options);
             }
             socket.on("serverError", new Emitter.Listener() {
                 @Override
