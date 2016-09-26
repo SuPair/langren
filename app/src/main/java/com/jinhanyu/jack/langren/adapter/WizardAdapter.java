@@ -15,6 +15,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.langren.ActionPerformer;
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
+import com.jinhanyu.jack.langren.entity.GameRole;
 import com.jinhanyu.jack.langren.entity.UserInfo;
 
 import java.util.List;
@@ -56,7 +57,6 @@ public class WizardAdapter extends CommonAdapter<UserInfo> implements ActionPerf
             viewHolder.state.setText(R.string.isLiving);
         }
 
-        viewHolder.poison.setText(R.string.wizardPoison);
 
         viewHolder.type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -67,7 +67,9 @@ public class WizardAdapter extends CommonAdapter<UserInfo> implements ActionPerf
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-
+        viewHolder.type.setSelection(info.getGameRole().getSign_type());
+        if(info.getGameRole().getType()!= GameRole.Type.Unknown)
+            viewHolder.type.setEnabled(false);
         if(MainApplication.roomInfo.isHasPoisoned()){
             viewHolder.poison.setEnabled(false);
         }else {

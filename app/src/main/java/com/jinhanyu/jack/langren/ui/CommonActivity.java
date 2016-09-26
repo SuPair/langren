@@ -1,6 +1,7 @@
 package com.jinhanyu.jack.langren.ui;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -10,12 +11,19 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import com.baoyz.actionsheet.ActionSheet;
 import com.jinhanyu.jack.langren.MainApplication;
+import com.jinhanyu.jack.langren.NetWorkStateReceiver;
+import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.entity.UserInfo;
 import com.parse.ParseUser;
+
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 /**
  * Created by anzhuo on 2016/9/12.
@@ -24,6 +32,9 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
 
     private ActionSheet.Builder builder;
     private SensorManager sensorManager;
+    private NetWorkStateReceiver receiver;
+    private TextView network_state;
+    private boolean watchNetworkState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +53,21 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
 
     }
 
+    protected void watchNetworkState() {
+        network_state = (TextView) findViewById(R.id.network_state);
+        network_state.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                network_state.setEnabled(false);
+                MainApplication.socket.connect();
+            }
+        });
+        receiver = new NetWorkStateReceiver(network_state);
+        registerReceiver(receiver,new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+        watchNetworkState =true;
+
+    }
+
     private Handler handler = new Handler();
 
     protected void refreshUI(final BaseAdapter adapter) {
@@ -56,15 +82,65 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
 
     protected abstract void prepareViews();
 
-    protected abstract void prepareSocket();
+    protected  void prepareSocket(){
+        if(!watchNetworkState)
+            return;
+        MainApplication.socket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        network_state.setText("连接已断开,点击重连");
+                        network_state.setEnabled(true);
+                        network_state.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+        }).on(Socket.EVENT_RECONNECTING, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        network_state.setText("正在重连...");
+                    }
+                });
+            }
+        }).on(Socket.EVENT_RECONNECT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        network_state.setText("重连成功");
+                        network_state.setVisibility(View.GONE);
+                    }
+                });
+            }
+        }).on(Socket.EVENT_RECONNECT_FAILED, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        network_state.setText("重连失败,点击重连");
+                    }
+                });
+            }
+        });
+    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        unregisterReceiver(receiver);
         unbindSocket();
     }
 
-    protected abstract void unbindSocket();
+    protected  void unbindSocket(){
+        MainApplication.socket.off(Socket.EVENT_DISCONNECT).off(Socket.EVENT_RECONNECTING).off(Socket.EVENT_RECONNECT).off(Socket.EVENT_RECONNECT_FAILED);
+    }
 
 
     private boolean isShowing = false;

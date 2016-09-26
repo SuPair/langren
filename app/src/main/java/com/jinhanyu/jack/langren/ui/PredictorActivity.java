@@ -56,10 +56,9 @@ public class PredictorActivity extends CommonActivity implements ActionPerformer
                     public void run() {
                         if(type==0){
                             action_done_label.setText(MainApplication.roomInfo.findUserInRoom(toCheckUserId).getNickname()+"是好人");
-                            Toast.makeText(PredictorActivity.this, "您要验的人的身份是好人", Toast.LENGTH_SHORT).show();
                         }else if(type==1){
                             action_done_label.setText(MainApplication.roomInfo.findUserInRoom(toCheckUserId).getNickname()+"是狼人");
-                            Toast.makeText(PredictorActivity.this, "您要验的人的身份是坏人", Toast.LENGTH_SHORT).show();
+                            MainApplication.roomInfo.findUserInRoom(toCheckUserId).getGameRole().setType(1);
                         }
 
                     }

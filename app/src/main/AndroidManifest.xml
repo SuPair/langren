@@ -50,12 +50,6 @@
         <activity android:name=".ui.WolfActivity" />
         <activity android:name=".ui.VoteResultActivity"></activity>
         <activity android:name=".ui.PlayerSetActivity"/>
-        <receiver android:name=".NetWorkStateReceiver">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

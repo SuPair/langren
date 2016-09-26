@@ -5,6 +5,16 @@
     android:padding="10dp"
     android:orientation="vertical">
 
+    <TextView
+        android:textSize="20sp"
+        android:padding="10dp"
+        android:textColor="@color/lightblue"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_vote_title"
+        android:text=""/>
+
     <ListView
         android:id="@+id/vote_listView"
         android:layout_width="match_parent"

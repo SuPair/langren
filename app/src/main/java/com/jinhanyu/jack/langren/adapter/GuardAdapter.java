@@ -15,6 +15,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.langren.ActionPerformer;
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
+import com.jinhanyu.jack.langren.entity.GameRole;
 import com.jinhanyu.jack.langren.entity.UserInfo;
 
 import java.util.List;
@@ -67,6 +68,9 @@ public class GuardAdapter extends CommonAdapter<UserInfo> implements ActionPerfo
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+        viewHolder.type.setSelection(info.getGameRole().getSign_type());
+        if(info.getGameRole().getType()!= GameRole.Type.Unknown)
+            viewHolder.type.setEnabled(false);
         if(info.getUserId().equals(MainApplication.roomInfo.getLastGuardedUserId())){
             viewHolder.choose.setEnabled(false);
         }else{

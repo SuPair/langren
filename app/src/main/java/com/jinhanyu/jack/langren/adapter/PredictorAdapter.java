@@ -15,6 +15,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.langren.ActionPerformer;
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
+import com.jinhanyu.jack.langren.entity.GameRole;
 import com.jinhanyu.jack.langren.entity.UserInfo;
 
 import java.util.List;
@@ -57,7 +58,6 @@ public class PredictorAdapter extends CommonAdapter<UserInfo> implements ActionP
         } else {
             viewHolder.state.setText(R.string.isLiving);
         }
-        viewHolder.choose.setText(R.string.predictorSkill);
         viewHolder.type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -68,6 +68,9 @@ public class PredictorAdapter extends CommonAdapter<UserInfo> implements ActionP
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+        viewHolder.type.setSelection(info.getGameRole().getSign_type());
+        if(info.getGameRole().getType()!= GameRole.Type.Unknown)
+            viewHolder.type.setEnabled(false);
         viewHolder.choose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

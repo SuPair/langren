@@ -28,8 +28,8 @@ public class RoomInfo implements Serializable{
         return police;
     }
 
-    public void setPolice(String policeId) {
-        this.police = findUserInRoom(policeId);
+    public void setPolice(UserInfo police) {
+        this.police = police;
     }
 
     public  UserInfo findUserInRoom(String userId){
@@ -139,4 +139,14 @@ public class RoomInfo implements Serializable{
     public static final int VOTE_POLICE = 0;
     public static final int VOTE_WOLF = 1;
     public static final int VOTE_KILL = 2;
+
+    public List<UserInfo> getAliveUsers() {
+        List<UserInfo> userInfos = new ArrayList<>();
+        for(UserInfo userInfo: users)
+        {
+            if(!userInfo.getGameRole().isDead())
+                userInfos.add(userInfo);
+        }
+        return userInfos;
+    }
 }

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.langren.R;
+import com.jinhanyu.jack.langren.entity.GameRole;
 import com.jinhanyu.jack.langren.entity.UserInfo;
 
 import java.util.List;
@@ -52,6 +53,8 @@ public class GameDetailAdapter extends CommonAdapter<UserInfo> {
             }
         });
         holder.mark.setSelection(info.getGameRole().getSign_type());
+        if(info.getGameRole().getType()!= GameRole.Type.Unknown)
+            holder.mark.setEnabled(false);
         return view;
     }
 

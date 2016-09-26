@@ -17,7 +17,7 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
-public class LoginActivty extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivty extends CommonActivity implements View.OnClickListener {
     private EditText game_number;
     private EditText game_password;
     private TextView forget_password;
@@ -25,18 +25,16 @@ public class LoginActivty extends AppCompatActivity implements View.OnClickListe
     private TextView game_register;
 
 
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void prepareViews() {
         setContentView(R.layout.login);
+        watchNetworkState();
 
         game_number = (EditText) findViewById(R.id.game_number);
         game_password = (EditText) findViewById(R.id.game_password);
         forget_password = (TextView) findViewById(R.id.forget_password);
         game_login = (ImageButton) findViewById(R.id.game_login);
         game_register = (TextView) findViewById(R.id.game_register);
-
 
         forget_password.setOnClickListener(this);
         game_login.setOnClickListener(this);

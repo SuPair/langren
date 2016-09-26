@@ -47,43 +47,27 @@ public class MainApplication extends Application {
     }
 
 
-
     private void initSocket() {
         try {
             if (socket == null) {
                 socket = IO.socket(ServerHost + "/msg");
             }
-              socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
-                        @Override
-                        public void call(Object... args) {
-                            Log.i("connected to socket io", "nice");
-                        }
+            socket.on("serverError", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    Looper.prepare();
+                    Toast.makeText(MainApplication.this, "服务器错误：" + args[0], Toast.LENGTH_SHORT).show();
+                    Looper.loop();
+                }
+            }).on(Socket.EVENT_ERROR, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    Looper.prepare();
+                    Toast.makeText(MainApplication.this, "socket error", Toast.LENGTH_SHORT).show();
+                    Looper.loop();
+                }
+            });
 
-                    })
-                    .on("serverError", new Emitter.Listener() {
-                        @Override
-                        public void call(Object... args) {
-                            Looper.prepare();
-                            Toast.makeText(MainApplication.this, "服务器错误：" + args[0], Toast.LENGTH_SHORT).show();
-                            Looper.loop();
-                        }
-                    })
-                    .on(Socket.EVENT_ERROR, new Emitter.Listener() {
-                        @Override
-                        public void call(Object... args) {
-                            Looper.prepare();
-                            Toast.makeText(MainApplication.this, "socket error", Toast.LENGTH_SHORT).show();
-                            Looper.loop();
-                        }
-                    })
-                    .on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
-                        @Override
-                        public void call(Object... args) {
-                            Looper.prepare();
-                            Toast.makeText(MainApplication.this, "SOCKET 已断开", Toast.LENGTH_SHORT).show();
-                            Looper.loop();
-                        }
-                    });
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }

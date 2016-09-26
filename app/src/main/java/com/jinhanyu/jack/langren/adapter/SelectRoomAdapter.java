@@ -54,7 +54,7 @@ public class SelectRoomAdapter extends CommonAdapter<RoomInfo> {
         });
 
         viewHolder.peopleNum.setText(roomInfo.getCurrentCount()+"");
-        viewHolder.totalNum.setText(roomInfo.getMaxCount());
+        viewHolder.totalNum.setText(roomInfo.getMaxCount()+"");
         viewHolder.roomName.setText(roomInfo.getName());
         return view;
     }

@@ -29,7 +29,7 @@ public class VoteActivity extends CommonActivity implements ActionPerformer{
 
     private TickTimer tickTimer;
 
-    private TextView time_label;
+    private TextView time_label,tv_vote_title;
 
     @Override
     protected void prepareViews() {
@@ -39,6 +39,13 @@ public class VoteActivity extends CommonActivity implements ActionPerformer{
         adapter = new VoteAdapter(this, MainApplication.roomInfo.getUsers());
         listView.setAdapter(adapter);
         time_label = (TextView) findViewById(R.id.time_label);
+        tv_vote_title = (TextView) findViewById(R.id.tv_vote_title);
+        if(type== RoomInfo.VOTE_POLICE)
+            tv_vote_title.setText("投票选警长");
+        else if(type== RoomInfo.VOTE_WOLF)
+            tv_vote_title.setText("开始投票");
+        else
+            throw new RuntimeException("in VoteActivity unknown type.");
 
         tickTimer = new TickTimer(time_label,15,adapter){
             @Override

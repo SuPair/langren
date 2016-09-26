@@ -83,6 +83,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
     @Override
     protected void prepareViews() {
         setContentView(R.layout.game_main);
+        watchNetworkState();
 
         //杂项: 计时器相关、游戏背景、声音动画、身份、标记
         time_label = (TextView) findViewById(R.id.time_label);
@@ -189,6 +190,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
     }
 
     protected void prepareSocket() {
+        super.prepareSocket();
         MainApplication.socket
                 .on("start", new Emitter.Listener() {
                     @Override
@@ -215,6 +217,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             final List<String> companyNames = new ArrayList<String>();
                             for (int i = 0; i < array.length(); i++) {
                                 String userId = (String) array.get(i);
+                                MainApplication.roomInfo.findUserInRoom(userId).getGameRole().setType(1);
                                 companyNames.add(MainApplication.roomInfo.findUserInRoom(userId).getNickname());
                             }
 
@@ -320,7 +323,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         String userId2 = (String) args[1];
                         final StringBuilder sb = new StringBuilder();
                         if (userId1 == null && userId2 == null) {
-                            identification_label.post(new Runnable() {
+                            tv_game_hint.post(new Runnable() {
                                 @Override
                                 public void run() {
                                     SoundEffectManager.stop();
@@ -339,7 +342,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                 info.getGameRole().setDead(true);
                                 sb.append(info.getUsername() + "被杀  ");
                             }
-                            identification_label.post(new Runnable() {
+                            tv_game_hint.post(new Runnable() {
                                 @Override
                                 public void run() {
                                     tv_game_hint.setText(sb.toString());
@@ -347,6 +350,87 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             });
                             SoundEffectManager.play(R.raw.kill);//被杀音效
                         }
+                    }
+                })
+                .on("hunterDead", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        final String hunterId = (String) args[0];
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                tv_game_hint.setText(MainApplication.roomInfo.findUserInRoom(hunterId).getNickname()+"是猎人，等待猎人发动技能...");
+                            }
+                        });
+                    }
+                })
+                .on("youHunterDead", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                tv_game_hint.setText("猎人，你死了，你可以秒掉一个人");
+                            }
+                        });
+                    }
+                })
+                .on("hunterFinished", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        final String huntedId = (String) args[0];
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (huntedId==null) {
+                                    tv_game_hint.setText("猎人没有枪杀任何人");
+                                    return;
+                                }
+                                tv_game_hint.setText(MainApplication.roomInfo.findUserInRoom(huntedId).getNickname()+"被枪杀");
+                                MainApplication.roomInfo.findUserInRoom(huntedId).getGameRole().setDead(true);
+                            }
+                        });
+                    }
+                })
+                .on("changePolice", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                tv_game_hint.setText("警长被杀，请等待警长移交警徽");
+                            }
+                        });
+                    }
+                })
+                .on("deliverPolice", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                tv_game_hint.setText("警长，你被杀了，请移交警徽");
+                            }
+                        });
+                    }
+                })
+                .on("deliverPoliceFinished", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        final String userId = (String) args[0];
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(userId==null){
+                                    tv_game_hint.setText("警徽没了");
+                                    MainApplication.roomInfo.setPolice(null);
+                                    return;
+                                }
+                                final UserInfo police = MainApplication.roomInfo.findUserInRoom(userId);
+                                MainApplication.roomInfo.setPolice(police);
+                                tv_game_hint.setText("警徽传给了"+ police.getNickname());
+                            }
+                        });
                     }
                 })
                 .on("leaveWords", new Emitter.Listener() {
@@ -381,6 +465,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                     }
                                 };
                                 tickTimer.startTick();
+                                tv_game_hint.setText("你被刀了,请发表遗言");
                                 Toast.makeText(GameMainActivity.this, "你被刀了,请发表遗言", Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -441,6 +526,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                 tickTimer.startTick();
                                 if(MainApplication.userInfo.getGameRole().getType()== GameRole.Type.Wolf)
                                     bt_wolf_destroy.setEnabled(true);
+                                tv_game_hint.setText("现在轮到你发言");
                                 Toast.makeText(GameMainActivity.this, "现在轮到你发言", Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -453,7 +539,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         identification_label.post(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(GameMainActivity.this, "发言结束", Toast.LENGTH_SHORT).show();
+                                tv_game_hint.setText("发言结束");
                                 speakAnim.stop();
                             }
                         });
@@ -512,6 +598,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             public void run() {
                                 UserInfo wolf = MainApplication.roomInfo.findUserInRoom(wolfId);
                                 wolf.getGameRole().setType(1);
+                                tv_game_hint.setText("狼人 "+ wolf.getNickname()+" 自爆了");
                                 Toast.makeText(GameMainActivity.this, "狼人 "+ wolf.getNickname()+" 自爆了", Toast.LENGTH_SHORT).show();
                                 finishSpeak();
                             }
@@ -524,6 +611,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
 
     @Override
     protected void unbindSocket() {
+        super.unbindSocket();
         voiceManager.stopPlay();
         voiceManager.stopRecord();
         voiceManager.release();
