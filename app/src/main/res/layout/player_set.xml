@@ -34,19 +34,18 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="20dp"
-                android:inputType="text"
-                android:text="游戏账号:"
+                android:text="@string/game_account"
                 android:textColor="@color/state"
                 android:textSize="24sp" />
 
             <TextView
-                android:id="@+id/game_number"
+                android:id="@+id/game_account"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:text="547494937"
+                android:text=""
                 android:textSize="22sp" />
 
 
@@ -66,8 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="20dp"
-                android:inputType="text"
-                android:text="游戏昵称:"
+                android:text="@string/game_nickname"
                 android:textColor="@color/state"
                 android:textSize="24sp" />
 
@@ -77,9 +75,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp"
+                android:padding="5dp"
+                android:inputType="text"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/edit_text_style_dark"
-                android:text="小黑"
+                android:hint="@string/game_nickname"
                 android:textColor="@color/dark"
                 android:textSize="22sp" />
 
@@ -100,8 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="20dp"
-                android:inputType="text"
-                android:text="游戏头像:"
+                android:text="@string/game_head"
                 android:textColor="@color/state"
                 android:textSize="24sp" />
 
@@ -119,9 +118,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="修改"
+                android:text="@string/modify"
                 android:layout_marginLeft="15dp"
-                android:background="@drawable/shape"
+                android:background="@drawable/button_common"
                 android:textSize="18sp" />
         </LinearLayout>
 
@@ -130,7 +129,7 @@
                  android:layout_height="wrap_content"
                  android:layout_marginTop="20dp"
                  android:gravity="center"
-                 android:text="当前版本暂不支持修改密码"/>
+                 android:text="@string/reset_password_not_supported"/>
 
     </LinearLayout>
 
@@ -141,9 +140,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
         android:layout_margin="15dp"
-        android:background="@drawable/shape"
+        android:background="@drawable/button_common"
         android:gravity="center"
-        android:text="完 成"
+        android:text="@string/finish"
         android:textSize="22sp" />
 
 

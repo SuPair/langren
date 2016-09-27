@@ -2,9 +2,6 @@ package com.jinhanyu.jack.langren.ui;
 
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -14,13 +11,14 @@ import com.jinhanyu.jack.langren.ActionPerformer;
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.TickTimer;
-import com.jinhanyu.jack.langren.adapter.WizardAdapter;
+import com.jinhanyu.jack.langren.adapter.GameRoleCommonAdapter;
+import com.jinhanyu.jack.langren.entity.GameRole;
 
 import io.socket.emitter.Emitter;
 
 public class WizardActivity extends CommonActivity implements ActionPerformer{
     private ListView listView;
-    private WizardAdapter adapter;
+    private GameRoleCommonAdapter adapter;
 
     private TickTimer tickTimer;
     private TextView time_label,action_done_label;
@@ -44,7 +42,7 @@ public class WizardActivity extends CommonActivity implements ActionPerformer{
             iv_antidote.setImageResource(R.mipmap.noantidote);
         if(MainApplication.roomInfo.isHasPoisoned())
             iv_poison.setImageResource(R.mipmap.nopoison);
-        adapter=new WizardAdapter(this, MainApplication.roomInfo.getUsers());
+        adapter=new GameRoleCommonAdapter(this, MainApplication.roomInfo.getUsers(), GameRole.Type.Wizard);
         listView.setAdapter(adapter);
 
         tickTimer = new TickTimer(time_label,15,adapter){

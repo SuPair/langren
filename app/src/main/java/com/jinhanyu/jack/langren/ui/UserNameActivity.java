@@ -30,7 +30,7 @@ public class UserNameActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.user_name);
 
 
-        game_number = (EditText) findViewById(R.id.game_number);
+        game_number = (EditText) findViewById(R.id.game_account);
         game_password = (EditText) findViewById(R.id.game_password);
         game_name = (EditText) findViewById(R.id.game_name);
         next =  findViewById(R.id.next);

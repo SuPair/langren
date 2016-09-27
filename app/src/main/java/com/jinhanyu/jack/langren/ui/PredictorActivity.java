@@ -2,19 +2,19 @@ package com.jinhanyu.jack.langren.ui;
 
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jinhanyu.jack.langren.ActionPerformer;
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.TickTimer;
-import com.jinhanyu.jack.langren.adapter.PredictorAdapter;
+import com.jinhanyu.jack.langren.adapter.GameRoleCommonAdapter;
+import com.jinhanyu.jack.langren.entity.GameRole;
 
 import io.socket.emitter.Emitter;
 
 public class PredictorActivity extends CommonActivity implements ActionPerformer{
 
-    private PredictorAdapter adapter;
+    private GameRoleCommonAdapter adapter;
     private ListView listView;
     private TextView time_label,action_done_label;
     private TickTimer tickTimer;
@@ -25,7 +25,7 @@ public class PredictorActivity extends CommonActivity implements ActionPerformer
     protected void prepareViews() {
         setContentView(R.layout.predictor);
         listView = (ListView) findViewById(R.id.predictor_listView);
-        adapter = new PredictorAdapter(this,MainApplication.roomInfo.getUsers());
+        adapter = new GameRoleCommonAdapter(this,MainApplication.roomInfo.getUsers(), GameRole.Type.Predictor);
         action_done_label = (TextView) findViewById(R.id.action_done_label);
         time_label = (TextView) findViewById(R.id.time_label);
         listView.setAdapter(adapter);

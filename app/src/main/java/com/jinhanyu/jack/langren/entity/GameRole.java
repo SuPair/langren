@@ -60,7 +60,7 @@ public class GameRole {
 
 
     public enum Type{
-        Citizen("村民"),Wolf("狼人"),Predictor("预言家"),Wizard("女巫"),Guard("守卫"),Hunter("猎人"),Unknown("未知");
+        Citizen("村民"),Wolf("狼人"),Predictor("预言家"),Wizard("女巫"),Guard("守卫"),Hunter("猎人"),Unknown("未知"),Police("警长");
 
         Type(String name){
             this.name = name;

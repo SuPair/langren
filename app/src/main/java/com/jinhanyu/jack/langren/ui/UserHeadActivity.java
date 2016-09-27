@@ -7,6 +7,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -49,13 +50,19 @@ public class UserHeadActivity extends Activity implements View.OnClickListener {
         complete.setOnClickListener(this);
 
 
-
     }
 
-
-
-
-
+    protected Bitmap scaleImg(Bitmap bm, int newWidth) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        // 计算缩放比例
+        float scaleWidth = ((float) newWidth) / width;
+        // 取得想要缩放的matrix参数
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleWidth);
+        // 得到新的图片
+        return Bitmap.createBitmap(bm, 0, 0, width, height, matrix,true);
+    }
 
 
     @Override
@@ -75,10 +82,10 @@ public class UserHeadActivity extends Activity implements View.OnClickListener {
     }
 
     private void gotosystempic(View v) {
-        Intent intent=new Intent(Intent.ACTION_GET_CONTENT,null);
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
         intent.setType("image/*");
         intent.putExtra("return-data", true);
-        startActivityForResult(intent,2);
+        startActivityForResult(intent, 2);
 
     }
 
@@ -91,10 +98,10 @@ public class UserHeadActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==1 && resultCode==RESULT_OK){
+        if (requestCode == 1 && resultCode == RESULT_OK) {
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
             cameraView.setImageBitmap(bitmap);
-        }else if(requestCode==2 && resultCode==RESULT_OK){
+        } else if (requestCode == 2 && resultCode == RESULT_OK) {
             Uri uri = data.getData();
             ContentResolver cr = this.getContentResolver();
             try {
@@ -111,27 +118,29 @@ public class UserHeadActivity extends Activity implements View.OnClickListener {
     public void uploadHead(View view) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         BitmapDrawable bitmapDrawable = (BitmapDrawable) cameraView.getDrawable();
-        if(bitmapDrawable!=null)
-            bitmapDrawable.getBitmap().compress(Bitmap.CompressFormat.PNG, 100, output);
+        final Bitmap finalBm;
+        finalBm = scaleImg(bitmapDrawable.getBitmap(),300);
+        finalBm.compress(Bitmap.CompressFormat.JPEG, 60, output);
         //bm.recycle();//自由选择是否进行回收
         byte[] result = output.toByteArray();
         final ParseFile file = new ParseFile("head.jpg", result);
         file.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                if(e!=null){
+                if (e != null) {
                     e.printStackTrace();
                     Toast.makeText(UserHeadActivity.this, "上传头像失败", Toast.LENGTH_SHORT).show();
-                }else {
-                    ParseUser.getCurrentUser().put("head",file);
+                } else {
+                    ParseUser.getCurrentUser().put("head", file);
                     ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
-                            if(e==null) {
+                            if (e == null) {
                                 Toast.makeText(UserHeadActivity.this, "上传头像成功！", Toast.LENGTH_SHORT).show();
                                 ParseFile parseFile = (ParseFile) ParseUser.getCurrentUser().get("head");
-                                if(parseFile!=null)
+                                if (parseFile != null)
                                     MainApplication.userInfo.setHead(parseFile.getUrl());
+                                setResult(RESULT_OK,getIntent().putExtra("head",finalBm));
                                 finish();
                             }
                         }

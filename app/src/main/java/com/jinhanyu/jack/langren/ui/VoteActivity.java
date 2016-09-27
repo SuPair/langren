@@ -9,7 +9,8 @@ import com.jinhanyu.jack.langren.ActionPerformer;
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.TickTimer;
-import com.jinhanyu.jack.langren.adapter.VoteAdapter;
+import com.jinhanyu.jack.langren.adapter.GameRoleCommonAdapter;
+import com.jinhanyu.jack.langren.entity.GameRole;
 import com.jinhanyu.jack.langren.entity.RoomInfo;
 import com.jinhanyu.jack.langren.entity.VoteResult;
 
@@ -23,7 +24,7 @@ public class VoteActivity extends CommonActivity implements ActionPerformer{
     private int type = -1;
 
     private ListView listView;
-    private VoteAdapter adapter;
+    private GameRoleCommonAdapter adapter;
 
     private String toVoteUserId;
 
@@ -36,7 +37,7 @@ public class VoteActivity extends CommonActivity implements ActionPerformer{
         type = getIntent().getIntExtra("type",-1);
         setContentView(R.layout.vote);
         listView = (ListView) findViewById(R.id.vote_listView);
-        adapter = new VoteAdapter(this, MainApplication.roomInfo.getUsers());
+        adapter = new GameRoleCommonAdapter(this, MainApplication.roomInfo.getUsers(), GameRole.Type.Citizen);
         listView.setAdapter(adapter);
         time_label = (TextView) findViewById(R.id.time_label);
         tv_vote_title = (TextView) findViewById(R.id.tv_vote_title);

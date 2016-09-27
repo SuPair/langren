@@ -20,16 +20,16 @@
             android:layout_gravity="center"
             android:layout_marginLeft="20dp"
             android:inputType="text"
-            android:text="游戏账号:"
+            android:text="@string/game_account"
             android:textColor="@color/state"
             android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/game_number"
+            android:id="@+id/game_account"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:hint="请输入您的账号..."
+            android:hint="@string/type_your_account"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="20dp"
             android:singleLine="true"
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="20dp"
-            android:text="游戏密码:"
+            android:text="@string/game_password"
             android:textColor="@color/state"
             android:textSize="24sp" />
 
@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:hint="请输入密码..."
+            android:hint="@string/type_your_password"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="20dp"
             android:background="@drawable/edit_text_style_dark"
@@ -75,7 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:layout_marginRight="15dp"
-        android:text="忘记密码"
+        android:text="@string/forget_password"
         android:textColor="@color/state"
         android:textSize="18sp" />
 
@@ -102,7 +102,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginBottom="10dp"
         android:textColor="@color/state"
-        android:text="注册账号"
+        android:text="@string/register"
         android:textSize="18sp" />
 
     </LinearLayout>

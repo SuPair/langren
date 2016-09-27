@@ -1,8 +1,6 @@
 package com.jinhanyu.jack.langren.ui;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
@@ -30,7 +28,7 @@ public class LoginActivty extends CommonActivity implements View.OnClickListener
         setContentView(R.layout.login);
         watchNetworkState();
 
-        game_number = (EditText) findViewById(R.id.game_number);
+        game_number = (EditText) findViewById(R.id.game_account);
         game_password = (EditText) findViewById(R.id.game_password);
         forget_password = (TextView) findViewById(R.id.forget_password);
         game_login = (ImageButton) findViewById(R.id.game_login);

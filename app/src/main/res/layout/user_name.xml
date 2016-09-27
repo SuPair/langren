@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:scaleType="fitStart"
         android:layout_weight="1"
-        android:src="@mipmap/user_head" />
+        android:src="@mipmap/user_head_bg" />
 
 
     <LinearLayout
@@ -31,8 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="20dp"
-                android:inputType="text"
-                android:text="昵        称:"
+                android:text="@string/game_nickname"
                 android:textColor="#000000"
                 android:textSize="24sp" />
 
@@ -44,7 +43,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/edit_text_style"
-                android:hint="可选..."
+                android:hint="@string/optional"
                 android:maxLength="8"
                 android:singleLine="true"
                 android:ellipsize="end"
@@ -65,20 +64,19 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="20dp"
-                android:inputType="text"
-                android:text="游戏账号:"
+                android:text="@string/game_account"
                 android:textColor="#000000"
                 android:textSize="24sp" />
 
             <EditText
-                android:id="@+id/game_number"
+                android:id="@+id/game_account"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/edit_text_style"
-                android:hint="必填..."
+                android:hint="@string/required"
                 android:maxLength="11"
                 android:ems="4"
                 android:ellipsize="end"
@@ -99,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="20dp"
-                android:text="游戏密码:"
+                android:text="@string/game_password"
                 android:textColor="#000000"
                 android:textSize="24sp" />
 
@@ -111,7 +109,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/edit_text_style"
-                android:hint="必填..."
+                android:hint="@string/required"
                 android:inputType="textPassword"
                 android:maxLength="16"
                 android:maxLines="1"
@@ -136,9 +134,9 @@
         android:layout_gravity="center"
         android:layout_margin="10dp"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/shape"
+        android:background="@drawable/button_common"
         android:textColor="#000000"
-        android:text="下一步"
+        android:text="@string/nextStep"
         android:textSize="20sp" />
 
 </LinearLayout>

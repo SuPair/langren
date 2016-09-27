@@ -1,6 +1,7 @@
 package com.jinhanyu.jack.langren.ui;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -36,7 +37,7 @@ public class PlayerSetActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.player_set);
 
         player_set_back = (ImageView) findViewById(R.id.player_set_back);
-        game_number = (TextView) findViewById(R.id.game_number);
+        game_number = (TextView) findViewById(R.id.game_account);
         game_nickname = (EditText) findViewById(R.id.game_nickname);
         game_head = (SimpleDraweeView) findViewById(R.id.game_head);
         game_head_choose = (TextView) findViewById(R.id.game_head_choose);
@@ -60,7 +61,7 @@ public class PlayerSetActivity extends AppCompatActivity implements View.OnClick
                 finish();
                 break;
             case R.id.game_head_choose://修改头像
-                startActivity(new Intent(PlayerSetActivity.this, UserHeadActivity.class));
+                startActivityForResult(new Intent(PlayerSetActivity.this, UserHeadActivity.class),0);
                 break;
             case R.id.player_set_complete://完成
                 final String nickname = game_nickname.getText().toString();//昵称
@@ -85,5 +86,14 @@ public class PlayerSetActivity extends AppCompatActivity implements View.OnClick
         }
 
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK){
+             Bitmap bm = data.getParcelableExtra("head");
+             game_head.setImageBitmap(bm);
+        }
     }
 }

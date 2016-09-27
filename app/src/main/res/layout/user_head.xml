@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="10dp"
-        android:text="拍张你的靓照吧！"
+        android:text="@string/take_your_photo"
         android:textSize="26sp" />
 
 
@@ -51,8 +51,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@drawable/shape"
-                android:text="完成"
+                android:background="@drawable/button_common"
+                android:text="@string/finish"
                 android:textSize="22sp"/>
         </RelativeLayout>
 

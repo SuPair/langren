@@ -10,14 +10,11 @@ import com.jinhanyu.jack.langren.ActionPerformer;
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.TickTimer;
-import com.jinhanyu.jack.langren.adapter.GuardAdapter;
-import com.jinhanyu.jack.langren.entity.UserInfo;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.jinhanyu.jack.langren.adapter.GameRoleCommonAdapter;
+import com.jinhanyu.jack.langren.entity.GameRole;
 
 public class GuardActivity extends AppCompatActivity implements ActionPerformer{
-    private GuardAdapter adapter;
+    private GameRoleCommonAdapter adapter;
     private ListView listView;
     private TickTimer tickTimer;
     private TextView time_label,action_done_label;
@@ -34,7 +31,7 @@ public class GuardActivity extends AppCompatActivity implements ActionPerformer{
         String lastGuadedUserId = MainApplication.roomInfo.getLastGuardedUserId();
         if(lastGuadedUserId!=null)
             iv_last_guard.setImageURI(MainApplication.roomInfo.findUserInRoom(lastGuadedUserId).getHead());
-        adapter = new GuardAdapter(this, MainApplication.roomInfo.getUsers());
+        adapter = new GameRoleCommonAdapter(this, MainApplication.roomInfo.getUsers(), GameRole.Type.Guard);
         listView.setAdapter(adapter);
 
         tickTimer = new TickTimer(time_label,15,adapter){

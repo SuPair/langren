@@ -1,48 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:foregroundGravity="center">
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:foregroundGravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <com.facebook.drawee.view.SimpleDraweeView
-                xmlns:fresco = "http://schemas.android.com/apk/res-auto"
-                android:id="@+id/iv_waitRoom_item_portrait"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                fresco:roundAsCircle ="true"
-                fresco:placeholderImage="@mipmap/ic_launcher"/>
-
-            <TextView
-                android:id="@+id/tv_waitRoom_item_userId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="@color/state"
-                android:layout_margin="10dp"
-                android:text="狼王_JY"
-                android:textSize="18dp" />
-        </LinearLayout>
-        <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/iv_overlay"
-            xmlns:fresco = "http://schemas.android.com/apk/res-auto"
+        <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/iv_waitRoom_item_portrait"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            fresco:roundAsCircle ="true"
-            />
-    </FrameLayout>
-</LinearLayout>
+            fresco:placeholderImage="@mipmap/user_head"
+            fresco:roundAsCircle="true" />
+
+        <TextView
+            android:id="@+id/tv_waitRoom_item_userId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/state"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/iv_overlay"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        fresco:roundAsCircle="true" />
+</FrameLayout>

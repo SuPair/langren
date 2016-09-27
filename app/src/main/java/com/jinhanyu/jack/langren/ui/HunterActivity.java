@@ -11,11 +11,12 @@ import com.jinhanyu.jack.langren.ActionPerformer;
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.TickTimer;
-import com.jinhanyu.jack.langren.adapter.HunterAdapter;
+import com.jinhanyu.jack.langren.adapter.GameRoleCommonAdapter;
+import com.jinhanyu.jack.langren.entity.GameRole;
 
 public class HunterActivity extends AppCompatActivity implements ActionPerformer{
     private ListView listView;
-    private HunterAdapter adapter;
+    private GameRoleCommonAdapter adapter;
     private String huntedUserId;
     private TextView time_label;
     private TickTimer tickTimer;
@@ -26,7 +27,7 @@ public class HunterActivity extends AppCompatActivity implements ActionPerformer
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hunter);
         listView = (ListView) findViewById(R.id.hunter_listView);
-        adapter = new HunterAdapter(this, MainApplication.roomInfo.getAliveUsers());
+        adapter = new GameRoleCommonAdapter(this, MainApplication.roomInfo.getAliveUsers(), GameRole.Type.Hunter);
         listView.setAdapter(adapter);
         time_label = (TextView) findViewById(R.id.time_label);
         tickTimer = new TickTimer(time_label,15,adapter){

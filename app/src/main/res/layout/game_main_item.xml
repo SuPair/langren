@@ -12,7 +12,7 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         fresco:roundAsCircle="true"
-        fresco:placeholderImage ="@mipmap/ic_launcher"
+        fresco:placeholderImage ="@mipmap/user_head"
         />
     <TextView
         android:id="@+id/tv_waitRoom_item_userId"
@@ -20,9 +20,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:gravity="center"
-        android:text="狼王_JY"
+        android:text=""
         android:textColor="#000000"
-        android:textSize="18dp" />
+        android:textSize="18sp" />
 
 </LinearLayout>
 

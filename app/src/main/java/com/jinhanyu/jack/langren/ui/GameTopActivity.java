@@ -22,8 +22,8 @@ import java.util.List;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 
-public class GameTopActivity extends AppCompatActivity implements View.OnClickListener {
-    private Button back;
+public class GameTopActivity extends AppCompatActivity{
+
     private ListView listView;
     private List<UserInfo> list;
     private GameTopAdapter adapter;
@@ -35,11 +35,10 @@ public class GameTopActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_top);
         list = new ArrayList<>();
-        back = (Button) findViewById(R.id.back);
         listView = (ListView) findViewById(R.id.top_listView);
         adapter = new GameTopAdapter(this, list);
         listView.setAdapter(adapter);
-        back.setOnClickListener(this);
+
         loadData();
 
         //主页面下拉刷新控件 实例化
@@ -87,12 +86,5 @@ public class GameTopActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.back:
-                finish();
-                break;
-        }
-    }
+
 }

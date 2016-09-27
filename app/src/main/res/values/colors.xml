@@ -28,5 +28,6 @@
     <color name="three">#d7455A64</color>
     <color name="two">#d737474F</color>
     <color name="one">#d7263238</color>
+    <color name="transparent">#00ffffff</color>
 
 </resources>

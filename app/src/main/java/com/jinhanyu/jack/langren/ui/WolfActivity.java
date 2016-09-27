@@ -14,7 +14,8 @@ import com.jinhanyu.jack.langren.ActionPerformer;
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.TickTimer;
-import com.jinhanyu.jack.langren.adapter.WolfAdapter;
+import com.jinhanyu.jack.langren.adapter.GameRoleCommonAdapter;
+import com.jinhanyu.jack.langren.entity.GameRole;
 import com.jinhanyu.jack.langren.entity.RoomInfo;
 import com.jinhanyu.jack.langren.entity.VoteResult;
 
@@ -27,7 +28,7 @@ public class WolfActivity extends CommonActivity implements ActionPerformer{
     private TextView tv_content;
     private EditText et_msg;
     private TextView time_label,action_done_label;
-    private WolfAdapter wolfAdapter;
+    private GameRoleCommonAdapter wolfAdapter;
     private ListView listView;
     private StringBuilder sb= new StringBuilder();
 
@@ -45,7 +46,7 @@ public class WolfActivity extends CommonActivity implements ActionPerformer{
         time_label = (TextView) findViewById(R.id.time_label);
         msg_scroll = (ScrollView) findViewById(R.id.msg_scroll);
         action_done_label = (TextView) findViewById(R.id.action_done_label);
-        wolfAdapter = new WolfAdapter(this,MainApplication.roomInfo.getUsers());
+        wolfAdapter = new GameRoleCommonAdapter(this,MainApplication.roomInfo.getUsers(), GameRole.Type.Wolf);
         listView = (ListView) findViewById(R.id.wolf_listView);
         listView.setAdapter(wolfAdapter);
 
@@ -69,7 +70,7 @@ public class WolfActivity extends CommonActivity implements ActionPerformer{
                  String userId= (String) args[0];
                  Log.i("userid",userId);
                  String msg = (String) args[1];
-                 sb.append(MainApplication.roomInfo.findUserInRoom(userId).getUsername()+" 说: "+msg+"\n");
+                 sb.append(MainApplication.roomInfo.findUserInRoom(userId).getUsername()).append(" 说: ").append(msg).append("\n");
                  tv_content.post(new Runnable() {
                      @Override
                      public void run() {

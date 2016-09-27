@@ -8,7 +8,7 @@ import com.parse.ParseUser;
  * Created by anzhuo on 2016/9/10.
  */
 public class UserInfo {
-    private String head ="res://com.jinhanyu.jack.langren/"+ R.mipmap.ic_launcher;
+    private String head ="res://com.jinhanyu.jack.langren/"+ R.mipmap.user_head_bg;
     private String username;
     private String userId;
     private String nickname;
