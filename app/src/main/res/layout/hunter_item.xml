@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="5dp"
-             />
+            android:entries="@array/sign_type" />
 
         <TextView
             android:id="@+id/gameHunter_item_shoot"

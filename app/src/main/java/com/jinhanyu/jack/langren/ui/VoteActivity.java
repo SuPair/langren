@@ -80,7 +80,7 @@ public class VoteActivity extends CommonActivity implements ActionPerformer{
                             }
                             Intent intent =new Intent(VoteActivity.this, VoteResultActivity.class).putExtra("type",type);
                             if(policeUserId!=null) {
-                                MainApplication.roomInfo.setPolice(policeUserId);
+                                MainApplication.roomInfo.setPolice(MainApplication.roomInfo.findUserInRoom(policeUserId));
                                 intent.putExtra("finalUserName", MainApplication.roomInfo.findUserInRoom(policeUserId).getUsername());
                                 startActivity(intent);
                                 finish();

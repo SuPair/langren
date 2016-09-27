@@ -134,7 +134,8 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(receiver);
+        if(receiver!=null)
+          unregisterReceiver(receiver);
         unbindSocket();
     }
 
