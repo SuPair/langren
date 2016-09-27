@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
+import com.jinhanyu.jack.langren.SoundEffectManager;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -55,6 +56,7 @@ public class PlayerSetActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.player_set_back://返回
+                SoundEffectManager.play(R.raw.back);
                 finish();
                 break;
             case R.id.game_head_choose://修改头像
@@ -75,6 +77,7 @@ public class PlayerSetActivity extends AppCompatActivity implements View.OnClick
                             setResult(RESULT_OK);
                             finish();
                         }
+                        SoundEffectManager.play(R.raw.complete);
                     }
                 });
                 break;

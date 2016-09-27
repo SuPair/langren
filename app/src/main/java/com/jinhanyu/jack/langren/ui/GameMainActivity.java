@@ -370,7 +370,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                tv_game_hint.setText("猎人，你死了，你可以秒掉一个人");
+                                tv_game_hint.setText("猎人，你死了，你可以带走一个人");
                             }
                         });
                     }

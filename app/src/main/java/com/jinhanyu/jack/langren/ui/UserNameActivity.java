@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
+import com.jinhanyu.jack.langren.SoundEffectManager;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -61,6 +62,7 @@ public class UserNameActivity extends AppCompatActivity implements View.OnClickL
                            MainApplication.userInfo.populateFromParseServer(user);
                            Intent intent = new Intent(UserNameActivity.this, UserHeadActivity.class);
                            startActivity(intent);
+                            SoundEffectManager.play(R.raw.complete);
                            finish();
                         }
                     }

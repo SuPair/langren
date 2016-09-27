@@ -210,6 +210,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_createRoom:
+                SoundEffectManager.play(R.raw.user_detail);
                 dialog.show();
                 break;
             case R.id.game_top:
@@ -222,6 +223,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                 break;
             case R.id.iv_userInfo_settings:
             //这里点击设置账号
+                SoundEffectManager.play(R.raw.user_detail);
               startActivityForResult(new Intent(SelectRoomActivity.this,PlayerSetActivity.class),0);
                 break;
         }

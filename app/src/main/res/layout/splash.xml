@@ -3,4 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/lang">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="狼人杀--语音版"
+        android:textSize="18sp"
+        android:gravity="end"
+        android:layout_margin="5dp"/>
+
+
 </LinearLayout>
