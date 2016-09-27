@@ -1,23 +1,34 @@
 package com.jinhanyu.jack.langren.ui;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.jinhanyu.jack.langren.PullRefresh;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.adapter.GameTopAdapter;
 import com.jinhanyu.jack.langren.entity.UserInfo;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
 
 public class GameTopActivity extends AppCompatActivity implements View.OnClickListener {
     private Button back;
     private ListView listView;
     private List<UserInfo> list;
     private GameTopAdapter adapter;
+    in.srain.cube.views.ptr.PtrFrameLayout iv_ptrFeame;
+    PullRefresh pullRefresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +40,51 @@ public class GameTopActivity extends AppCompatActivity implements View.OnClickLi
         adapter = new GameTopAdapter(this, list);
         listView.setAdapter(adapter);
         back.setOnClickListener(this);
+        loadData();
+
+        //主页面下拉刷新控件 实例化
+        iv_ptrFeame = (PtrFrameLayout) findViewById(R.id.iv_ptrFeame);
+
+        pullRefresh = new PullRefresh(this);
+
+        iv_ptrFeame.setHeaderView(pullRefresh);
+        iv_ptrFeame.addPtrUIHandler(pullRefresh);
+        iv_ptrFeame.setPtrHandler(new PtrDefaultHandler() {
+            @Override
+            public void onRefreshBegin(PtrFrameLayout frame) {
+                iv_ptrFeame.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(GameTopActivity.this,"已是最新数据！",Toast.LENGTH_SHORT).show();
+                        iv_ptrFeame.refreshComplete();
+                    }
+                }, 2000);
+            }
+        });
+
+
+    }
+
+    private void loadData() {
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.orderByDescending("score").setLimit(10);
+        query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> objects, ParseException e) {
+                for (ParseUser parseUser : objects) {
+                    UserInfo info = new UserInfo();
+                    info.populateFromParseServer(parseUser);
+                    list.add(info);
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        });
+
     }
 
     @Override

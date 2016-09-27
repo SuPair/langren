@@ -12,7 +12,21 @@
     <color name="text_color">#c508cf0b</color>
     <color name="light">#f1f1f1</color>
     <color name="dark">#555</color>
+    <color name="dark_transparent">#d4555555</color>
     <color name="green">#0c0</color>
     <color name="game_top">#402c03</color>
     <color name="state">@color/gray</color>
+    <color name="disabled">#fb909396</color>
+
+    <color name="ten">#d7eceff1</color>
+    <color name="nice">#d7cfd8dc</color>
+    <color name="eight">#d7B0BEC5</color>
+    <color name="seven">#d790A4AE</color>
+    <color name="six">#d778909C</color>
+    <color name="five">#d7607D8B</color>
+    <color name="four">#d7546E7A</color>
+    <color name="three">#d7455A64</color>
+    <color name="two">#d737474F</color>
+    <color name="one">#d7263238</color>
+
 </resources>

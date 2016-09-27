@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true">
+    <item android:state_pressed="true" >
         <shape>
             <corners android:radius="5dp"></corners>
-            <padding android:bottom="10dp" android:left="10dp" android:top="10dp" android:right="10dp"/>
-            <solid android:color="#d00b3479" />
+            <padding android:bottom="10dp" android:left="10dp" android:right="10dp" android:top="10dp" />
+            <solid android:color="#d0285aaf" />
         </shape>
     </item>
     <item android:state_enabled="false">
         <shape>
-        <corners android:radius="5dp"></corners>
-        <padding android:bottom="10dp" />
-        <padding android:left="10dp" />
-        <padding android:right="10dp" />
-        <padding android:top="10dp" />
-        <solid android:color="#fb909396" />
+            <corners android:radius="5dp"></corners>
+            <padding android:bottom="10dp" android:left="10dp" android:right="10dp" android:top="10dp" />
+            <solid android:color="@color/disabled" />
         </shape>
     </item>
+
     <item>
         <shape>
             <corners android:radius="5dp"></corners>
-            <padding android:bottom="10dp" android:left="10dp" android:top="10dp" android:right="10dp"/>
+            <padding android:bottom="10dp" android:left="10dp" android:right="10dp" android:top="10dp" />
             <solid android:color="#d03e71a4" />
         </shape>
 

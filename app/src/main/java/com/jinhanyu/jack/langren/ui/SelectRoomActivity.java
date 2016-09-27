@@ -222,8 +222,18 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                 break;
             case R.id.iv_userInfo_settings:
             //这里点击设置账号
-              startActivity(new Intent(SelectRoomActivity.this,PlayerSetActivity.class));
+              startActivityForResult(new Intent(SelectRoomActivity.this,PlayerSetActivity.class),0);
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK){
+            userHead.setImageURI(MainApplication.userInfo.getHead());
+            head.setImageURI(MainApplication.userInfo.getHead());
+            nickname.setText(MainApplication.userInfo.getNickname());
         }
     }
 }
