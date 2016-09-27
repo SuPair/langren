@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <ImageView
+        android:layout_margin="10dp"
         android:id="@+id/player_set_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,7 +25,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="15dp">
@@ -142,6 +143,7 @@
         android:layout_margin="15dp"
         android:background="@drawable/button_common"
         android:gravity="center"
+        android:textStyle="bold"
         android:text="@string/finish"
         android:textSize="22sp" />
 
