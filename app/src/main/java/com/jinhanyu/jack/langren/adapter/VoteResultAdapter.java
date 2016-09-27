@@ -24,16 +24,17 @@ public class VoteResultAdapter extends CommonAdapter<VoteResult> {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         ViewHolder viewHolder;
-        if(view==null){
-            view = LayoutInflater.from(context).inflate(R.layout.vote_result_item,null);
+        if (view == null) {
+            view = LayoutInflater.from(context).inflate(R.layout.vote_result_item, null);
             viewHolder = new ViewHolder();
             viewHolder.fromUserName = (TextView) view.findViewById(R.id.fromUserName);
             viewHolder.toUserName = (TextView) view.findViewById(R.id.toUserName);
             viewHolder.fromUserHead = (SimpleDraweeView) view.findViewById(R.id.fromUserHead);
-            viewHolder.toUserHead = (SimpleDraweeView) view.findViewById(R.id.fromUserHead);
+            viewHolder.toUserHead = (SimpleDraweeView) view.findViewById(R.id.toUserHead);
             view.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) view.getTag();
         }
-        viewHolder= (ViewHolder) view.getTag();
 
         VoteResult voteResult = data.get(i);
         viewHolder.fromUserName.setText(voteResult.getFromUser().getNickname());
@@ -43,8 +44,8 @@ public class VoteResultAdapter extends CommonAdapter<VoteResult> {
         return view;
     }
 
-    class ViewHolder{
-        public SimpleDraweeView fromUserHead,toUserHead;
-        public TextView fromUserName,toUserName;
+    class ViewHolder {
+        public SimpleDraweeView fromUserHead, toUserHead;
+        public TextView fromUserName, toUserName;
     }
 }

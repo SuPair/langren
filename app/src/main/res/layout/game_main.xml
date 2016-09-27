@@ -49,7 +49,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginLeft="30dp"
                     android:layout_marginTop="30dp"
-                    fresco:placeholderImage="@mipmap/lang"
+                    fresco:placeholderImage="@mipmap/user_head"
                     fresco:roundAsCircle="true" />
 
                 <TextView

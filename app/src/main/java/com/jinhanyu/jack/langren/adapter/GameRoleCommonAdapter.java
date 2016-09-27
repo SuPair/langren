@@ -35,18 +35,25 @@ public class GameRoleCommonAdapter extends CommonAdapter<UserInfo> implements Ac
         switch (type){
             case Wolf:
                 actionStr = resources.getString(R.string.wolfSkill);
+                break;
             case Wizard:
                 actionStr = resources.getString(R.string.wizardPoison);
+                break;
             case Predictor:
                 actionStr = resources.getString(R.string.predictorSkill);
+                break;
             case Hunter:
                 actionStr = resources.getString(R.string.hunterSkill);
+                break;
             case Guard:
                 actionStr = resources.getString(R.string.guardSkill);
+                break;
             case Citizen:
                 actionStr = resources.getString(R.string.citizenSkill);
+                break;
             case Police:
                 actionStr = resources.getString(R.string.policeSkill);
+                break;
         }
     }
 

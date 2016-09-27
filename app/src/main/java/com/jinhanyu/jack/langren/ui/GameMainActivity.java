@@ -104,6 +104,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
 
         //大头像
         bigHead = (SimpleDraweeView) findViewById(R.id.iv_playStage_bigHead);
+        bigHead.setImageURI(MainApplication.userInfo.getHead());
 
         //游戏规则
         gameRule = (ImageView) findViewById(R.id.iv_gameStage_gameRule);
@@ -162,10 +163,13 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
         //侧边栏
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+            private boolean hasRefreshed;
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
-                  if(slideOffset==10)
+                  if(!hasRefreshed){
+                      hasRefreshed = true;
                       gameDetailAdapter.notifyDataSetChanged();
+                  }
             }
 
             @Override
@@ -175,7 +179,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
 
             @Override
             public void onDrawerClosed(View drawerView) {
-
+                   hasRefreshed = false;
             }
 
             @Override

@@ -91,9 +91,9 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        network_state.setVisibility(View.VISIBLE);
                         network_state.setText("连接已断开,点击重连");
                         network_state.setEnabled(true);
-                        network_state.setVisibility(View.VISIBLE);
                     }
                 });
             }
@@ -103,6 +103,7 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        network_state.setVisibility(View.VISIBLE);
                         network_state.setText("正在重连...");
                     }
                 });
@@ -113,6 +114,7 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        network_state.setVisibility(View.VISIBLE);
                         network_state.setText("重连成功");
                         network_state.setVisibility(View.GONE);
                     }
@@ -124,6 +126,7 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        network_state.setVisibility(View.VISIBLE);
                         network_state.setText("重连失败,点击重连");
                     }
                 });

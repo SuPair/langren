@@ -23,30 +23,7 @@
         android:entries="@array/sign_type">
     </ListView>
 
-    <LinearLayout
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:textSize="20sp"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="剩余时间:" />
-        <TextView
-            android:id="@+id/time_label"
-            android:textSize="20sp"
-            android:textColor="@color/red"
-            android:layout_marginLeft="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="15秒" />
-        <TextView
-            android:layout_marginLeft="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="抓紧时间投票"/>
-    </LinearLayout>
+    <include layout="@layout/time_panel"/>
 
 
 </LinearLayout>
