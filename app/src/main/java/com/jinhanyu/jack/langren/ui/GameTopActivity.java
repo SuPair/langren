@@ -2,8 +2,7 @@ package com.jinhanyu.jack.langren.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
+
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -14,7 +13,7 @@ import com.jinhanyu.jack.langren.entity.UserInfo;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,16 +64,12 @@ public class GameTopActivity extends AppCompatActivity{
     }
 
     private void loadData() {
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        ParseQuery<UserInfo> query = ParseQuery.getQuery(UserInfo.class);
         query.orderByDescending("score").setLimit(10);
-        query.findInBackground(new FindCallback<ParseUser>() {
+        query.findInBackground(new FindCallback<UserInfo>() {
             @Override
-            public void done(List<ParseUser> objects, ParseException e) {
-                for (ParseUser parseUser : objects) {
-                    UserInfo info = new UserInfo();
-                    info.populateFromParseServer(parseUser);
-                    list.add(info);
-                }
+            public void done(List<UserInfo> objects, ParseException e) {
+                list.addAll(objects);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

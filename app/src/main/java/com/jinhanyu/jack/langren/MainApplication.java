@@ -9,6 +9,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.jinhanyu.jack.langren.entity.RoomInfo;
 import com.jinhanyu.jack.langren.entity.UserInfo;
 import com.parse.Parse;
+import com.parse.ParseObject;
 
 import java.net.URISyntaxException;
 
@@ -29,7 +30,7 @@ public class MainApplication extends Application {
 
         Fresco.initialize(getApplicationContext());
 
-
+        ParseObject.registerSubclass(UserInfo.class);
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId("langrensha")
                 .clientKey("")
@@ -73,11 +74,9 @@ public class MainApplication extends Application {
         }
     }
 
-    public static UserInfo userInfo = new UserInfo();
+
     public static RoomInfo roomInfo;
     public static Socket socket;
-
-
     private static final String ServerHost = "http://172.168.0.10:3000";
 //    private static final String ServerHost = "http://langren.applinzi.com";
 

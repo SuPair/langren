@@ -18,11 +18,13 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.baoyz.actionsheet.ActionSheet;
 import com.jinhanyu.jack.langren.MainApplication;
+import com.jinhanyu.jack.langren.Me;
 import com.jinhanyu.jack.langren.NetWorkStateReceiver;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.entity.RoomInfo;
-import com.jinhanyu.jack.langren.entity.UserInfo;
+
 import com.parse.ParseUser;
+
 
 import org.json.JSONObject;
 
@@ -68,7 +70,7 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
             public void onClick(View view) {
                 socket_state.setEnabled(false);
                 MainApplication.socket.connect();
-                MainApplication.socket.emit("login", MainApplication.userInfo.getUserId());
+                MainApplication.socket.emit("login", Me.getUserId());
             }
         });
         MainApplication.socket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
@@ -186,7 +188,6 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
             case 1:
                 ParseUser.getCurrentUser().logOut();
                 MainApplication.socket.disconnect();
-                MainApplication.userInfo = new UserInfo();
                 startActivity(new Intent(this, LoginActivty.class));
                 finish();
                 break;

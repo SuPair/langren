@@ -1,7 +1,8 @@
 package com.jinhanyu.jack.langren.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.jinhanyu.jack.langren.MainApplication;
+import com.jinhanyu.jack.langren.Me;
+import com.parse.ParseException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,19 +11,19 @@ import java.util.List;
 /**
  * Created by anzhuo on 2016/9/10.
  */
-public class RoomInfo implements Serializable{
+public class RoomInfo implements Serializable {
 
 
     //voteRecord:[{fromUserId,toUserId}], vote:{userId:voteCount}, voteCounter // 投票计数器，都投完票就计算投票结果
     // users:[{userId, socket, dead, type}],   const hasSaved, const hasPoisoned, const lastGuardedUserId
 
-    private  String roomId;
+    private String roomId;
     private int maxCount;
     private int currentCount;
     private String name;
     private boolean hasSaved;
     private boolean hasPoisoned;
-    private String  lastGuardedUserId;
+    private String lastGuardedUserId;
     private String policeId;
 
     public String getPoliceId() {
@@ -33,7 +34,7 @@ public class RoomInfo implements Serializable{
         this.policeId = policeId;
     }
 
-    public  UserInfo findUserInRoom(String userId){
+    public UserInfo findUserInRoom(String userId) {
         for (UserInfo info : users) {
             if (info.getUserId().equals(userId)) {
                 return info;
@@ -42,17 +43,17 @@ public class RoomInfo implements Serializable{
         throw new RuntimeException("客户端：  用户未找到");
     }
 
-    public  UserInfo findMeInRoom(){
+    public UserInfo findMeInRoom() {
         for (UserInfo info : users) {
-            if (info.getUserId().equals(MainApplication.userInfo.getUserId())) {
+            if (info.getUserId().equals(Me.getUserId())) {
                 return info;
             }
         }
         throw new RuntimeException("客户端：  房间里没有我");
     }
 
-    public     int    findUserIndexInRoom(String userId){
-        for (int i=0;i<users.size();i++) {
+    public int findUserIndexInRoom(String userId) {
+        for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getUserId().equals(userId)) {
                 return i;
             }
@@ -60,9 +61,9 @@ public class RoomInfo implements Serializable{
         throw new RuntimeException("客户端：  用户未找到");
     }
 
-    public int    findMyIndexInRoom(){
-        for (int i=0;i<users.size();i++) {
-            if (users.get(i).getUserId().equals(MainApplication.userInfo.getUserId())) {
+    public int findMyIndexInRoom() {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getUserId().equals(Me.getUserId())) {
                 return i;
             }
         }
@@ -96,8 +97,7 @@ public class RoomInfo implements Serializable{
 
     @JSONField(name = "vote")
     private List<VoteResult> voteResults = new ArrayList<>();
-    private List<UserInfo> users= new ArrayList<UserInfo>();
-
+    private List<UserInfo> users = new ArrayList<UserInfo>();
 
 
     public List<UserInfo> getUsers() {
@@ -125,7 +125,6 @@ public class RoomInfo implements Serializable{
     }
 
 
-
     public int getCurrentCount() {
         return currentCount;
     }
@@ -142,8 +141,8 @@ public class RoomInfo implements Serializable{
         this.name = name;
     }
 
-    public void changePeopleNum(int diff){
-        this.currentCount +=diff;
+    public void changePeopleNum(int diff) {
+        this.currentCount += diff;
     }
 
 
@@ -153,17 +152,20 @@ public class RoomInfo implements Serializable{
 
     public List<UserInfo> getAliveUsers() {
         List<UserInfo> userInfos = new ArrayList<>();
-        for(UserInfo userInfo: users)
-        {
-            if(!userInfo.getGameRole().isDead())
+        for (UserInfo userInfo : users) {
+            if (!userInfo.getGameRole().isDead())
                 userInfos.add(userInfo);
         }
         return userInfos;
     }
 
-    public void unreadyAll() {
-        for(UserInfo user: users)
-            user.getGameRole().setReady(false);
 
+    public void update() {
+        try {
+            for (UserInfo info : users)
+                info.fetchIfNeeded();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 }

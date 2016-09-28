@@ -9,13 +9,13 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.langren.MainApplication;
+import com.jinhanyu.jack.langren.Me;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.SoundEffectManager;
 import com.jinhanyu.jack.langren.adapter.WaitRoomAdapter;
@@ -25,7 +25,6 @@ import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -43,12 +42,17 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
     private WaitRoomAdapter adapter;
     private Button cancel;
     private ToggleButton ready;
-    private boolean isForwarding;
     private TextView username,nickname,scoreText,title;
     private View profile;
     private PopupWindow popupWindow;
     private SimpleDraweeView userHead;
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        MainApplication.roomInfo.update();
+        adapter.notifyDataSetChanged();
+    }
 
     @Override
     protected void prepareViews() {
@@ -95,8 +99,8 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                     public void call(Object... args) {
                         try {
                             SoundEffectManager.play(R.raw.enter_room);//音效
-                            ParseQuery<ParseUser> query = ParseUser.getQuery();
-                            List<String> userIds = new ArrayList<String>();
+                            ParseQuery<UserInfo> query = ParseQuery.getQuery(UserInfo.class);
+                            final List<String> userIds = new ArrayList<String>();
                             final Map<String,Boolean> readys = new HashMap<>();
 
                             JSONArray array = (JSONArray) args[0];
@@ -107,17 +111,13 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                                 readys.put(userId,user.getBoolean("ready"));
 
                             }
-
-                            query.whereContainedIn("objectId", userIds).findInBackground(new FindCallback<ParseUser>() {
+                            query.whereContainedIn("objectId", userIds).findInBackground(new FindCallback<UserInfo>() {
                                 @Override
-                                public void done(List<ParseUser> objects, ParseException e) {
-                                    for (ParseUser parseUser : objects) {
-                                        UserInfo info = new UserInfo();
-                                        info.populateFromParseServer(parseUser);
-                                        info.getGameRole().setReady(readys.get(parseUser.getObjectId()));
-                                        MainApplication.roomInfo.getUsers().add(info);
+                                public void done(List<UserInfo> objects, ParseException e) {
+                                    for (UserInfo userInfo : objects) {
+                                        userInfo.getGameRole().setReady(readys.get(userInfo.getObjectId()));
+                                        MainApplication.roomInfo.getUsers().add(userInfo);
                                     }
-
                                     refreshUI(adapter);
                                 }
                             });
@@ -132,18 +132,13 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                     public void call(Object... args) {
                         String userId = (String) args[0];
                         Log.i("join", userId);
-                        ParseQuery<ParseUser> query = ParseUser.getQuery();
-                        query.whereEqualTo("objectId", userId).getFirstInBackground(new GetCallback<ParseUser>() {
-
+                        ParseQuery<UserInfo> query = ParseQuery.getQuery(UserInfo.class);
+                        query.whereEqualTo("objectId", userId).getFirstInBackground(new GetCallback<UserInfo>() {
                             @Override
-                            public void done(ParseUser parseUser, ParseException e) {
-                                UserInfo info = new UserInfo();
-                                info.populateFromParseServer(parseUser);
-                                MainApplication.roomInfo.getUsers().add(info);
+                            public void done(UserInfo object, ParseException e) {
+                                MainApplication.roomInfo.getUsers().add(object);
                                 refreshUI(adapter);
                             }
-
-
                         });
                     }
                 })
@@ -175,16 +170,17 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                 .on("willstart", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
-                        startActivity(new Intent(RoomActivity.this, GameMainActivity.class));
-                        isForwarding =true;
-                        finish();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                startActivity(new Intent(RoomActivity.this, GameMainActivity.class));
+                                ready.setChecked(false);
+                            }
+                        });
+
                     }
                 });
-
-            if(getIntent().getBooleanExtra("alreadyInRoom",false)){
-                return;
-            }
-            MainApplication.socket.emit("enterRoom", MainApplication.roomInfo.getRoomId(), MainApplication.userInfo.getUserId());
+            MainApplication.socket.emit("enterRoom", MainApplication.roomInfo.getRoomId(), Me.getUserId());
     }
 
 
@@ -214,10 +210,10 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
-            MainApplication.socket.emit("prepare", MainApplication.roomInfo.getRoomId(), MainApplication.userInfo.getUserId());
+            MainApplication.socket.emit("prepare", MainApplication.roomInfo.getRoomId(), Me.getUserId());
 
         } else {
-            MainApplication.socket.emit("unprepare", MainApplication.roomInfo.getRoomId(), MainApplication.userInfo.getUserId());
+            MainApplication.socket.emit("unprepare", MainApplication.roomInfo.getRoomId(), Me.getUserId());
 
         }
     }
@@ -226,8 +222,7 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(!isForwarding)
-           MainApplication.roomInfo.getUsers().clear();
+        MainApplication.roomInfo.getUsers().clear();
     }
 
     @Override
@@ -238,6 +233,6 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
     }
 
     private void leaveRoom() {
-        MainApplication.socket.emit("leaveRoom", MainApplication.roomInfo.getRoomId(), MainApplication.userInfo.getUserId());
+        MainApplication.socket.emit("leaveRoom", MainApplication.roomInfo.getRoomId(), Me.getUserId());
     }
 }

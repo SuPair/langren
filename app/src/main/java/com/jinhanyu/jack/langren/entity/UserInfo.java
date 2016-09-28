@@ -6,90 +6,43 @@ import com.parse.ParseUser;
 
 /**
  * Created by anzhuo on 2016/9/10.
+ *
  */
-public class UserInfo {
-    private String head ="res://com.jinhanyu.jack.langren/"+ R.mipmap.user_head_bg;
-    private String username;
-    private String userId;
-    private String nickname;
+public class UserInfo extends ParseUser {
 
+    public static String default_head ="res://com.jinhanyu.jack.langren/"+ R.mipmap.user_head_bg;
 
     private GameRole gameRole = new GameRole();
-
-    public void resetGameRole(){
-        gameRole = new GameRole();
-    }
 
     public GameRole getGameRole() {
         return gameRole;
     }
 
     public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+        return getString("nickname");
     }
 
     public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    private String title;
-
-    private int score;
-
-
-
-
-    public void populateFromParseServer(ParseUser parseUser){
-        setUserId(parseUser.getObjectId());
-        ParseFile file = (ParseFile) parseUser.get("head");
-        if(file!=null)
-           setHead(file.getUrl());
-        setUsername(parseUser.getUsername());
-        setScore((Integer) parseUser.get("score"));
-        setTitle((String) parseUser.get("title"));
-        setNickname((String) parseUser.get("nickname"));
+        return getString("title");
     }
 
     public String getUsername() {
-        return username;
+        return getString("username");
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
     public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
+        return getInt("score");
     }
 
     public String getHead() {
-        return head;
-    }
-
-    public void setHead(String head) {
-        this.head = head;
+        ParseFile parseFile = getParseFile("head");
+        if(parseFile==null)
+            return default_head;
+        return parseFile.getUrl();
     }
 
     public String getUserId() {
-        return userId;
+        return getObjectId();
     }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-
-
 
 }

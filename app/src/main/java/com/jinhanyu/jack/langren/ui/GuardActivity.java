@@ -1,13 +1,14 @@
 package com.jinhanyu.jack.langren.ui;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.langren.ActionPerformer;
 import com.jinhanyu.jack.langren.MainApplication;
+import com.jinhanyu.jack.langren.Me;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.TickTimer;
 import com.jinhanyu.jack.langren.adapter.GameRoleCommonAdapter;
@@ -38,7 +39,7 @@ public class GuardActivity extends AppCompatActivity implements ActionPerformer{
             @Override
             protected void onTimeEnd() {
                 super.onTimeEnd();
-                MainApplication.socket.emit("guard",MainApplication.roomInfo.getRoomId(),MainApplication.userInfo.getUserId(),guardUserId);
+                MainApplication.socket.emit("guard",MainApplication.roomInfo.getRoomId(), Me.getUserId(),guardUserId);
             }
         };
         tickTimer.startTick();

@@ -5,10 +5,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
-import com.jinhanyu.jack.langren.MainApplication;
+import com.jinhanyu.jack.langren.Me;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.SoundEffectManager;
-import com.parse.ParseUser;
+
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -20,17 +20,17 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(ParseUser.getCurrentUser()!=null){
-                    MainApplication.userInfo.populateFromParseServer(ParseUser.getCurrentUser());
-                    startActivity(new Intent(SplashActivity.this,SelectRoomActivity.class));
+                if (Me.get() != null) {
+                    Me.update();
+                    startActivity(new Intent(SplashActivity.this, SelectRoomActivity.class));
                     finish();
-                }else{
+                } else {
                     SoundEffectManager.play(R.raw.dark);
-                    startActivity(new Intent(SplashActivity.this,LoginActivty.class));
+                    startActivity(new Intent(SplashActivity.this, LoginActivty.class));
                     finish();
                 }
             }
-        },3000);
+        }, 3000);
 
     }
 }

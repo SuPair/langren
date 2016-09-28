@@ -9,7 +9,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.SoundEffectManager;
 import com.parse.ParseException;
@@ -59,7 +58,6 @@ public class UserNameActivity extends AppCompatActivity implements View.OnClickL
                             e.printStackTrace();
                             Toast.makeText(UserNameActivity.this, "注册失败"+" code:"+e.getCode(), Toast.LENGTH_SHORT).show();
                         }else{
-                           MainApplication.userInfo.populateFromParseServer(user);
                            Intent intent = new Intent(UserNameActivity.this, UserHeadActivity.class);
                            startActivity(intent);
                             SoundEffectManager.play(R.raw.complete);

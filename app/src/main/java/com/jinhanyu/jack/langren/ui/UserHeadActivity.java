@@ -17,11 +17,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.jinhanyu.jack.langren.MainApplication;
+
+import com.jinhanyu.jack.langren.Me;
 import com.jinhanyu.jack.langren.R;
+import com.jinhanyu.jack.langren.entity.UserInfo;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseUser;
+
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
@@ -131,15 +133,12 @@ public class UserHeadActivity extends Activity implements View.OnClickListener {
                     e.printStackTrace();
                     Toast.makeText(UserHeadActivity.this, "上传头像失败", Toast.LENGTH_SHORT).show();
                 } else {
-                    ParseUser.getCurrentUser().put("head", file);
-                    ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
+                    Me.get().put("head", file);
+                    Me.get().saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
                             if (e == null) {
                                 Toast.makeText(UserHeadActivity.this, "上传头像成功！", Toast.LENGTH_SHORT).show();
-                                ParseFile parseFile = (ParseFile) ParseUser.getCurrentUser().get("head");
-                                if (parseFile != null)
-                                    MainApplication.userInfo.setHead(parseFile.getUrl());
                                 setResult(RESULT_OK,getIntent().putExtra("head",finalBm));
                                 finish();
                             }

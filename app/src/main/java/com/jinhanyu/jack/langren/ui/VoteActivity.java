@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.jinhanyu.jack.langren.ActionPerformer;
 import com.jinhanyu.jack.langren.MainApplication;
+import com.jinhanyu.jack.langren.Me;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.TickTimer;
 import com.jinhanyu.jack.langren.adapter.GameRoleCommonAdapter;
@@ -53,9 +54,9 @@ public class VoteActivity extends CommonActivity implements ActionPerformer{
             protected void onTimeEnd() {
                 super.onTimeEnd();
                 if(type== RoomInfo.VOTE_POLICE)
-                     MainApplication.socket.emit("votePolice",MainApplication.roomInfo.getRoomId(),MainApplication.userInfo.getUserId(),toVoteUserId);
+                     MainApplication.socket.emit("votePolice",MainApplication.roomInfo.getRoomId(), Me.getUserId(),toVoteUserId);
                 else if(type== RoomInfo.VOTE_WOLF)
-                    MainApplication.socket.emit("voteWolf",MainApplication.roomInfo.getRoomId(),MainApplication.userInfo.getUserId(),toVoteUserId);
+                    MainApplication.socket.emit("voteWolf",MainApplication.roomInfo.getRoomId(),Me.getUserId(),toVoteUserId);
                 else
                     throw new RuntimeException("in VoteActivity unknown type.");
             }
@@ -103,7 +104,7 @@ public class VoteActivity extends CommonActivity implements ActionPerformer{
                                     @Override
                                     protected void onTimeEnd() {
                                         super.onTimeEnd();
-                                        MainApplication.socket.emit("votePolice",MainApplication.roomInfo.getRoomId(),MainApplication.userInfo.getUserId(),toVoteUserId);
+                                        MainApplication.socket.emit("votePolice",MainApplication.roomInfo.getRoomId(),Me.getUserId(),toVoteUserId);
                                     }
                                 };
                                 tickTimer.startTick();

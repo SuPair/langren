@@ -5,6 +5,7 @@ import android.widget.TextView;
 
 import com.jinhanyu.jack.langren.ActionPerformer;
 import com.jinhanyu.jack.langren.MainApplication;
+import com.jinhanyu.jack.langren.Me;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.TickTimer;
 import com.jinhanyu.jack.langren.adapter.GameRoleCommonAdapter;
@@ -34,7 +35,7 @@ public class PredictorActivity extends CommonActivity implements ActionPerformer
             protected void onTimeEnd() {
                 super.onTimeEnd();
                 if(hasChecked) return;
-                MainApplication.socket.emit("predictor",MainApplication.roomInfo.getRoomId(),MainApplication.userInfo.getUserId(),null);
+                MainApplication.socket.emit("predictor",MainApplication.roomInfo.getRoomId(), Me.getUserId(),null);
             }
         };
         tickTimer.startTick();
@@ -77,7 +78,7 @@ public class PredictorActivity extends CommonActivity implements ActionPerformer
     @Override
     public void doAction(Object... params) {
         toCheckUserId = (String) params[0];
-        MainApplication.socket.emit("predictor",MainApplication.roomInfo.getRoomId(),MainApplication.userInfo.getUserId(), toCheckUserId);
+        MainApplication.socket.emit("predictor",MainApplication.roomInfo.getRoomId(), Me.getUserId(), toCheckUserId);
         hasChecked =true;
         action_done_label.setText("等待法官确认...");
     }

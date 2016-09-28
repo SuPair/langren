@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.langren.MainApplication;
+import com.jinhanyu.jack.langren.Me;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.SoundEffectManager;
 import com.jinhanyu.jack.langren.adapter.SelectRoomAdapter;
@@ -43,6 +44,19 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
     private AlertDialog dialog;
     private PopupWindow popupWindow;
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Me.update();
+    }
+
+    private void populateUserInfoToWidgets(){
+        userHead.setImageURI(Me.getHead());
+        nickname.setText(Me.getNickname());
+        username.setText(Me.getUsername());
+        scoreText.setText(Me.getScore()+"");
+        title.setText(Me.getTitle());
+    }
 
     @Override
     protected void prepareViews() {
@@ -59,20 +73,15 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
         createRoom.setOnClickListener(this);
         game_top.setOnClickListener(this);
         head.setOnClickListener(this);
-        head.setImageURI(MainApplication.userInfo.getHead());
+        head.setImageURI(Me.getHead());
 
         //个人信息popupWindow
         profile=getLayoutInflater().inflate(R.layout.user_detail,null);
         userHead= (SimpleDraweeView) profile.findViewById(R.id.sdv_userInfo_userHead);
-        userHead.setImageURI(MainApplication.userInfo.getHead());
         nickname= (TextView) profile.findViewById(R.id.tv_userInfo_nickname);
-        nickname.setText(MainApplication.userInfo.getNickname());
         username= (TextView) profile.findViewById(R.id.tv_userInfo_username);
-        username.setText(MainApplication.userInfo.getUsername());
         scoreText= (TextView) profile.findViewById(R.id.tv_userInfo_score);
-        scoreText.setText(MainApplication.userInfo.getScore()+"");
         title= (TextView) profile.findViewById(R.id.tv_userInfo_title);
-        title.setText(MainApplication.userInfo.getTitle());
         settings= (ImageView) profile.findViewById(R.id.iv_userInfo_settings);
         settings.setVisibility(View.VISIBLE);
         settings.setOnClickListener(this);
@@ -95,7 +104,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                         if (TextUtils.isEmpty(roomName))
                             Toast.makeText(SelectRoomActivity.this, "房间名称不能为空", Toast.LENGTH_SHORT).show();
                         else {
-                            MainApplication.socket.emit("createRoom", roomName, MainApplication.userInfo.getUserId());
+                            MainApplication.socket.emit("createRoom", roomName, Me.getUserId());
                         }
                     }
                 })
@@ -137,6 +146,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                         info.setRoomId((String) args[0]);
                         info.setName((String) args[1]);
                         info.setCurrentCount((Integer) args[2]);
+                        info.setMaxCount((Integer) args[3]);
 
                         list.add(info);
                         refreshUI(adapter);
@@ -168,6 +178,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                         info.setRoomId((String) args[0]);
                         info.setName((String) args[1]);
                         info.setCurrentCount((Integer) args[2]);
+                        info.setMaxCount((Integer) args[3]);
 
                         list.add(info);
 
@@ -192,7 +203,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                 });
 
         MainApplication.socket.connect();
-        MainApplication.socket.emit("login", MainApplication.userInfo.getUserId());
+        MainApplication.socket.emit("login", Me.getUserId());
     }
 
     @Override
@@ -219,6 +230,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                 break;
             case R.id.sdv_userHead:
                 SoundEffectManager.play(R.raw.user_detail);
+                populateUserInfoToWidgets();
                 popupWindow.showAtLocation(view,Gravity.CENTER,0,140);
                 break;
             case R.id.iv_userInfo_settings:
@@ -233,9 +245,10 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode==RESULT_OK){
-            userHead.setImageURI(MainApplication.userInfo.getHead());
-            head.setImageURI(MainApplication.userInfo.getHead());
-            nickname.setText(MainApplication.userInfo.getNickname());
+            Me.update();
+            userHead.setImageURI(Me.getHead());
+            head.setImageURI(Me.getHead());
+            nickname.setText(Me.getNickname());
         }
     }
 }

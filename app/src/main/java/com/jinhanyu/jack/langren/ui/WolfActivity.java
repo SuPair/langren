@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.jinhanyu.jack.langren.ActionPerformer;
 import com.jinhanyu.jack.langren.MainApplication;
+import com.jinhanyu.jack.langren.Me;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.TickTimer;
 import com.jinhanyu.jack.langren.adapter.GameRoleCommonAdapter;
@@ -56,7 +57,7 @@ public class WolfActivity extends CommonActivity implements ActionPerformer{
             @Override
             protected void onTimeEnd() {
                 super.onTimeEnd();
-                MainApplication.socket.emit("wolf",MainApplication.roomInfo.getRoomId(),MainApplication.userInfo.getUserId(),toKillUserId);
+                MainApplication.socket.emit("wolf",MainApplication.roomInfo.getRoomId(), Me.getUserId(),toKillUserId);
             }
         };
         tickTimer.startTick();
@@ -113,7 +114,7 @@ public class WolfActivity extends CommonActivity implements ActionPerformer{
         if(TextUtils.isEmpty(msg))
             return;
         et_msg.setText("");
-        MainApplication.socket.emit("langrenMsg",MainApplication.roomInfo.getRoomId(),MainApplication.userInfo.getUserId(),msg);
+        MainApplication.socket.emit("langrenMsg",MainApplication.roomInfo.getRoomId(),Me.getUserId(),msg);
     }
 
     @Override

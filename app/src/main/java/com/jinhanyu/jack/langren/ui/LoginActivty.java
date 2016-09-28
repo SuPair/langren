@@ -8,7 +8,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.SoundEffectManager;
 import com.parse.LogInCallback;
@@ -77,7 +76,6 @@ public   class LoginActivty extends CommonActivity implements View.OnClickListen
 
                         } else {
                             SoundEffectManager.play(R.raw.enter_hall);//音效
-                            MainApplication.userInfo.populateFromParseServer(user);
                             Intent intent1 = new Intent(LoginActivty.this, SelectRoomActivity.class);
                             startActivity(intent1);
                             finish();

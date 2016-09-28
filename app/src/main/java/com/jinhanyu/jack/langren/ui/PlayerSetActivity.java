@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.jinhanyu.jack.langren.MainApplication;
+import com.jinhanyu.jack.langren.Me;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.SoundEffectManager;
 import com.parse.ParseException;
@@ -47,9 +47,9 @@ public class PlayerSetActivity extends AppCompatActivity implements View.OnClick
         game_head_choose.setOnClickListener(this);
         player_set_complete.setOnClickListener(this);
 
-        game_number.setText(MainApplication.userInfo.getUsername());
-        game_nickname.setText(MainApplication.userInfo.getNickname());
-        game_head.setImageURI(MainApplication.userInfo.getHead());
+        game_number.setText(Me.getUsername());
+        game_nickname.setText(Me.getNickname());
+        game_head.setImageURI(Me.getHead());
 
     }
 
@@ -74,7 +74,6 @@ public class PlayerSetActivity extends AppCompatActivity implements View.OnClick
                             Toast.makeText(PlayerSetActivity.this, "修改失败"+" code:"+e.getCode(), Toast.LENGTH_SHORT).show();
                         }else {
                             Toast.makeText(PlayerSetActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
-                            MainApplication.userInfo.setNickname(nickname);
                             setResult(RESULT_OK);
                             finish();
                         }

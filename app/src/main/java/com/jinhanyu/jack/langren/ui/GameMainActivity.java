@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.langren.MainApplication;
+import com.jinhanyu.jack.langren.Me;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.SoundEffectManager;
 import com.jinhanyu.jack.langren.TickTimer;
@@ -108,7 +109,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
 
         //大头像
         bigHead = (SimpleDraweeView) findViewById(R.id.iv_playStage_bigHead);
-        bigHead.setImageURI(MainApplication.userInfo.getHead());
+        bigHead.setImageURI(MainApplication.roomInfo.findMeInRoom().getHead());
 
         //游戏规则
         gameRule = (ImageView) findViewById(R.id.iv_gameStage_gameRule);
@@ -150,7 +151,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                     public void onClick(DialogInterface dialog, int which) {
                         SoundEffectManager.play(R.raw.wolf_self_destruction);//狼人自爆音效
                         finishSpeak();
-                        MainApplication.socket.emit("wolfDestroy",MainApplication.roomInfo.getRoomId(),MainApplication.userInfo.getUserId());
+                        MainApplication.socket.emit("wolfDestroy",MainApplication.roomInfo.getRoomId(), Me.getUserId());
                     }
                 });
                 dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -214,9 +215,6 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                     bt_wolf_destroy.setVisibility(View.VISIBLE);
                             }
                         });
-                        //将所有人的准备状态置为未准备
-                        MainApplication.roomInfo.unreadyAll();
-
                     }
                 })
                 .on("company", new Emitter.Listener() {
@@ -468,7 +466,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                 voiceManager.startRecord();
                                 speak_time_label.setVisibility(View.VISIBLE);
                                 bt_endSpeak.setEnabled(true);
-                                bigHead.setImageURI(MainApplication.userInfo.getHead());
+                                bigHead.setImageURI(MainApplication.roomInfo.findMeInRoom().getHead());
                                 gallery.setSelection(MainApplication.roomInfo.findMyIndexInRoom());
                                 tickTimer =new TickTimer(time_label,40,null){
                                     @Override
@@ -526,7 +524,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                 speak_time_label.setVisibility(View.VISIBLE);
                                 tv_game_hint.setVisibility(View.INVISIBLE);
                                 bt_endSpeak.setEnabled(true);
-                                bigHead.setImageURI(MainApplication.userInfo.getHead());
+                                bigHead.setImageURI(MainApplication.roomInfo.findMeInRoom().getHead());
                                 gallery.setSelection(MainApplication.roomInfo.findMyIndexInRoom());
                                 tickTimer =new TickTimer(time_label,40,null){
                                     @Override
@@ -627,7 +625,6 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
 
         voiceManager.stopPlay();
         voiceManager.stopRecord();
-        voiceManager.release();
         MainApplication.socket.off("start").off("company").off("blob");
     }
 
