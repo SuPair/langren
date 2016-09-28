@@ -181,6 +181,9 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                     }
                 });
 
+            if(getIntent().getBooleanExtra("alreadyInRoom",false)){
+                return;
+            }
             MainApplication.socket.emit("enterRoom", MainApplication.roomInfo.getRoomId(), MainApplication.userInfo.getUserId());
     }
 

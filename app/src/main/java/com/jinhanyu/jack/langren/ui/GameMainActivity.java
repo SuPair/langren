@@ -68,7 +68,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
 
 
     private boolean isLeavingWords = false;
-    private UserInfo currentUser = MainApplication.roomInfo.findUserInRoom(MainApplication.userInfo.getUserId());
+    private UserInfo currentUser = MainApplication.roomInfo.findMeInRoom();
 
     private void finishSpeak() {
         bt_endSpeak.setEnabled(false);
@@ -78,6 +78,10 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
             tickTimer.cancel();
         speak_time_label.setVisibility(View.INVISIBLE);
         tv_game_hint.setVisibility(View.VISIBLE);
+    }
+
+    private void clearTopActivities(){
+        startActivity(new Intent(GameMainActivity.this, GameMainActivity.class));
     }
 
     @Override
@@ -194,22 +198,24 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
     }
 
     protected void prepareSocket() {
-        super.prepareSocket();
+
         MainApplication.socket
                 .on("start", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
                         final int type = (int) args[0];
-                        MainApplication.userInfo.getGameRole().setType(type);
-                        Log.i("你的身份是", MainApplication.userInfo.getGameRole().getType().getName());
+                        final UserInfo me =MainApplication.roomInfo.findMeInRoom();
+                        me.getGameRole().setType(type);
                         identification_label.post(new Runnable() {
                             @Override
                             public void run() {
-                                identification_label.setText("您的身份是: " + MainApplication.userInfo.getGameRole().getType().getName());
-                                if (MainApplication.userInfo.getGameRole().getType() == GameRole.Type.Wolf)
+                                identification_label.setText("您的身份是: " + me.getGameRole().getType().getName());
+                                if (me.getGameRole().getType() == GameRole.Type.Wolf)
                                     bt_wolf_destroy.setVisibility(View.VISIBLE);
                             }
                         });
+                        //将所有人的准备状态置为未准备
+                        MainApplication.roomInfo.unreadyAll();
 
                     }
                 })
@@ -268,7 +274,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                startActivity(new Intent(GameMainActivity.this, GameMainActivity.class));
+                                clearTopActivities();
                                 tv_game_hint.setText("天亮了");
                                 SoundEffectManager.play(R.raw.light);//天亮音效
                                 game_bg.setBackgroundResource(R.color.light);
@@ -304,7 +310,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                 .on("action", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
-                        switch (MainApplication.userInfo.getGameRole().getType()) {
+                        switch (MainApplication.roomInfo.findMeInRoom().getGameRole().getType()) {
                             case Wolf:
                                 startActivity(new Intent(getApplicationContext(), WolfActivity.class));
                                 break;
@@ -323,6 +329,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                 .on("darkResult", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
+                        clearTopActivities();
                         String userId1 = (String) args[0];
                         String userId2 = (String) args[1];
                         final StringBuilder sb = new StringBuilder();
@@ -375,6 +382,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             @Override
                             public void run() {
                                 tv_game_hint.setText("猎人，你死了，你可以带走一个人");
+                                startActivity(new Intent(GameMainActivity.this,HunterActivity.class));
                             }
                         });
                     }
@@ -414,6 +422,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             @Override
                             public void run() {
                                 tv_game_hint.setText("警长，你被杀了，请移交警徽");
+                                startActivity(new Intent(GameMainActivity.this,PoliceActivity.class));
                             }
                         });
                     }
@@ -427,11 +436,11 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             public void run() {
                                 if(userId==null){
                                     tv_game_hint.setText("警徽没了");
-                                    MainApplication.roomInfo.setPolice(null);
+                                    MainApplication.roomInfo.setPoliceId(null);
                                     return;
                                 }
                                 final UserInfo police = MainApplication.roomInfo.findUserInRoom(userId);
-                                MainApplication.roomInfo.setPolice(police);
+                                MainApplication.roomInfo.setPoliceId(userId);
                                 tv_game_hint.setText("警徽传给了"+ police.getNickname());
                             }
                         });
@@ -509,7 +518,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                 .on("youSpeak", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
-                        currentUser = MainApplication.roomInfo.findUserInRoom(MainApplication.userInfo.getUserId());
+                        currentUser = MainApplication.roomInfo.findMeInRoom();
                         identification_label.post(new Runnable() {
                             @Override
                             public void run() {
@@ -528,7 +537,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                     }
                                 };
                                 tickTimer.startTick();
-                                if(MainApplication.userInfo.getGameRole().getType()== GameRole.Type.Wolf)
+                                if(MainApplication.roomInfo.findMeInRoom().getGameRole().getType()== GameRole.Type.Wolf)
                                     bt_wolf_destroy.setEnabled(true);
                                 tv_game_hint.setText("现在轮到你发言");
                                 Toast.makeText(GameMainActivity.this, "现在轮到你发言", Toast.LENGTH_SHORT).show();
@@ -615,7 +624,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
 
     @Override
     protected void unbindSocket() {
-        super.unbindSocket();
+
         voiceManager.stopPlay();
         voiceManager.stopRecord();
         voiceManager.release();

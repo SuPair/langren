@@ -46,13 +46,13 @@ public class GameOverActivity extends AppCompatActivity implements View.OnClickL
         switch (v.getId()) {
             case R.id.back_hall:
                 SoundEffectManager.stop();
+                MainApplication.socket.emit("leaveRoom",MainApplication.roomInfo.getRoomId(),MainApplication.userInfo.getUserId());
                 startActivity(new Intent(this,SelectRoomActivity.class));
                 finish();
                 break;
             case R.id.again:
-                Intent intent1 = new Intent(this, RoomActivity.class);
+                Intent intent1 = new Intent(this, RoomActivity.class).putExtra("alreadyInRoom",true);
                 SoundEffectManager.stop();
-                MainApplication.roomInfo.getUsers().clear();
                 startActivity(intent1);
                 finish();
                 break;

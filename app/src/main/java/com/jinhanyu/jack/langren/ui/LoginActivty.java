@@ -15,7 +15,7 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
-public class LoginActivty extends CommonActivity implements View.OnClickListener {
+public   class LoginActivty extends CommonActivity implements View.OnClickListener {
     private EditText game_number;
     private EditText game_password;
     private TextView forget_password;
@@ -37,6 +37,16 @@ public class LoginActivty extends CommonActivity implements View.OnClickListener
         forget_password.setOnClickListener(this);
         game_login.setOnClickListener(this);
         game_register.setOnClickListener(this);
+    }
+
+    @Override
+    protected void prepareSocket() {
+
+    }
+
+    @Override
+    protected void unbindSocket() {
+
     }
 
     @Override

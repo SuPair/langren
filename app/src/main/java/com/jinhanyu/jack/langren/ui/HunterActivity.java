@@ -34,8 +34,10 @@ public class HunterActivity extends AppCompatActivity implements ActionPerformer
             @Override
             protected void onTimeEnd() {
                 super.onTimeEnd();
-                if (!hasShot)
-                    MainApplication.socket.emit("hunter",MainApplication.roomInfo.getRoomId(),null);
+                if (!hasShot) {
+                    MainApplication.socket.emit("hunter", MainApplication.roomInfo.getRoomId(), null);
+                    finish();
+                }
             }
         };
         tickTimer.startTick();
@@ -48,5 +50,6 @@ public class HunterActivity extends AppCompatActivity implements ActionPerformer
         tickTimer.cancel();
         hasShot = true;
         MainApplication.socket.emit("hunter",MainApplication.roomInfo.getRoomId(),huntedUserId);
+        finish();
     }
 }

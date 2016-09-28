@@ -37,8 +37,10 @@ public class PoliceActivity extends AppCompatActivity implements ActionPerformer
             @Override
             protected void onTimeEnd() {
                 super.onTimeEnd();
-                if(!hasDelivered)
-                    MainApplication.socket.emit("deliverPolice",MainApplication.roomInfo.getRoomId(),null);
+                if(!hasDelivered) {
+                    MainApplication.socket.emit("deliverPolice", MainApplication.roomInfo.getRoomId(), null);
+                    finish();
+                }
             }
         };
         tickTimer.startTick();
@@ -50,5 +52,6 @@ public class PoliceActivity extends AppCompatActivity implements ActionPerformer
         hasDelivered = true;
         tickTimer.cancel();
         MainApplication.socket.emit("deliverPolice",MainApplication.roomInfo.getRoomId(),newPoliceId);
+        finish();
     }
 }

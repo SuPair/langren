@@ -15,12 +15,16 @@ import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.baoyz.actionsheet.ActionSheet;
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.NetWorkStateReceiver;
 import com.jinhanyu.jack.langren.R;
+import com.jinhanyu.jack.langren.entity.RoomInfo;
 import com.jinhanyu.jack.langren.entity.UserInfo;
 import com.parse.ParseUser;
+
+import org.json.JSONObject;
 
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -33,7 +37,7 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
     private ActionSheet.Builder builder;
     private SensorManager sensorManager;
     private NetWorkStateReceiver receiver;
-    private TextView network_state;
+    private TextView network_state,socket_state;
     private boolean watchNetworkState;
 
     @Override
@@ -55,16 +59,84 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
 
     protected void watchNetworkState() {
         network_state = (TextView) findViewById(R.id.network_state);
-        network_state.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                network_state.setEnabled(false);
-                MainApplication.socket.connect();
-            }
-        });
         receiver = new NetWorkStateReceiver(network_state);
         registerReceiver(receiver,new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
         watchNetworkState =true;
+        socket_state = (TextView) findViewById(R.id.socket_state);
+        socket_state.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                socket_state.setEnabled(false);
+                MainApplication.socket.connect();
+                MainApplication.socket.emit("login", MainApplication.userInfo.getUserId());
+            }
+        });
+        MainApplication.socket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        socket_state.setVisibility(View.VISIBLE);
+                        socket_state.setText("连接已断开,点击重连");
+                        socket_state.setEnabled(true);
+                    }
+                });
+            }
+        }).on(Socket.EVENT_RECONNECTING, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        socket_state.setVisibility(View.VISIBLE);
+                        socket_state.setText("正在重连...");
+                    }
+                });
+            }
+        }).on(Socket.EVENT_RECONNECT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        socket_state.setVisibility(View.VISIBLE);
+                        socket_state.setText("重连成功");
+                        socket_state.setVisibility(View.GONE);
+                    }
+                });
+            }
+        }).on(Socket.EVENT_RECONNECT_FAILED, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        socket_state.setVisibility(View.VISIBLE);
+                        socket_state.setText("重连失败,点击重连");
+                    }
+                });
+            }
+        }).on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        socket_state.setVisibility(View.VISIBLE);
+                        socket_state.setText("连接成功");
+                        socket_state.setVisibility(View.GONE);
+                    }
+                });
+            }
+        }).on("reJoinGame", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject room = (JSONObject) args[0];
+                MainApplication.roomInfo = JSON.parseObject(room.toString(), RoomInfo.class);
+                startActivity(new Intent(CommonActivity.this,GameMainActivity.class));
+            }
+        });
 
     }
 
@@ -82,57 +154,7 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
 
     protected abstract void prepareViews();
 
-    protected  void prepareSocket(){
-        if(!watchNetworkState)
-            return;
-        MainApplication.socket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        network_state.setVisibility(View.VISIBLE);
-                        network_state.setText("连接已断开,点击重连");
-                        network_state.setEnabled(true);
-                    }
-                });
-            }
-        }).on(Socket.EVENT_RECONNECTING, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        network_state.setVisibility(View.VISIBLE);
-                        network_state.setText("正在重连...");
-                    }
-                });
-            }
-        }).on(Socket.EVENT_RECONNECT, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        network_state.setVisibility(View.VISIBLE);
-                        network_state.setText("重连成功");
-                        network_state.setVisibility(View.GONE);
-                    }
-                });
-            }
-        }).on(Socket.EVENT_RECONNECT_FAILED, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        network_state.setVisibility(View.VISIBLE);
-                        network_state.setText("重连失败,点击重连");
-                    }
-                });
-            }
-        });
-    }
+    protected  abstract void prepareSocket();
 
     @Override
     protected void onDestroy() {
@@ -140,11 +162,12 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
         if(receiver!=null)
            unregisterReceiver(receiver);
         unbindSocket();
+        if(watchNetworkState)
+        MainApplication.socket.off(Socket.EVENT_DISCONNECT).off(Socket.EVENT_RECONNECTING).off(Socket.EVENT_RECONNECT).off(Socket.EVENT_RECONNECT_FAILED).off(Socket.EVENT_CONNECT);
     }
 
-    protected  void unbindSocket(){
-        MainApplication.socket.off(Socket.EVENT_DISCONNECT).off(Socket.EVENT_RECONNECTING).off(Socket.EVENT_RECONNECT).off(Socket.EVENT_RECONNECT_FAILED);
-    }
+    protected  abstract void unbindSocket();
+
 
 
     private boolean isShowing = false;

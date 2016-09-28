@@ -108,7 +108,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
     }
 
     protected void prepareSocket() {
-        super.prepareSocket();
+
         MainApplication.socket
                 .on("login", new Emitter.Listener() {
                     @Override
@@ -197,7 +197,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
 
     @Override
     protected void unbindSocket() {
-        super.unbindSocket();
+
         MainApplication.socket
                 .off("login")
                 .off("createRoom")

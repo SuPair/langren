@@ -1,5 +1,6 @@
 package com.jinhanyu.jack.langren.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.jinhanyu.jack.langren.MainApplication;
 
 import java.io.Serializable;
@@ -22,14 +23,14 @@ public class RoomInfo implements Serializable{
     private boolean hasSaved;
     private boolean hasPoisoned;
     private String  lastGuardedUserId;
-    private UserInfo police;
+    private String policeId;
 
-    public UserInfo getPolice() {
-        return police;
+    public String getPoliceId() {
+        return policeId;
     }
 
-    public void setPolice(UserInfo police) {
-        this.police = police;
+    public void setPoliceId(String policeId) {
+        this.policeId = policeId;
     }
 
     public  UserInfo findUserInRoom(String userId){
@@ -39,6 +40,15 @@ public class RoomInfo implements Serializable{
             }
         }
         throw new RuntimeException("客户端：  用户未找到");
+    }
+
+    public  UserInfo findMeInRoom(){
+        for (UserInfo info : users) {
+            if (info.getUserId().equals(MainApplication.userInfo.getUserId())) {
+                return info;
+            }
+        }
+        throw new RuntimeException("客户端：  房间里没有我");
     }
 
     public     int    findUserIndexInRoom(String userId){
@@ -56,7 +66,7 @@ public class RoomInfo implements Serializable{
                 return i;
             }
         }
-        throw new RuntimeException("客户端：  用户未找到");
+        throw new RuntimeException("客户端：  房间里没有我");
     }
 
 
@@ -84,6 +94,7 @@ public class RoomInfo implements Serializable{
         this.hasSaved = hasSaved;
     }
 
+    @JSONField(name = "vote")
     private List<VoteResult> voteResults = new ArrayList<>();
     private List<UserInfo> users= new ArrayList<UserInfo>();
 
@@ -148,5 +159,12 @@ public class RoomInfo implements Serializable{
                 userInfos.add(userInfo);
         }
         return userInfos;
+    }
+
+    public void unreadyAll() {
+        for(UserInfo user: users)
+            user.getGameRole().setReady(false);
+
+        setCurrentCount(0);
     }
 }
