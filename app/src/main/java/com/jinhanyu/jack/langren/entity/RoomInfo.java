@@ -165,6 +165,5 @@ public class RoomInfo implements Serializable{
         for(UserInfo user: users)
             user.getGameRole().setReady(false);
 
-        setCurrentCount(0);
     }
 }

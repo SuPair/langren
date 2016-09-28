@@ -48,6 +48,7 @@ public class GameOverActivity extends AppCompatActivity implements View.OnClickL
                 SoundEffectManager.stop();
                 MainApplication.socket.emit("leaveRoom",MainApplication.roomInfo.getRoomId(),MainApplication.userInfo.getUserId());
                 startActivity(new Intent(this,SelectRoomActivity.class));
+                MainApplication.roomInfo = null;
                 finish();
                 break;
             case R.id.again:

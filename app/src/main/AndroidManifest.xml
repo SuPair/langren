@@ -50,6 +50,7 @@
         <activity android:name=".ui.WolfActivity" />
         <activity android:name=".ui.VoteResultActivity"></activity>
         <activity android:name=".ui.PlayerSetActivity"/>
+        <activity android:name=".ui.PoliceActivity"/>
     </application>
 
 </manifest>
