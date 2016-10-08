@@ -15,6 +15,8 @@ import com.jinhanyu.jack.langren.SoundEffectManager;
 import com.jinhanyu.jack.langren.adapter.GameOverAdapter;
 import com.jinhanyu.jack.langren.entity.UserInfo;
 
+import java.util.Collections;
+
 public class GameOverActivity extends AppCompatActivity implements View.OnClickListener {
     private Button back_hall;//返回大厅
     private Button again;//再来一局
@@ -30,6 +32,7 @@ public class GameOverActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.game_over);
 
         listView= (ListView) findViewById(R.id.game_over_listView);
+        Collections.reverse(MainApplication.roomInfo.getUsers());
         adapter = new GameOverAdapter(this,MainApplication.roomInfo.getUsers());
         listView.setAdapter(adapter);
         game_win = (TextView) findViewById(R.id.game_win);
@@ -46,7 +49,7 @@ public class GameOverActivity extends AppCompatActivity implements View.OnClickL
         SoundEffectManager.looping(true);
 
 
-        MainApplication.roomInfo.resetRoom();
+
     }
 
     @Override
@@ -56,6 +59,7 @@ public class GameOverActivity extends AppCompatActivity implements View.OnClickL
                 SoundEffectManager.looping(false);
                 SoundEffectManager.stop();
                 MainApplication.socket.emit("leaveRoom",MainApplication.roomInfo.getRoomId(), Me.getUserId());
+                MainApplication.roomInfo.resetRoom();
                 startActivity(new Intent(this,SelectRoomActivity.class));
                 finish();
                 break;
@@ -63,6 +67,7 @@ public class GameOverActivity extends AppCompatActivity implements View.OnClickL
                 Intent intent1 = new Intent(this, RoomActivity.class);
                 SoundEffectManager.looping(false);
                 SoundEffectManager.stop();
+                MainApplication.roomInfo.resetRoom();
                 startActivity(intent1);
                 finish();
                 break;
