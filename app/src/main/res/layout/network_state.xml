@@ -13,23 +13,8 @@
         android:clickable="true"
         android:gravity="center"
         android:padding="5dp"
-        android:text="网络断开"
+        android:text="没网了"
         android:textColor="@color/red"
         android:visibility="gone" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/dark"/>
-    <TextView
-        android:id="@+id/socket_state"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:background="@color/gray"
-        android:clickable="true"
-        android:gravity="center"
-        android:padding="5dp"
-        android:text="网络断开"
-        android:textColor="@color/red"
-        android:visibility="gone" />
+
 </LinearLayout>

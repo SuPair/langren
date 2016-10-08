@@ -44,6 +44,9 @@ public class GameOverActivity extends AppCompatActivity implements View.OnClickL
         again.setOnClickListener(this);
         SoundEffectManager.play(R.raw.gameover);
         SoundEffectManager.looping(true);
+
+
+        MainApplication.roomInfo.resetRoom();
     }
 
     @Override
@@ -64,5 +67,14 @@ public class GameOverActivity extends AppCompatActivity implements View.OnClickL
                 finish();
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        SoundEffectManager.looping(false);
+        SoundEffectManager.stop();
+        MainApplication.socket.emit("leaveRoom",MainApplication.roomInfo.getRoomId(), Me.getUserId());
+        startActivity(new Intent(this,SelectRoomActivity.class));
+        finish();
     }
 }

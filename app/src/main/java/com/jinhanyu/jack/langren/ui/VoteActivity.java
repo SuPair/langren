@@ -6,6 +6,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jinhanyu.jack.langren.ActionPerformer;
+import com.jinhanyu.jack.langren.Constants;
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.Me;
 import com.jinhanyu.jack.langren.R;
@@ -45,11 +46,11 @@ public class VoteActivity extends CommonActivity implements ActionPerformer{
         if(type== RoomInfo.VOTE_POLICE)
             tv_vote_title.setText("投票选警长");
         else if(type== RoomInfo.VOTE_WOLF)
-            tv_vote_title.setText("开始投票");
+            tv_vote_title.setText("开始票坏人");
         else
             throw new RuntimeException("in VoteActivity unknown type.");
 
-        tickTimer = new TickTimer(time_label,15,adapter){
+        tickTimer = new TickTimer(time_label, Constants.VOTE_SECONDS,adapter){
             @Override
             protected void onTimeEnd() {
                 super.onTimeEnd();
@@ -92,26 +93,6 @@ public class VoteActivity extends CommonActivity implements ActionPerformer{
                         }
                     }
                 })
-                .on("continueVotePolice", new Emitter.Listener() {
-                    @Override
-                    public void call(Object... args) {
-                        adapter.reset();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(VoteActivity.this, "没有任何人投票,必须投出警长", Toast.LENGTH_SHORT).show();
-                                tickTimer = new TickTimer(time_label,10,adapter){
-                                    @Override
-                                    protected void onTimeEnd() {
-                                        super.onTimeEnd();
-                                        MainApplication.socket.emit("votePolice",MainApplication.roomInfo.getRoomId(),Me.getUserId(),toVoteUserId);
-                                    }
-                                };
-                                tickTimer.startTick();
-                            }
-                        });
-                    }
-                })
                 .on("lightResult", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
@@ -141,12 +122,12 @@ public class VoteActivity extends CommonActivity implements ActionPerformer{
 
     @Override
     protected void unbindSocket() {
-            MainApplication.socket.off("policeResult").off("lightResult").off("continueVotePolice");
+            MainApplication.socket.off("policeResult").off("lightResult");
     }
 
     @Override
     public void doAction(Object... params) {
         toVoteUserId = (String) params[0];
-        time_label.setText("投票完成，等待其他人...");
+        tv_vote_title.setText("投票完成，等待其他人...");
     }
 }

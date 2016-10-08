@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jinhanyu.jack.langren.ActionPerformer;
+import com.jinhanyu.jack.langren.Constants;
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.TickTimer;
@@ -45,7 +46,7 @@ public class WizardActivity extends CommonActivity implements ActionPerformer{
         adapter=new GameRoleCommonAdapter(this, MainApplication.roomInfo.getUsers(), GameRole.Type.Wizard);
         listView.setAdapter(adapter);
 
-        tickTimer = new TickTimer(time_label,15,adapter){
+        tickTimer = new TickTimer(time_label, Constants.WIZARD_SECONDS,adapter){
             @Override
             protected void onTimeEnd() {
                 super.onTimeEnd();

@@ -75,7 +75,7 @@ public class GameRoleCommonAdapter extends CommonAdapter<UserInfo> implements Ac
         }
         final UserInfo info = data.get(i);
         viewHolder.head.setImageURI(info.getHead());
-        viewHolder.username.setText(info.getUsername());
+        viewHolder.username.setText(info.getNickname());
         if (info.getGameRole().isDead()) {
             viewHolder.state.setText(R.string.isDead);
         } else {

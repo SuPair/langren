@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jinhanyu.jack.langren.ActionPerformer;
+import com.jinhanyu.jack.langren.Constants;
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.Me;
 import com.jinhanyu.jack.langren.R;
@@ -53,7 +54,7 @@ public class WolfActivity extends CommonActivity implements ActionPerformer{
 
 
         Toast.makeText(WolfActivity.this, "今晚你想刀谁？开始吧", Toast.LENGTH_SHORT).show();
-        tickTimer = new TickTimer(time_label,15,wolfAdapter){
+        tickTimer = new TickTimer(time_label, Constants.WOLF_SECONDS,wolfAdapter){
             @Override
             protected void onTimeEnd() {
                 super.onTimeEnd();

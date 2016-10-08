@@ -1,17 +1,28 @@
 package com.jinhanyu.jack.langren;
 
 import android.app.Application;
+import android.content.Intent;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.jinhanyu.jack.langren.entity.RoomInfo;
 import com.jinhanyu.jack.langren.entity.UserInfo;
+import com.jinhanyu.jack.langren.ui.GameMainActivity;
 import com.parse.Parse;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -34,7 +45,7 @@ public class MainApplication extends Application {
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId("langrensha")
                 .clientKey("")
-                .server(ServerHost + "/parse")
+                .server(Constants.ServerHost + "/parse")
                 .enableLocalDataStore()
                 .build()
         );
@@ -49,35 +60,17 @@ public class MainApplication extends Application {
         try {
             if (socket == null) {
                 IO.Options options = new IO.Options();
-                options.reconnection = true;
-                options.reconnectionAttempts=5;
-                socket = IO.socket(ServerHost + "/msg",options);
+                options.reconnection = false;
+                socket = IO.socket(Constants.ServerHost + "/msg",options);
             }
-            socket.on("serverError", new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    Looper.prepare();
-                    Toast.makeText(MainApplication.this, "服务器错误：" + args[0], Toast.LENGTH_SHORT).show();
-                    Looper.loop();
-                }
-            }).on(Socket.EVENT_ERROR, new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    Looper.prepare();
-                    Toast.makeText(MainApplication.this, "socket error", Toast.LENGTH_SHORT).show();
-                    Looper.loop();
-                }
-            });
-
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
     }
 
 
-    public static RoomInfo roomInfo;
+    public static RoomInfo roomInfo = new RoomInfo();
     public static Socket socket;
-    private static final String ServerHost = "http://172.168.0.10:3000";
-//    private static final String ServerHost = "http://langren.applinzi.com";
+
 
 }

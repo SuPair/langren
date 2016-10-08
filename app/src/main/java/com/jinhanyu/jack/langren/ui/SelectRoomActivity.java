@@ -3,8 +3,10 @@ package com.jinhanyu.jack.langren.ui;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Looper;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
@@ -21,14 +23,19 @@ import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.SoundEffectManager;
 import com.jinhanyu.jack.langren.adapter.SelectRoomAdapter;
 import com.jinhanyu.jack.langren.entity.RoomInfo;
+import com.jinhanyu.jack.langren.entity.UserInfo;
 import com.jinhanyu.jack.langren.util.ScreenUtils;
+import com.parse.ParseQuery;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 public class SelectRoomActivity extends CommonActivity implements View.OnClickListener {
@@ -119,7 +126,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
     protected void prepareSocket() {
 
         MainApplication.socket
-                .on("login", new Emitter.Listener() {
+                .once("login", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
                         try {
@@ -201,9 +208,99 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
 
                     }
                 });
-
+        moreListener();
         MainApplication.socket.connect();
-        MainApplication.socket.emit("login", Me.getUserId());
+
+    }
+
+
+    private void moreListener(){
+        MainApplication.socket.on("serverError", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                Looper.prepare();
+                Toast.makeText(getApplicationContext(), "服务器错误：" + args[0], Toast.LENGTH_SHORT).show();
+                Looper.loop();
+            }
+        }).on(Socket.EVENT_ERROR, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                Looper.prepare();
+                Toast.makeText(getApplicationContext(), "socket error", Toast.LENGTH_SHORT).show();
+                Looper.loop();
+            }
+        }).on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                Log.i("connected", "haha");
+                MainApplication.socket.emit("login", Me.getUserId());
+            }
+        }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                Looper.prepare();
+                Toast.makeText(getApplicationContext(), "socket断开" + args[0], Toast.LENGTH_SHORT).show();
+                MainApplication.socket.connect();
+                Looper.loop();
+            }
+        }).on("reJoinGame", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        try {
+                            JSONObject room = (JSONObject) args[0];
+                            MainApplication.roomInfo.setRoomId(room.getString("roomId"));
+                            MainApplication.roomInfo.setMaxCount(room.getInt("maxCount"));
+                            MainApplication.roomInfo.setCurrentCount(room.getInt("currentCount"));
+                            MainApplication.roomInfo.setName(room.getString("name"));
+                            MainApplication.roomInfo.setHasPoisoned(room.getBoolean("hasPoisoned"));
+                            MainApplication.roomInfo.setHasSaved(room.getBoolean("hasSaved"));
+                            try {
+                                MainApplication.roomInfo.setPoliceId(room.getString("policeId"));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            ParseQuery<UserInfo> query = ParseQuery.getQuery(UserInfo.class);
+                            final List<String> userIds = new ArrayList<String>();
+                            final Map<String, Boolean> readys = new HashMap<>();
+
+                            JSONArray array = room.getJSONArray("users");
+                            for (int i = 0; i < array.length(); i++) {
+                                JSONObject user = array.getJSONObject(i);
+                                String userId = (String) user.get("userId");
+                                userIds.add(userId);
+                                readys.put(userId, user.getBoolean("dead"));
+
+                            }
+                            synchronized (MainApplication.roomInfo) {
+                                MainApplication.roomInfo.getUsers().clear();
+                                List<UserInfo> objects = query.whereContainedIn("objectId", userIds).find();
+                                for (UserInfo userInfo : objects) {
+                                    userInfo.getGameRole().setDead(readys.get(userInfo.getObjectId()));
+                                    MainApplication.roomInfo.getUsers().add(userInfo);
+                                }
+                            }
+                            int type = (int) args[1];
+                            MainApplication.roomInfo.findMeInRoom().getGameRole().setType(type);
+                            boolean isFromDark = (boolean) args[2];
+                            JSONArray companys = (JSONArray) args[3];
+                            for (int i = 0; i < companys.length(); i++) {
+                                String userId = (String) companys.get(i);
+                                MainApplication.roomInfo.findUserInRoom(userId).getGameRole().setType(1);
+                            }
+                            Log.i("reJoinGame", room.toString());
+                            Log.i("willgotoGameMain", "true");
+                            startActivity(new Intent(getApplicationContext(), GameMainActivity.class).putExtra("reJoinGame", true).putExtra("isFromDark", isFromDark));
+                            MainApplication.socket.off("reJoinGame");
+                            Looper.prepare();
+                            Toast.makeText(getApplicationContext(), "重新加入了游戏", Toast.LENGTH_SHORT).show();
+                            Looper.loop();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+        );
     }
 
     @Override

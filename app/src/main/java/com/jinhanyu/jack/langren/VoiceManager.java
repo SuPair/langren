@@ -67,7 +67,7 @@ public class VoiceManager {
                 while (isRecording) {
                     int bufferReadResult = audioRecord.read(buffer, 0, trunkSize);
 
-                    socket.emit("blob",MainApplication.roomInfo.getRoomId(),copyBuffer(buffer,bufferReadResult));
+                    socket.emit("blob",MainApplication.roomInfo.getRoomId(),encode(buffer,bufferReadResult));
                     //Log.i("record","编码前: "+bufferReadResult+"   编码后: "+encodeSize);
                 }
                 audioRecord.stop();

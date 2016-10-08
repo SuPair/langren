@@ -12,8 +12,21 @@ import java.util.List;
  * Created by anzhuo on 2016/9/10.
  */
 public class RoomInfo implements Serializable {
-
-
+    @Override
+    public String toString() {
+        return "RoomInfo{" +
+                "roomId='" + roomId + '\'' +
+                ", maxCount=" + maxCount +
+                ", currentCount=" + currentCount +
+                ", name='" + name + '\'' +
+                ", hasSaved=" + hasSaved +
+                ", hasPoisoned=" + hasPoisoned +
+                ", lastGuardedUserId='" + lastGuardedUserId + '\'' +
+                ", policeId='" + policeId + '\'' +
+                ", voteResults=" + voteResults +
+                ", users=" + users +
+                '}';
+    }
     //voteRecord:[{fromUserId,toUserId}], vote:{userId:voteCount}, voteCounter // 投票计数器，都投完票就计算投票结果
     // users:[{userId, socket, dead, type}],   const hasSaved, const hasPoisoned, const lastGuardedUserId
 
@@ -166,6 +179,15 @@ public class RoomInfo implements Serializable {
                 info.fetchIfNeeded();
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void resetRoom() {
+        policeId = null;
+        for(UserInfo userInfo : users){
+            GameRole gameRole = userInfo.getGameRole();
+            gameRole.setDead(false);
+            gameRole.setType(6);
         }
     }
 }
