@@ -32,7 +32,6 @@ import com.jinhanyu.jack.langren.entity.RoomInfo;
 import com.jinhanyu.jack.langren.entity.UserInfo;
 import com.jinhanyu.jack.langren.util.RoundBitmapUtils;
 import com.jinhanyu.jack.langren.util.ScreenUtils;
-import com.parse.ParseQuery;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -327,7 +326,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             public void run() {
                                 clearTopActivities();
                                 tv_game_hint.setText("天黑!  请闭眼....");
-                                game_bg.setBackgroundResource(R.color.dark);
+                                game_bg.setBackgroundResource(R.mipmap.night);
                                 SoundEffectManager.play(R.raw.dark);//天黑音效
                             }
                         });
@@ -353,7 +352,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                 clearTopActivities();
                                 tv_game_hint.setText("天亮了");
                                 SoundEffectManager.play(R.raw.light);//天亮音效
-                                game_bg.setBackgroundResource(R.color.light);
+                                game_bg.setBackgroundResource(R.mipmap.day);
                             }
                         });
                     }

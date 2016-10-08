@@ -20,7 +20,7 @@ public class PullRefresh extends FrameLayout implements PtrUIHandler {
     private ImageView iv_icon;
     private TextView tv_hint;
     private AnimationDrawable drawable;
-
+    
 
     public PullRefresh(Context context) {
         this(context, null);

@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:gravity="center"
     android:orientation="vertical">
 
     <FrameLayout
@@ -20,14 +22,15 @@
             fresco:roundAsCircle="true" />
     </FrameLayout>
 
+
     <TextView
         android:id="@+id/tv_waitRoom_item_userId"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:singleLine="true"
         android:ellipsize="end"
+        android:ems="5"
         android:layout_gravity="center"
         android:gravity="center"
-        android:textSize="18sp"
-        android:layout_margin="10dp"/>
+        android:textSize="18sp" />
 </LinearLayout>
