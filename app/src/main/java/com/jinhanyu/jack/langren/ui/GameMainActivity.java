@@ -92,9 +92,9 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                 bt_wolf_destroy.setVisibility(View.VISIBLE);
 
             if (intent.getBooleanExtra("isFromDark", false)) {
-                game_bg.setBackgroundResource(R.color.dark);
+                game_bg.setBackgroundResource(R.mipmap.night);
             } else {
-                game_bg.setBackgroundResource(R.color.light);
+                game_bg.setBackgroundResource(R.mipmap.day);
             }
         }
 
