@@ -86,25 +86,12 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
 
     private void updateRoomInfoIfReJoinGame(Intent intent) {
         if (intent.getBooleanExtra("reJoinGame", false)) {
-            UserInfo me = MainApplication.roomInfo.findMeInRoom();
-            identification_label.setText("您的身份是: " + me.getGameRole().getType().getName());
-            if (me.getGameRole().getType() == GameRole.Type.Wolf)
-                bt_wolf_destroy.setVisibility(View.VISIBLE);
-
-            if (intent.getBooleanExtra("isFromDark", false)) {
-                game_bg.setBackgroundResource(R.mipmap.night);
-            } else {
-                game_bg.setBackgroundResource(R.mipmap.day);
-            }
+             MainApplication.socket.emit("reJoinGame",MainApplication.roomInfo.getRoomId(),Me.getUserId());
         }
 
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        updateRoomInfoIfReJoinGame(intent);
-    }
+
 
     private void clearTopActivities() {
         startActivity(new Intent(GameMainActivity.this, GameMainActivity.class));
@@ -246,10 +233,20 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         });
                     }
                 })
+                .on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        Log.i("connected and In Game", "haha");
+                        MainApplication.socket.emit("reJoinGame",MainApplication.roomInfo.getRoomId(),Me.getUserId());
+                    }
+                })
                 .on("reJoinGame", new Emitter.Listener() {
                             @Override
                             public void call(Object... args) {
                                 try {
+                                    Log.i("reJoinGameInGameMain", "nice");
+
+                                    //房间的整体信息、玩家的存活状态
                                     JSONObject room = (JSONObject) args[0];
                                     MainApplication.roomInfo.setHasPoisoned(room.getBoolean("hasPoisoned"));
                                     MainApplication.roomInfo.setHasSaved(room.getBoolean("hasSaved"));
@@ -258,13 +255,35 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
-                                    Log.i("reJoinGameInGameMain", room.toString());
+                                    JSONArray users = room.getJSONArray("users");
+                                    for(int i=0;i<users.length();i++){
+                                        JSONObject user = users.getJSONObject(i);
+                                        String userId = (String) user.get("userId");
+                                        MainApplication.roomInfo.findUserInRoom(userId).getGameRole().setDead(user.getBoolean("dead"));
+                                    }
+
+                                    //是否有同伴、同伴的Id
+                                    JSONArray companys = (JSONArray) args[1];
+                                    for (int i = 0; i < companys.length(); i++) {
+                                        String userId = (String) companys.get(i);
+                                        MainApplication.roomInfo.findUserInRoom(userId).getGameRole().setType(1);
+                                    }
+
+                                    //天黑还是天亮
                                     boolean isFromDark = (boolean) args[2];
                                     if (isFromDark) {
-                                        game_bg.setBackgroundResource(R.color.dark);
+                                        game_bg.setBackgroundResource(R.mipmap.night);
                                     } else {
-                                        game_bg.setBackgroundResource(R.color.light);
+                                        game_bg.setBackgroundResource(R.mipmap.day);
                                     }
+
+                                    //我的身份
+                                    int type = (int) args[3];
+                                    UserInfo me = MainApplication.roomInfo.findMeInRoom();
+                                    me.getGameRole().setType(type);
+                                    identification_label.setText("您的身份是: " + me.getGameRole().getType().getName());
+                                    if (me.getGameRole().getType() == GameRole.Type.Wolf)
+                                        bt_wolf_destroy.setVisibility(View.VISIBLE);
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {

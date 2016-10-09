@@ -44,11 +44,11 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
     private GridView roomList;
     private SelectRoomAdapter adapter;
     private List<RoomInfo> list;
-    private ImageView createRoom,settings;
+    private ImageView createRoom, settings;
     private TextView game_top;
-    private SimpleDraweeView head,userHead;
-    private TextView username,nickname,scoreText,title;
-    private View view,profile;
+    private SimpleDraweeView head, userHead;
+    private TextView username, nickname, scoreText, title;
+    private View view, profile;
     private EditText et_room_name;
     private AlertDialog dialog;
     private PopupWindow popupWindow;
@@ -59,11 +59,11 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
         Me.update();
     }
 
-    private void populateUserInfoToWidgets(){
+    private void populateUserInfoToWidgets() {
         userHead.setImageURI(Me.getHead());
         nickname.setText(Me.getNickname());
         username.setText(Me.getUsername());
-        scoreText.setText(Me.getScore()+"");
+        scoreText.setText(Me.getScore() + "");
         title.setText(Me.getTitle());
     }
 
@@ -75,7 +75,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
         list = new ArrayList<>();
         roomList = (GridView) findViewById(R.id.gv_roomList);
         game_top = (TextView) findViewById(R.id.game_top);
-        head= (SimpleDraweeView) findViewById(R.id.sdv_userHead);
+        head = (SimpleDraweeView) findViewById(R.id.sdv_userHead);
         adapter = new SelectRoomAdapter(this, list);
         roomList.setAdapter(adapter);
         createRoom = (ImageView) findViewById(R.id.iv_createRoom);
@@ -85,16 +85,16 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
         head.setImageURI(Me.getHead());
 
         //个人信息popupWindow
-        profile=getLayoutInflater().inflate(R.layout.user_detail,null);
-        userHead= (SimpleDraweeView) profile.findViewById(R.id.sdv_userInfo_userHead);
-        nickname= (TextView) profile.findViewById(R.id.tv_userInfo_nickname);
-        username= (TextView) profile.findViewById(R.id.tv_userInfo_username);
-        scoreText= (TextView) profile.findViewById(R.id.tv_userInfo_score);
-        title= (TextView) profile.findViewById(R.id.tv_userInfo_title);
-        settings= (ImageView) profile.findViewById(R.id.iv_userInfo_settings);
+        profile = getLayoutInflater().inflate(R.layout.user_detail, null);
+        userHead = (SimpleDraweeView) profile.findViewById(R.id.sdv_userInfo_userHead);
+        nickname = (TextView) profile.findViewById(R.id.tv_userInfo_nickname);
+        username = (TextView) profile.findViewById(R.id.tv_userInfo_username);
+        scoreText = (TextView) profile.findViewById(R.id.tv_userInfo_score);
+        title = (TextView) profile.findViewById(R.id.tv_userInfo_title);
+        settings = (ImageView) profile.findViewById(R.id.iv_userInfo_settings);
         settings.setVisibility(View.VISIBLE);
         settings.setOnClickListener(this);
-        popupWindow = new PopupWindow(profile, ScreenUtils.getScreenWidth(this)*3/4,ScreenUtils.getScreenHeight(this)*2/3);
+        popupWindow = new PopupWindow(profile, ScreenUtils.getScreenWidth(this) * 3 / 4, ScreenUtils.getScreenHeight(this) * 2 / 3);
         popupWindow.setFocusable(true);
         popupWindow.setTouchable(true);
         popupWindow.setOutsideTouchable(true);
@@ -107,7 +107,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
         final CheckBox cb_wizard = (CheckBox) view.findViewById(R.id.cb_wizard);
         final CheckBox cb_predictor = (CheckBox) view.findViewById(R.id.cb_predictor);
         final CheckBox cb_guard = (CheckBox) view.findViewById(R.id.cb_guard);
-        final CheckBox cb_hunter= (CheckBox) view.findViewById(R.id.cb_hunter);
+        final CheckBox cb_hunter = (CheckBox) view.findViewById(R.id.cb_hunter);
         final NumberPicker np_wolf_count = (NumberPicker) view.findViewById(R.id.np_wolf_count);
         np_wolf_count.setMinValue(1);
         np_wolf_count.setMaxValue(4);
@@ -123,7 +123,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                         if (TextUtils.isEmpty(roomName))
                             Toast.makeText(SelectRoomActivity.this, "房间名称不能为空", Toast.LENGTH_SHORT).show();
                         else {
-                            MainApplication.socket.emit("createRoom", roomName,cb_wizard.isChecked(),cb_predictor.isChecked(),cb_guard.isChecked(),cb_hunter.isChecked(),np_wolf_count.getValue(),np_citizen_count.getValue());
+                            MainApplication.socket.emit("createRoom", roomName, cb_wizard.isChecked(), cb_predictor.isChecked(), cb_guard.isChecked(), cb_hunter.isChecked(), np_wolf_count.getValue(), np_citizen_count.getValue());
                         }
                     }
                 })
@@ -152,7 +152,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                                 info.setMaxCount(obj.getInt("maxCount"));
                                 list.add(info);
                             }
-                             refreshUI(adapter);
+                            refreshUI(adapter);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -226,7 +226,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
     }
 
 
-    private void moreListener(){
+    private void moreListener() {
         MainApplication.socket.on("serverError", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
@@ -241,13 +241,13 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                 Toast.makeText(getApplicationContext(), "socket error", Toast.LENGTH_SHORT).show();
                 Looper.loop();
             }
-        }).on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+        }).once(Socket.EVENT_CONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
                 Log.i("connected", "haha");
                 MainApplication.socket.emit("login", Me.getUserId());
             }
-        }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+        }).once(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
                 Looper.prepare();
@@ -255,60 +255,17 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                 MainApplication.socket.connect();
                 Looper.loop();
             }
-        }).on("reJoinGame", new Emitter.Listener() {
+        }).on("alreadyInRoom", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
-                        try {
-                            JSONObject room = (JSONObject) args[0];
-                            MainApplication.roomInfo.setRoomId(room.getString("roomId"));
-                            MainApplication.roomInfo.setMaxCount(room.getInt("maxCount"));
-                            MainApplication.roomInfo.setCurrentCount(room.getInt("currentCount"));
-                            MainApplication.roomInfo.setName(room.getString("name"));
-                            MainApplication.roomInfo.setHasPoisoned(room.getBoolean("hasPoisoned"));
-                            MainApplication.roomInfo.setHasSaved(room.getBoolean("hasSaved"));
-                            try {
-                                MainApplication.roomInfo.setPoliceId(room.getString("policeId"));
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                        String roomId = (String) args[0];
+                        for (RoomInfo roomInfo : list) {
+                            if (roomInfo.getRoomId().equals(roomId)) {
+                                MainApplication.roomInfo = roomInfo;
+                                break;
                             }
-                            ParseQuery<UserInfo> query = ParseQuery.getQuery(UserInfo.class);
-                            final List<String> userIds = new ArrayList<String>();
-                            final Map<String, Boolean> readys = new HashMap<>();
-
-                            JSONArray array = room.getJSONArray("users");
-                            for (int i = 0; i < array.length(); i++) {
-                                JSONObject user = array.getJSONObject(i);
-                                String userId = (String) user.get("userId");
-                                userIds.add(userId);
-                                readys.put(userId, user.getBoolean("dead"));
-
-                            }
-                            synchronized (MainApplication.roomInfo) {
-                                MainApplication.roomInfo.getUsers().clear();
-                                List<UserInfo> objects = query.whereContainedIn("objectId", userIds).find();
-                                for (UserInfo userInfo : objects) {
-                                    userInfo.getGameRole().setDead(readys.get(userInfo.getObjectId()));
-                                    MainApplication.roomInfo.getUsers().add(userInfo);
-                                }
-                            }
-                            int type = (int) args[1];
-                            MainApplication.roomInfo.findMeInRoom().getGameRole().setType(type);
-                            boolean isFromDark = (boolean) args[2];
-                            JSONArray companys = (JSONArray) args[3];
-                            for (int i = 0; i < companys.length(); i++) {
-                                String userId = (String) companys.get(i);
-                                MainApplication.roomInfo.findUserInRoom(userId).getGameRole().setType(1);
-                            }
-                            Log.i("reJoinGame", room.toString());
-                            Log.i("willgotoGameMain", "true");
-                            startActivity(new Intent(getApplicationContext(), GameMainActivity.class).putExtra("reJoinGame", true).putExtra("isFromDark", isFromDark));
-                            MainApplication.socket.off("reJoinGame");
-                            Looper.prepare();
-                            Toast.makeText(getApplicationContext(), "重新加入了游戏", Toast.LENGTH_SHORT).show();
-                            Looper.loop();
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
+                        startActivity(new Intent(SelectRoomActivity.this, RoomActivity.class));
                     }
                 }
 
@@ -340,12 +297,12 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
             case R.id.sdv_userHead:
                 SoundEffectManager.play(R.raw.user_detail);
                 populateUserInfoToWidgets();
-                popupWindow.showAtLocation(view,Gravity.CENTER,0,140);
+                popupWindow.showAtLocation(view, Gravity.CENTER, 0, 140);
                 break;
             case R.id.iv_userInfo_settings:
-            //这里点击设置账号
+                //这里点击设置账号
                 SoundEffectManager.play(R.raw.user_detail);
-              startActivityForResult(new Intent(SelectRoomActivity.this,PlayerSetActivity.class),0);
+                startActivityForResult(new Intent(SelectRoomActivity.this, PlayerSetActivity.class), 0);
                 break;
         }
     }
@@ -353,7 +310,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==RESULT_OK){
+        if (resultCode == RESULT_OK) {
             Me.update();
             userHead.setImageURI(Me.getHead());
             head.setImageURI(Me.getHead());

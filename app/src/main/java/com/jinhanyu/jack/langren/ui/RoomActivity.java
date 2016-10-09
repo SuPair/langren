@@ -42,7 +42,7 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
     private WaitRoomAdapter adapter;
     private Button cancel;
     private ToggleButton ready;
-    private TextView username,nickname,scoreText,title;
+    private TextView username, nickname, scoreText, title;
     private View profile;
     private PopupWindow popupWindow;
     private SimpleDraweeView userHead;
@@ -64,13 +64,13 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
         adapter = new WaitRoomAdapter(this, MainApplication.roomInfo.getUsers());
         waitList.setAdapter(adapter);
         //个人信息popupWindow
-        profile=getLayoutInflater().inflate(R.layout.user_detail,null);
-        userHead= (SimpleDraweeView) profile.findViewById(R.id.sdv_userInfo_userHead);
-        nickname= (TextView) profile.findViewById(R.id.tv_userInfo_nickname);
-        username= (TextView) profile.findViewById(R.id.tv_userInfo_username);
-        scoreText= (TextView) profile.findViewById(R.id.tv_userInfo_score);
-        title= (TextView) profile.findViewById(R.id.tv_userInfo_title);
-        popupWindow = new PopupWindow(profile, ScreenUtils.getScreenWidth(this)*3/4,ScreenUtils.getScreenHeight(this)*2/3);
+        profile = getLayoutInflater().inflate(R.layout.user_detail, null);
+        userHead = (SimpleDraweeView) profile.findViewById(R.id.sdv_userInfo_userHead);
+        nickname = (TextView) profile.findViewById(R.id.tv_userInfo_nickname);
+        username = (TextView) profile.findViewById(R.id.tv_userInfo_username);
+        scoreText = (TextView) profile.findViewById(R.id.tv_userInfo_score);
+        title = (TextView) profile.findViewById(R.id.tv_userInfo_title);
+        popupWindow = new PopupWindow(profile, ScreenUtils.getScreenWidth(this) * 3 / 4, ScreenUtils.getScreenHeight(this) * 2 / 3);
         popupWindow.setFocusable(true);
         popupWindow.setTouchable(true);
         popupWindow.setOutsideTouchable(true);
@@ -82,9 +82,9 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                 username.setText(userInfo.getUsername());
                 nickname.setText(userInfo.getNickname());
                 userHead.setImageURI(userInfo.getHead());
-                scoreText.setText(userInfo.getScore()+"");
+                scoreText.setText(userInfo.getScore() + "");
                 title.setText(userInfo.getTitle());
-                popupWindow.showAtLocation(view, Gravity.CENTER,0,0);
+                popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
             }
         });
         cancel.setOnClickListener(this);
@@ -101,14 +101,14 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                             SoundEffectManager.play(R.raw.enter_room);//音效
                             ParseQuery<UserInfo> query = ParseQuery.getQuery(UserInfo.class);
                             final List<String> userIds = new ArrayList<String>();
-                            final Map<String,Boolean> readys = new HashMap<>();
+                            final Map<String, Boolean> readys = new HashMap<>();
 
                             JSONArray array = (JSONArray) args[0];
                             for (int i = 0; i < array.length(); i++) {
                                 JSONObject user = array.getJSONObject(i);
                                 String userId = (String) user.get("userId");
                                 userIds.add(userId);
-                                readys.put(userId,user.getBoolean("ready"));
+                                readys.put(userId, user.getBoolean("ready"));
 
                             }
                             query.whereContainedIn("objectId", userIds).findInBackground(new FindCallback<UserInfo>() {
@@ -179,10 +179,21 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                         });
 
                     }
+                })
+                .on("alreadyInGame", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                startActivity(new Intent(RoomActivity.this, GameMainActivity.class).putExtra("reJoinGame",true));
+                                ready.setChecked(false);
+                            }
+                        });
+                    }
                 });
-            MainApplication.socket.emit("enterRoom", MainApplication.roomInfo.getRoomId(), Me.getUserId());
+        MainApplication.socket.emit("enterRoom", MainApplication.roomInfo.getRoomId(), Me.getUserId());
     }
-
 
 
     @Override
