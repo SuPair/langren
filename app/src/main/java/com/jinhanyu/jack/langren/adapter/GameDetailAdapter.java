@@ -39,7 +39,7 @@ public class GameDetailAdapter extends CommonAdapter<UserInfo> {
         holder = (ViewHolder) view.getTag();
         final UserInfo info = data.get(i);
         holder.head.setImageURI(info.getHead());
-        if(info.getUserId()== MainApplication.roomInfo.getPoliceId()){
+        if(info.getUserId().equals(MainApplication.roomInfo.getPoliceId())){
             holder.head.getHierarchy().setOverlayImage(context.getResources().getDrawable(R.mipmap.police));
         }
         if(info.getGameRole().isDead()){

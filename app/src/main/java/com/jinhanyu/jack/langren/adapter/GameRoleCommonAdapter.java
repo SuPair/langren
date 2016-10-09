@@ -77,7 +77,7 @@ public class GameRoleCommonAdapter extends CommonAdapter<UserInfo> implements Ac
         final UserInfo info = data.get(i);
         viewHolder.head.setImageURI(info.getHead());
         viewHolder.username.setText(info.getNickname());
-        if(info.getUserId()== MainApplication.roomInfo.getPoliceId()){
+        if(info.getUserId().equals(MainApplication.roomInfo.getPoliceId())){
             viewHolder.head.getHierarchy().setOverlayImage(context.getResources().getDrawable(R.mipmap.police));
         }
         if (info.getGameRole().isDead()) {
