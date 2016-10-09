@@ -438,13 +438,13 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             if (userId1 != null) {
                                 UserInfo info = MainApplication.roomInfo.findUserInRoom(userId1);
                                 info.getGameRole().setDead(true);
-                                sb.append(info.getUsername() + "被杀  ");
+                                sb.append(info.getNickname() + "被杀  ");
                             }
 
                             if (userId2 != null) {
                                 UserInfo info = MainApplication.roomInfo.findUserInRoom(userId2);
                                 info.getGameRole().setDead(true);
-                                sb.append(info.getUsername() + "被杀  ");
+                                sb.append(info.getNickname() + "被杀  ");
                             }
                             runOnUiThread(new Runnable() {
                                 @Override
@@ -608,7 +608,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                 speakAnim.start();
                                 bigHead.setImageURI(MainApplication.roomInfo.findUserInRoom(userId).getHead());
                                 gallery.setSelection(MainApplication.roomInfo.findUserIndexInRoom(userId));
-                                tv_game_hint.setText("现在" + MainApplication.roomInfo.findUserInRoom(userId).getUsername() + "开始发言");
+                                tv_game_hint.setText("现在" + MainApplication.roomInfo.findUserInRoom(userId).getNickname() + "开始发言");
                             }
                         });
 

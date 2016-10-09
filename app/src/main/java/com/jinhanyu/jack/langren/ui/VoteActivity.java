@@ -84,7 +84,7 @@ public class VoteActivity extends CommonActivity implements ActionPerformer{
                             Intent intent =new Intent(VoteActivity.this, VoteResultActivity.class).putExtra("type",type);
                             if(policeUserId!=null) {
                                 MainApplication.roomInfo.setPoliceId(policeUserId);
-                                intent.putExtra("finalUserName", MainApplication.roomInfo.findUserInRoom(policeUserId).getUsername());
+                                intent.putExtra("finalUserName", MainApplication.roomInfo.findUserInRoom(policeUserId).getNickname());
                                 startActivity(intent);
                                 finish();
                             }
@@ -109,7 +109,7 @@ public class VoteActivity extends CommonActivity implements ActionPerformer{
                             Intent intent =new Intent(VoteActivity.this, VoteResultActivity.class).putExtra("type",type);
                             if(voteOutUserId!=null) {
                                 MainApplication.roomInfo.findUserInRoom(voteOutUserId).getGameRole().setDead(true);
-                                intent.putExtra("finalUserName", MainApplication.roomInfo.findUserInRoom(voteOutUserId).getUsername());
+                                intent.putExtra("finalUserName", MainApplication.roomInfo.findUserInRoom(voteOutUserId).getNickname());
                             }
                             startActivity(intent);
                             finish();

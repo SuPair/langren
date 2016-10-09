@@ -72,7 +72,7 @@ public class WolfActivity extends CommonActivity implements ActionPerformer{
                  String userId= (String) args[0];
                  Log.i("userid",userId);
                  String msg = (String) args[1];
-                 sb.append(MainApplication.roomInfo.findUserInRoom(userId).getUsername()).append(" 说: ").append(msg).append("\n");
+                 sb.append(MainApplication.roomInfo.findUserInRoom(userId).getNickname()).append(" 说: ").append(msg).append("\n");
                  tv_content.post(new Runnable() {
                      @Override
                      public void run() {
@@ -95,7 +95,7 @@ public class WolfActivity extends CommonActivity implements ActionPerformer{
                     }
                     Intent intent =new Intent(WolfActivity.this, VoteResultActivity.class).putExtra("type",RoomInfo.VOTE_KILL);
                     if(finalUserId!=null)
-                        intent.putExtra("finalUserName",MainApplication.roomInfo.findUserInRoom(finalUserId).getUsername());
+                        intent.putExtra("finalUserName",MainApplication.roomInfo.findUserInRoom(finalUserId).getNickname());
                     startActivity(intent);
                     finish();
                 }catch (Exception e){
