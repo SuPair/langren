@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.langren.ActionPerformer;
+import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.entity.GameRole;
 import com.jinhanyu.jack.langren.entity.UserInfo;
@@ -76,6 +77,9 @@ public class GameRoleCommonAdapter extends CommonAdapter<UserInfo> implements Ac
         final UserInfo info = data.get(i);
         viewHolder.head.setImageURI(info.getHead());
         viewHolder.username.setText(info.getNickname());
+        if(info.getUserId()== MainApplication.roomInfo.getPoliceId()){
+            viewHolder.head.getHierarchy().setOverlayImage(context.getResources().getDrawable(R.mipmap.police));
+        }
         if (info.getGameRole().isDead()) {
             viewHolder.state.setText(R.string.isDead);
             viewHolder.action.setEnabled(false);

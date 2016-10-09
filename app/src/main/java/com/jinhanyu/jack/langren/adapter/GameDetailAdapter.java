@@ -9,6 +9,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.entity.GameRole;
 import com.jinhanyu.jack.langren.entity.UserInfo;
@@ -38,6 +39,9 @@ public class GameDetailAdapter extends CommonAdapter<UserInfo> {
         holder = (ViewHolder) view.getTag();
         final UserInfo info = data.get(i);
         holder.head.setImageURI(info.getHead());
+        if(info.getUserId()== MainApplication.roomInfo.getPoliceId()){
+            holder.head.getHierarchy().setOverlayImage(context.getResources().getDrawable(R.mipmap.police));
+        }
         if(info.getGameRole().isDead()){
             holder.head.getHierarchy().setOverlayImage(context.getResources().getDrawable(R.mipmap.dead));
         }
