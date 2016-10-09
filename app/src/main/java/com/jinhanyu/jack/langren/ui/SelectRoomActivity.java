@@ -9,9 +9,11 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -102,6 +104,16 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
         //创建房间对话框
         view = getLayoutInflater().inflate(R.layout.create_room, null);
         et_room_name = (EditText) view.findViewById(R.id.et_room_name);
+        final CheckBox cb_wizard = (CheckBox) view.findViewById(R.id.cb_wizard);
+        final CheckBox cb_predictor = (CheckBox) view.findViewById(R.id.cb_predictor);
+        final CheckBox cb_guard = (CheckBox) view.findViewById(R.id.cb_guard);
+        final CheckBox cb_hunter= (CheckBox) view.findViewById(R.id.cb_hunter);
+        final NumberPicker np_wolf_count = (NumberPicker) view.findViewById(R.id.np_wolf_count);
+        np_wolf_count.setMinValue(1);
+        np_wolf_count.setMaxValue(4);
+        final NumberPicker np_citizen_count = (NumberPicker) view.findViewById(R.id.np_citizen_count);
+        np_citizen_count.setMinValue(0);
+        np_citizen_count.setMaxValue(4);
         dialog = new AlertDialog.Builder(this).setTitle("创建房间")
                 .setView(view)
                 .setPositiveButton("创建", new DialogInterface.OnClickListener() {
@@ -111,7 +123,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                         if (TextUtils.isEmpty(roomName))
                             Toast.makeText(SelectRoomActivity.this, "房间名称不能为空", Toast.LENGTH_SHORT).show();
                         else {
-                            MainApplication.socket.emit("createRoom", roomName, Me.getUserId());
+                            MainApplication.socket.emit("createRoom", roomName,cb_wizard.isChecked(),cb_predictor.isChecked(),cb_guard.isChecked(),cb_hunter.isChecked(),np_wolf_count.getValue(),np_citizen_count.getValue());
                         }
                     }
                 })

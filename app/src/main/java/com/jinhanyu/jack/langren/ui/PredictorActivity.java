@@ -78,7 +78,7 @@ public class PredictorActivity extends CommonActivity implements ActionPerformer
     @Override
     public void doAction(Object... params) {
         toCheckUserId = (String) params[0];
-        MainApplication.socket.emit("predictor",MainApplication.roomInfo.getRoomId(), Me.getUserId(), toCheckUserId);
+        MainApplication.socket.emit("predictor",MainApplication.roomInfo.getRoomId(),toCheckUserId);
         hasChecked =true;
         action_done_label.setText("等待法官确认...");
     }

@@ -78,6 +78,7 @@ public class GameRoleCommonAdapter extends CommonAdapter<UserInfo> implements Ac
         viewHolder.username.setText(info.getNickname());
         if (info.getGameRole().isDead()) {
             viewHolder.state.setText(R.string.isDead);
+            viewHolder.action.setEnabled(false);
         } else {
             viewHolder.state.setText(R.string.isLiving);
         }

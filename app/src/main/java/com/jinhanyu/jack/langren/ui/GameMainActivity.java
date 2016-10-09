@@ -474,9 +474,8 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             @Override
                             public void run() {
                                 clearTopActivities();
-                                boolean isFromDark = (boolean) args[0];
                                 tv_game_hint.setText("猎人，你死了，你可以带走一个人");
-                                startActivity(new Intent(GameMainActivity.this, HunterActivity.class).putExtra("isFromDark", isFromDark));
+                                startActivity(new Intent(GameMainActivity.this, HunterActivity.class));
                             }
                         });
                     }

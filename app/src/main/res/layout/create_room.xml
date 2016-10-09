@@ -3,24 +3,111 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="房间名称:" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:layout_marginRight="10dp"
-        android:id="@+id/et_room_name"
-        android:layout_width="0dp"
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="房间名称:" />
+
+        <EditText
+            android:id="@+id/et_room_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/edit_text_style"
+            android:ellipsize="end"
+            android:ems="10"
+            android:paddingLeft="5dp"
+            android:singleLine="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_weight="1"
-        android:singleLine="true"
-        android:ems="10"
-        android:ellipsize="end"
-        android:paddingLeft="5dp"
-        android:background="@drawable/edit_text_style"/>
+        android:paddingLeft="20dp"
+        android:paddingTop="5dp">
+
+        <CheckBox
+            android:id="@+id/cb_wizard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="女巫" />
+
+        <CheckBox
+            android:id="@+id/cb_predictor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="先知" />
+
+        <CheckBox
+            android:id="@+id/cb_guard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="守卫" />
+
+        <CheckBox
+            android:id="@+id/cb_hunter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="猎人" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="5dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="狼人"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="5dp"/>
+
+            <NumberPicker
+                android:id="@+id/np_wolf_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"></NumberPicker>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="村民"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="5dp"/>
+
+            <NumberPicker
+                android:id="@+id/np_citizen_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"></NumberPicker>
+        </LinearLayout>
+
+    </LinearLayout>
 </LinearLayout>

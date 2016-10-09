@@ -38,7 +38,7 @@ public class HunterActivity extends AppCompatActivity implements ActionPerformer
             @Override
             protected void onTimeEnd() {
                 super.onTimeEnd();
-                MainApplication.socket.emit("hunter", MainApplication.roomInfo.getRoomId(), huntedUserId, isFromDark);
+                MainApplication.socket.emit("hunter", MainApplication.roomInfo.getRoomId(), huntedUserId);
                 finish();
             }
         };

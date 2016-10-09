@@ -32,6 +32,7 @@ public class GameOverActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.game_over);
 
         listView= (ListView) findViewById(R.id.game_over_listView);
+        Collections.sort(MainApplication.roomInfo.getUsers());
         Collections.reverse(MainApplication.roomInfo.getUsers());
         adapter = new GameOverAdapter(this,MainApplication.roomInfo.getUsers());
         listView.setAdapter(adapter);
