@@ -98,7 +98,6 @@
 
 
         <include
-            android:id="@+id/wolf_chatRoom"
             layout="@layout/wolf_chat_room"
             android:layout_width="match_parent"
             android:layout_height="400dp"

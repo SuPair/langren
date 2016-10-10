@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:visibility="invisible"
+    android:id="@+id/wolf_chatRoom"
     >
     <ScrollView
         android:id="@+id/msg_scroll"
@@ -21,6 +23,7 @@
     </ScrollView>
 
     <LinearLayout
+        android:layout_marginTop="10dp"
         android:id="@+id/sendMsgPanel"
         android:gravity="bottom"
         android:layout_width="match_parent"
@@ -33,7 +36,7 @@
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:paddingLeft="10dp"
-            android:hint="@string/type_some_message"
+            android:hint="发消息给狼人同伴"
             android:background="@drawable/edit_text_style_dark"/>
         <TextView
             android:id="@+id/sendMsg"

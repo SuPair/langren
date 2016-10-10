@@ -353,9 +353,12 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                     int type = (int) args[3];
                                     UserInfo me = MainApplication.roomInfo.findMeInRoom();
                                     me.getGameRole().setType(type);
-                                    identification_label.setText("您的身份是: " + me.getGameRole().getType().getName());
-                                    if (me.getGameRole().getType() == GameRole.Type.Wolf)
+                                    identification_label.setText(me.getGameRole().getType().getName());
+                                    if (me.getGameRole().getType() == GameRole.Type.Wolf) {
                                         bt_wolf_destroy.setVisibility(View.VISIBLE);
+                                        toggle_chatRoom.setVisibility(View.VISIBLE);
+                                        wolf_chatRoom.setVisibility(View.VISIBLE);
+                                    }
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
@@ -383,6 +386,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                 if (me.getGameRole().getType() == GameRole.Type.Wolf) {
                                     bt_wolf_destroy.setVisibility(View.VISIBLE);
                                     toggle_chatRoom.setVisibility(View.VISIBLE);
+                                    wolf_chatRoom.setVisibility(View.VISIBLE);
                                 }
                             }
                         });
@@ -862,6 +866,10 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                 break;
             case R.id.tv_playStage_identification:
                 SoundEffectManager.play(R.raw.user_detail);
+                if(currentUser.getGameRole().getType()!= GameRole.Type.Unknown){
+                    Toast.makeText(GameMainActivity.this, "玩家身份已确定!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Identification();
                 break;
         }
