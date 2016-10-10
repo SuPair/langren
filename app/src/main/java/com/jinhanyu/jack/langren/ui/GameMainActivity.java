@@ -7,13 +7,18 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,35 +49,65 @@ import io.socket.emitter.Emitter;
 
 
 public class GameMainActivity extends CommonActivity implements View.OnClickListener {
+    //玩家画廊
     private Gallery gallery;
     private GalleryAdapter adapter;
-    private ListView gameDetailListview;
-    private GameDetailAdapter gameDetailAdapter;
-    private ImageView gameRule, voiceLevel;
-    private AnimationDrawable speakAnim;
-    private TextView identification;
-
-    private DrawerLayout drawerLayout;//侧滑（显示玩家详细信息）
 
 
-    private SimpleDraweeView bigHead;
-
-    private View game_bg;
-    private TextView identification_label;
-    private View bt_endSpeak;
-    private TextView time_label, tv_game_hint;
-    private TickTimer tickTimer;
-    private View speak_time_label;
-    private View bt_wolf_destroy;
-
-
-    private VoiceManager voiceManager = VoiceManager.getInstance(MainApplication.socket);
+    //游戏规则
+    private ImageView gameRule;
     private PopupWindow popupWindow;
 
 
+    //发言特效
+    private ImageView voiceLevel;
+    private AnimationDrawable speakAnim;
+
+    //标记玩家身份
+    private TextView mark;
+    //游戏背景
+    private View game_bg;
+    //玩家身份
+    private TextView identification_label;
+    //玩家大头像
+    private SimpleDraweeView bigHead;
+
+    //侧滑（显示玩家详细信息）
+    private DrawerLayout drawerLayout;
+    private ListView gameDetailListview;
+    private GameDetailAdapter gameDetailAdapter;
+
+
+
+    //发言按钮
+    private View bt_endSpeak;
+    //狼人自爆按钮
+    private View bt_wolf_destroy;
+    //游戏提示、时间面板
+    private TextView time_label, tv_game_hint;
+    private View speak_time_label;
+    //定时器
+    private TickTimer tickTimer;
+
+
+    private VoiceManager voiceManager = VoiceManager.getInstance(MainApplication.socket);
+
+    //游戏逻辑
     private boolean isLeavingWords = false;
     private boolean isFromDark = false;
     private UserInfo currentUser = MainApplication.roomInfo.findMeInRoom();
+
+
+    //狼人聊天室
+    private ImageView toggle_chatRoom;
+    private View wolf_chatRoom;
+    private ScrollView msg_scroll;
+    private TextView tv_content;
+    private EditText et_msg;
+    private View sendMsg;
+    private StringBuilder sb= new StringBuilder();
+    private RotateAnimation openChatRoomAnimation;
+    private RotateAnimation closeChatRoomAnimation;
 
     private void finishSpeak() {
         bt_endSpeak.setEnabled(false);
@@ -86,11 +121,10 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
 
     private void updateRoomInfoIfReJoinGame(Intent intent) {
         if (intent.getBooleanExtra("reJoinGame", false)) {
-             MainApplication.socket.emit("reJoinGame",MainApplication.roomInfo.getRoomId(),Me.getUserId());
+            MainApplication.socket.emit("reJoinGame", MainApplication.roomInfo.getRoomId(), Me.getUserId());
         }
 
     }
-
 
 
     private void clearTopActivities() {
@@ -101,6 +135,12 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
     protected void prepareViews() {
         setContentView(R.layout.game_main);
 
+        openChatRoomAnimation = new RotateAnimation(-90,0, Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+        openChatRoomAnimation.setDuration(300);
+        openChatRoomAnimation.setFillAfter(true);
+        closeChatRoomAnimation = new RotateAnimation(0,-90, Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+        closeChatRoomAnimation.setDuration(300);
+        closeChatRoomAnimation.setFillAfter(true);
 
         //杂项: 计时器相关、游戏背景、声音动画、身份、标记
         time_label = (TextView) findViewById(R.id.time_label);
@@ -110,9 +150,9 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
         game_bg = findViewById(R.id.game_bg);
         voiceLevel = (ImageView) findViewById(R.id.iv_playStage_voiceLevel);
         speakAnim = (AnimationDrawable) voiceLevel.getDrawable();
-        identification = (TextView) findViewById(R.id.tv_playStage_identification);
+        mark = (TextView) findViewById(R.id.tv_playStage_identification);
         identification_label = (TextView) findViewById(R.id.identification_label);
-        identification.setOnClickListener(this);
+        mark.setOnClickListener(this);
 
         //画廊
         gallery = (Gallery) findViewById(R.id.gallery_players_head);
@@ -136,6 +176,15 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
         popupWindow.setOutsideTouchable(true);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
 
+        //狼人聊天室
+        wolf_chatRoom = findViewById(R.id.wolf_chatRoom);
+        toggle_chatRoom = (ImageView) findViewById(R.id.toggle_chatRoom);
+        tv_content = (TextView)findViewById(R.id.tv_content);
+        et_msg = (EditText)findViewById(R.id.et_msg);
+        msg_scroll = (ScrollView)findViewById(R.id.msg_scroll);
+        sendMsg = findViewById(R.id.sendMsg);
+        sendMsg.setOnClickListener(this);
+        toggle_chatRoom.setOnClickListener(this);
 
         //结束发言按钮
         bt_endSpeak = findViewById(R.id.bt_endSpeak);
@@ -215,6 +264,22 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
     protected void prepareSocket() {
 
         MainApplication.socket
+                .on("langrenMsg", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        String userId = (String) args[0];
+                        Log.i("userid", userId);
+                        String msg = (String) args[1];
+                        sb.append(MainApplication.roomInfo.findUserInRoom(userId).getNickname()).append(" 说: ").append(msg).append("\n");
+                        tv_content.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                tv_content.setText(sb.toString());
+                                msg_scroll.fullScroll(ScrollView.FOCUS_DOWN);//滚动到底部
+                            }
+                        });
+                    }
+                })
                 .on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
@@ -244,7 +309,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                 hideProgress();
                             }
                         });
-                        MainApplication.socket.emit("reJoinGame",MainApplication.roomInfo.getRoomId(),Me.getUserId());
+                        MainApplication.socket.emit("reJoinGame", MainApplication.roomInfo.getRoomId(), Me.getUserId());
                     }
                 })
                 .on("reJoinGame", new Emitter.Listener() {
@@ -263,7 +328,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                         e.printStackTrace();
                                     }
                                     JSONArray users = room.getJSONArray("users");
-                                    for(int i=0;i<users.length();i++){
+                                    for (int i = 0; i < users.length(); i++) {
                                         JSONObject user = users.getJSONObject(i);
                                         String userId = (String) user.get("userId");
                                         MainApplication.roomInfo.findUserInRoom(userId).getGameRole().setDead(user.getBoolean("dead"));
@@ -279,7 +344,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                     //天黑还是天亮
                                     boolean isFromDark = (boolean) args[2];
                                     if (isFromDark) {
-                                        game_bg.setBackgroundResource(R.mipmap.night);
+                                        game_bg.setBackgroundResource(R.color.dark);
                                     } else {
                                         game_bg.setBackgroundResource(R.mipmap.day);
                                     }
@@ -310,12 +375,15 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         final int type = (int) args[0];
                         final UserInfo me = MainApplication.roomInfo.findMeInRoom();
                         me.getGameRole().setType(type);
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 identification_label.setText(me.getGameRole().getType().getName());
-                                if (me.getGameRole().getType() == GameRole.Type.Wolf)
+                                if (me.getGameRole().getType() == GameRole.Type.Wolf) {
                                     bt_wolf_destroy.setVisibility(View.VISIBLE);
+                                    toggle_chatRoom.setVisibility(View.VISIBLE);
+                                }
                             }
                         });
                     }
@@ -352,7 +420,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             public void run() {
                                 clearTopActivities();
                                 tv_game_hint.setText("天黑!  请闭眼....");
-                                game_bg.setBackgroundResource(R.mipmap.night);
+                                game_bg.setBackgroundResource(R.color.dark);
                                 SoundEffectManager.play(R.raw.dark);//天黑音效
                             }
                         });
@@ -475,7 +543,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(GameMainActivity.this, "昨晚"+sb.toString(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(GameMainActivity.this, "昨晚" + sb.toString(), Toast.LENGTH_SHORT).show();
                                 }
                             });
                             SoundEffectManager.play(R.raw.kill);//被杀音效
@@ -765,6 +833,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
     }
 
 
+
     //弹出游戏规则；标记身份
     @Override
     public void onClick(View v) {
@@ -772,6 +841,24 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
             case R.id.iv_gameStage_gameRule:
                 SoundEffectManager.play(R.raw.user_detail);
                 popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+                break;
+            case R.id.toggle_chatRoom:
+                boolean isChatRoomVisible = wolf_chatRoom.getVisibility()==View.VISIBLE;
+                if(isChatRoomVisible) {
+                    toggle_chatRoom.startAnimation(closeChatRoomAnimation);
+                    wolf_chatRoom.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    toggle_chatRoom.startAnimation(openChatRoomAnimation);
+                    wolf_chatRoom.setVisibility(View.VISIBLE);
+                }
+                break;
+            case R.id.sendMsg:
+                String msg = et_msg.getText().toString();
+                if(TextUtils.isEmpty(msg))
+                    return;
+                et_msg.setText("");
+                MainApplication.socket.emit("langrenMsg",MainApplication.roomInfo.getRoomId(),Me.getUserId(),msg);
                 break;
             case R.id.tv_playStage_identification:
                 SoundEffectManager.play(R.raw.user_detail);

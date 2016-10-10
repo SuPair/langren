@@ -37,7 +37,7 @@
         <activity android:name=".ui.UserHeadActivity" />
         <activity android:name=".ui.SelectRoomActivity" android:launchMode="singleTask"/>
         <activity android:name=".ui.RoomActivity" android:launchMode="singleTask"/>
-        <activity android:name=".ui.GameMainActivity" android:launchMode="singleTask">
+        <activity android:name=".ui.GameMainActivity" android:launchMode="singleTask" android:windowSoftInputMode="adjustPan">
 
         </activity>
         <activity android:name=".ui.GameOverActivity" />
