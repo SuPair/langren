@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:ellipsize="end"
-        android:ems="4"
+        android:ems="5"
         android:singleLine="true"
         android:text=""
         android:textSize="15sp" />
@@ -33,6 +33,7 @@
         android:layout_gravity="center"
         android:layout_marginLeft="5dp"
         android:layout_weight="1"
+        android:gravity="center"
         android:text=""
         android:textSize="15sp" />
 
@@ -51,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text=""
-        android:textColor="@color/state"
+        android:textColor="@color/red"
         android:textSize="15sp" />
 
 </LinearLayout>
