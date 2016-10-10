@@ -23,13 +23,22 @@
                 android:layout_weight="1.6">
 
                 <TextView
+                    android:layout_margin="5dp"
+                    android:id="@+id/identification_label_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="您的身份是:"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/light"
+                    android:textSize="20sp"/>
+                <TextView
                     android:id="@+id/identification_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_margin="5dp"
+                    android:layout_toRightOf="@+id/identification_label_hint"
+                    android:layout_marginTop="5dp"
                     android:text=""
-                    android:textColor="@color/colorPrimaryDark"
+                    android:textColor="@color/red"
                     android:textSize="20sp" />
 
                 <ImageView

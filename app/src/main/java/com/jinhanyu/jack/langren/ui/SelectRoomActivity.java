@@ -49,7 +49,6 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
     private SimpleDraweeView head, userHead;
     private TextView username, nickname, scoreText, title;
     private View view, profile;
-    private EditText et_room_name;
     private AlertDialog dialog;
     private PopupWindow popupWindow;
 
@@ -103,7 +102,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
 
         //创建房间对话框
         view = getLayoutInflater().inflate(R.layout.create_room, null);
-        et_room_name = (EditText) view.findViewById(R.id.et_room_name);
+        final EditText et_room_name;et_room_name = (EditText) view.findViewById(R.id.et_room_name);
         final CheckBox cb_wizard = (CheckBox) view.findViewById(R.id.cb_wizard);
         final CheckBox cb_predictor = (CheckBox) view.findViewById(R.id.cb_predictor);
         final CheckBox cb_guard = (CheckBox) view.findViewById(R.id.cb_guard);
@@ -227,49 +226,71 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
 
 
     private void moreListener() {
-        MainApplication.socket.on("serverError", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                Looper.prepare();
-                Toast.makeText(getApplicationContext(), "服务器错误：" + args[0], Toast.LENGTH_SHORT).show();
-                Looper.loop();
-            }
-        }).on(Socket.EVENT_ERROR, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                Looper.prepare();
-                Toast.makeText(getApplicationContext(), "socket error", Toast.LENGTH_SHORT).show();
-                Looper.loop();
-            }
-        }).once(Socket.EVENT_CONNECT, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                Log.i("connected", "haha");
-                MainApplication.socket.emit("login", Me.getUserId());
-            }
-        }).once(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                Looper.prepare();
-                Toast.makeText(getApplicationContext(), "socket断开" + args[0], Toast.LENGTH_SHORT).show();
-                MainApplication.socket.connect();
-                Looper.loop();
-            }
-        }).on("alreadyInRoom", new Emitter.Listener() {
+        MainApplication.socket
+                .on("serverError", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
-                        String roomId = (String) args[0];
-                        for (RoomInfo roomInfo : list) {
-                            if (roomInfo.getRoomId().equals(roomId)) {
-                                MainApplication.roomInfo = roomInfo;
-                                break;
+                        Looper.prepare();
+                        Toast.makeText(getApplicationContext(), "游戏错误：" + args[0], Toast.LENGTH_SHORT).show();
+                        Looper.loop();
+                    }
+                })
+                .on(Socket.EVENT_ERROR, new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        Looper.prepare();
+                        Toast.makeText(getApplicationContext(), "服务器可能崩了...", Toast.LENGTH_SHORT).show();
+                        Looper.loop();
+                    }
+                })
+                .once(Socket.EVENT_CONNECT, new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        Log.i("connected", "haha");
+                        MainApplication.socket.emit("login", Me.getUserId());
+                    }
+                })
+                .once(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        Looper.prepare();
+                        Toast.makeText(getApplicationContext(), "socket断开了" + args[0], Toast.LENGTH_SHORT).show();
+                        MainApplication.socket.connect();
+                        Looper.loop();
+                    }
+                })
+                .on("alreadyInRoomTag", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showProgress("正在重连...");
+                            }
+                        });
+                    }
+                })
+                .on("alreadyInRoom", new Emitter.Listener() {
+                            @Override
+                            public void call(Object... args) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        hideProgress();
+                                    }
+                                });
+                                String roomId = (String) args[0];
+                                for (RoomInfo roomInfo : list) {
+                                    if (roomInfo.getRoomId().equals(roomId)) {
+                                        MainApplication.roomInfo = roomInfo;
+                                        break;
+                                    }
+                                }
+                                startActivity(new Intent(SelectRoomActivity.this, RoomActivity.class));
                             }
                         }
-                        startActivity(new Intent(SelectRoomActivity.this, RoomActivity.class));
-                    }
-                }
 
-        );
+                );
     }
 
     @Override
@@ -280,7 +301,9 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                 .off("createRoom")
                 .off("newRoom")
                 .off("destroyRoom")
-                .off("roomChange");
+                .off("roomChange")
+                .off("alreadyInRoom")
+                .off("alreadyInRoomTag");
     }
 
     @Override

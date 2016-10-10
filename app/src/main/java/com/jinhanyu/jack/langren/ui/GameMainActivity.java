@@ -226,6 +226,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                         .setPositiveButton("重连", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
+                                                showProgress("正在重连...");
                                                 MainApplication.socket.connect();
                                             }
                                         }).show();
@@ -237,6 +238,12 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                     @Override
                     public void call(Object... args) {
                         Log.i("connected and In Game", "haha");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                hideProgress();
+                            }
+                        });
                         MainApplication.socket.emit("reJoinGame",MainApplication.roomInfo.getRoomId(),Me.getUserId());
                     }
                 })
@@ -306,7 +313,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                identification_label.setText("您的身份是: " + me.getGameRole().getType().getName());
+                                identification_label.setText(me.getGameRole().getType().getName());
                                 if (me.getGameRole().getType() == GameRole.Type.Wolf)
                                     bt_wolf_destroy.setVisibility(View.VISIBLE);
                             }
@@ -468,7 +475,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    tv_game_hint.setText("昨晚"+sb.toString());
+                                    Toast.makeText(GameMainActivity.this, "昨晚"+sb.toString(), Toast.LENGTH_SHORT).show();
                                 }
                             });
                             SoundEffectManager.play(R.raw.kill);//被杀音效
@@ -576,8 +583,8 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                 isLeavingWords = true;
                                 voiceManager.startRecord();
                                 isFromDark = (boolean) args[0];
-                                tv_game_hint.setText("你被刀了,请发表遗言");
-                                Toast.makeText(GameMainActivity.this, "你被刀了,请发表遗言", Toast.LENGTH_SHORT).show();
+                                tv_game_hint.setText("你死了,请发表遗言");
+                                Toast.makeText(GameMainActivity.this, "你死了,请发表遗言", Toast.LENGTH_SHORT).show();
                                 tv_game_hint.setVisibility(View.INVISIBLE);
                                 speak_time_label.setVisibility(View.VISIBLE);
                                 bt_endSpeak.setEnabled(true);

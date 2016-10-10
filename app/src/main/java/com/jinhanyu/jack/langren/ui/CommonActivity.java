@@ -1,5 +1,6 @@
 package com.jinhanyu.jack.langren.ui;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
@@ -29,13 +30,24 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
     private SensorManager sensorManager;
     private NetWorkStateReceiver receiver;
     private TextView network_state;
+    private ProgressDialog progressDialog;
 
+
+    protected void showProgress(String msg){
+        progressDialog.setMessage(msg);
+        progressDialog.show();
+    }
+
+    protected void hideProgress(){
+        progressDialog.dismiss();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        progressDialog = new ProgressDialog(this);
         prepareViews();
         prepareSocket();
 
@@ -101,9 +113,8 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
                 finish();
                 break;
             case 2:
-                //退出游戏
-                MainApplication.socket.disconnect();
-                System.exit(0);
+                android.os.Process.killProcess(android.os.Process.myPid());    //获取PID
+                System.exit(0);   //常规java、c#的标准退出法，返回值为0代表正常退出
                 break;
         }
     }

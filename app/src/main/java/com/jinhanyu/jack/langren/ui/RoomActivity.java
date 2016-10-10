@@ -180,12 +180,24 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
 
                     }
                 })
+                .on("alreadyInGameTag", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showProgress("正在重新加入游戏...");
+                            }
+                        });
+                    }
+                })
                 .on("alreadyInGame", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                hideProgress();
                                 startActivity(new Intent(RoomActivity.this, GameMainActivity.class).putExtra("reJoinGame",true));
                                 ready.setChecked(false);
                             }
@@ -204,7 +216,9 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                 .off("leaveRoom")
                 .off("prepare")
                 .off("unprepare")
-                .off("willstart");
+                .off("willstart")
+                .off("alreadyInGameTag")
+                .off("alreadyInGame");
 
     }
 

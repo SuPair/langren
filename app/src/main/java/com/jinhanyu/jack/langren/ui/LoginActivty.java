@@ -63,9 +63,11 @@ public   class LoginActivty extends CommonActivity implements View.OnClickListen
 
                 final String username = game_number.getText().toString();
                 final String password = game_password.getText().toString();
+                showProgress("正在登陆...");
                 ParseUser.logInInBackground(username, password, new LogInCallback() {
                     @Override
                     public void done(ParseUser user, ParseException e) {
+                        hideProgress();
                         if (e != null) {
                             SoundEffectManager.play(R.raw.login_failure);//音效
                             e.printStackTrace();

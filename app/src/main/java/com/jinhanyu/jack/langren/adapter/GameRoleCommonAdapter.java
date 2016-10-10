@@ -86,6 +86,9 @@ public class GameRoleCommonAdapter extends CommonAdapter<UserInfo> implements Ac
         } else {
             viewHolder.state.setText(R.string.isLiving);
         }
+        if(actionStr.equals("守护") && info.getUserId().equals(MainApplication.roomInfo.getLastGuardedUserId())){
+            viewHolder.action.setEnabled(false);
+        }
         viewHolder.type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
