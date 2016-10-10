@@ -143,9 +143,7 @@ public class GameRoleCommonAdapter extends CommonAdapter<UserInfo> implements Ac
         timerCanceled = true;
     }
 
-    public void reset(){
-        timerCanceled = false;
-    }
+
 
     class ViewHolder{
         SimpleDraweeView head;

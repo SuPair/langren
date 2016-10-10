@@ -171,6 +171,7 @@
             android:src="@mipmap/a99" />
 
         <ImageView
+            android:visibility="invisible"
             android:id="@+id/toggle_chatRoom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
