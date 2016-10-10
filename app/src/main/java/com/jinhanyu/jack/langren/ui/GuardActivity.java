@@ -39,7 +39,7 @@ public class GuardActivity extends AppCompatActivity implements ActionPerformer{
             @Override
             protected void onTimeEnd() {
                 super.onTimeEnd();
-                MainApplication.socket.emit("guard",MainApplication.roomInfo.getRoomId(), Me.getUserId(),guardUserId);
+                MainApplication.socket.emit("guard",MainApplication.roomInfo.getRoomId(),guardUserId);
             }
         };
         tickTimer.startTick();
