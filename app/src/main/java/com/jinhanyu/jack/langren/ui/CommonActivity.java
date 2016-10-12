@@ -16,6 +16,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.baoyz.actionsheet.ActionSheet;
+import com.jinhanyu.jack.langren.CustomProgress;
 import com.jinhanyu.jack.langren.MainApplication;
 import com.jinhanyu.jack.langren.NetWorkStateReceiver;
 import com.jinhanyu.jack.langren.R;
@@ -30,7 +31,7 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
     private SensorManager sensorManager;
     private NetWorkStateReceiver receiver;
     private TextView network_state;
-    private ProgressDialog progressDialog;
+    private CustomProgress progressDialog;
 
 
     protected void showProgress(String msg){
@@ -47,7 +48,7 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
         super.onCreate(savedInstanceState);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new CustomProgress(this,R.style.Custom_Progress);
         prepareViews();
         prepareSocket();
 
