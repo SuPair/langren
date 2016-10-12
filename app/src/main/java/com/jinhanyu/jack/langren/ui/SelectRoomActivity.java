@@ -272,7 +272,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                  if(!hasConnected)
                      Toast.makeText(SelectRoomActivity.this, "没连接上,ip可能有问题", Toast.LENGTH_SHORT).show();
             }
-        },3000);
+        },5000);
         
         MainApplication.socket
                 .on("serverError", new Emitter.Listener() {

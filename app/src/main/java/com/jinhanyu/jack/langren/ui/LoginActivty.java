@@ -137,7 +137,7 @@ public   class LoginActivty extends CommonActivity implements View.OnClickListen
                             hideProgress();
                         }
                     }
-                },3000);
+                },5000);
 
                 break;
             case R.id.game_register:
