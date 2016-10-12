@@ -5,7 +5,11 @@ package com.jinhanyu.jack.langren;
  */
 public class Constants {
 
-    public static final String ServerHost = "http://172.168.0.14:3000";
+    public static String makeNewIpAddress(String newServerHost){
+          return "http://"+newServerHost+":3000";
+    }
+
+    public static final String ServerHost = "172.168.0.14";
 
     public static final int SPEAK_SECONDS  = 40;
     public static final int WOLF_SECONDS   = 15;

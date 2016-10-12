@@ -3,6 +3,7 @@ package com.jinhanyu.jack.langren.ui;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -25,17 +26,13 @@ import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.SoundEffectManager;
 import com.jinhanyu.jack.langren.adapter.SelectRoomAdapter;
 import com.jinhanyu.jack.langren.entity.RoomInfo;
-import com.jinhanyu.jack.langren.entity.UserInfo;
 import com.jinhanyu.jack.langren.util.ScreenUtils;
-import com.parse.ParseQuery;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -48,9 +45,15 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
     private TextView game_top;
     private SimpleDraweeView head, userHead;
     private TextView username, nickname, scoreText, title;
-    private View view, profile;
-    private AlertDialog dialog;
+    private View view, profile, modify_ip;
+    private AlertDialog dialog,modify_ip_dialog;
     private PopupWindow popupWindow;
+    private View cannot_connect;
+
+
+    private void restartApplication() {
+        System.exit(0);
+    }
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -70,6 +73,36 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
     protected void prepareViews() {
         setContentView(R.layout.select_room);
         watchNetworkState();
+
+        modify_ip = getLayoutInflater().inflate(R.layout.modify_ip, null);
+        final EditText et_new_ip_address = (EditText) modify_ip.findViewById(R.id.et_new_ip_address);
+        et_new_ip_address.setText(MainApplication.ServerHost);
+        modify_ip_dialog = new AlertDialog.Builder(SelectRoomActivity.this).setTitle("修改ip").setView(modify_ip)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String new_ip_address = et_new_ip_address.getText().toString().trim();
+                        if (!new_ip_address.matches("([0-9]{1,3}\\.){3}[0-9]{1,3}")) {
+                            Toast.makeText(SelectRoomActivity.this, "格式不对", Toast.LENGTH_SHORT).show();
+                        } else {
+                            getSharedPreferences("ip", MODE_APPEND).edit().putString("ip", new_ip_address).commit();
+                            restartApplication();
+                        }
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                }).create();
+        cannot_connect = findViewById(R.id.cannot_connect);
+        cannot_connect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                modify_ip_dialog.show();
+            }
+        });
 
         list = new ArrayList<>();
         roomList = (GridView) findViewById(R.id.gv_roomList);
@@ -102,7 +135,8 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
 
         //创建房间对话框
         view = getLayoutInflater().inflate(R.layout.create_room, null);
-        final EditText et_room_name;et_room_name = (EditText) view.findViewById(R.id.et_room_name);
+        final EditText et_room_name;
+        et_room_name = (EditText) view.findViewById(R.id.et_room_name);
         final CheckBox cb_wizard = (CheckBox) view.findViewById(R.id.cb_wizard);
         final CheckBox cb_predictor = (CheckBox) view.findViewById(R.id.cb_predictor);
         final CheckBox cb_guard = (CheckBox) view.findViewById(R.id.cb_guard);
@@ -121,8 +155,11 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                         String roomName = et_room_name.getText().toString();
                         if (TextUtils.isEmpty(roomName))
                             Toast.makeText(SelectRoomActivity.this, "房间名称不能为空", Toast.LENGTH_SHORT).show();
-                        else {
+                        else if(!cb_wizard.isChecked()&&!cb_predictor.isChecked()&&!cb_guard.isChecked()&&!cb_hunter.isChecked()&& np_citizen_count.getValue()==0){
+                            Toast.makeText(SelectRoomActivity.this, "好人阵营没有人！", Toast.LENGTH_SHORT).show();
+                        }else{
                             MainApplication.socket.emit("createRoom", roomName, cb_wizard.isChecked(), cb_predictor.isChecked(), cb_guard.isChecked(), cb_hunter.isChecked(), np_wolf_count.getValue(), np_citizen_count.getValue());
+
                         }
                     }
                 })
@@ -225,7 +262,18 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
     }
 
 
+
+    private boolean hasConnected =false;
+
     private void moreListener() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                 if(!hasConnected)
+                     Toast.makeText(SelectRoomActivity.this, "没连接上,ip可能有问题", Toast.LENGTH_SHORT).show();
+            }
+        },1000);
+        
         MainApplication.socket
                 .on("serverError", new Emitter.Listener() {
                     @Override
@@ -247,6 +295,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                     @Override
                     public void call(Object... args) {
                         Log.i("connected", "haha");
+                        hasConnected = true;
                         MainApplication.socket.emit("login", Me.getUserId());
                     }
                 })

@@ -5,39 +5,56 @@
     android:background="@mipmap/wolf_bg"
     android:orientation="vertical">
 
-    <include layout="@layout/network_state"/>
+    <include layout="@layout/network_state" />
 
-    <TextView
-        android:id="@+id/game_top"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="狼人杀排行榜"
-        android:textColor="@color/game_top"
-        android:textSize="40dp"
-        android:background="@mipmap/game_top"
-        android:textStyle="bold"
-        android:padding="25dp"/>
+        >
+        <TextView
+            android:id="@+id/game_top"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:background="@mipmap/game_top"
+            android:gravity="center"
+            android:padding="25dp"
+            android:text="狼人杀排行榜"
+            android:textColor="@color/game_top"
+            android:textSize="40dp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/cannot_connect"
+            android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="5dp"
+            android:textColor="@color/red"
+            android:text="连接\n不上?" />
+    </RelativeLayout>
+
 
     <View
-    android:layout_width="match_parent"
-    android:layout_height="0.8dp"
-    android:background="@color/light"/>
+        android:layout_width="match_parent"
+        android:layout_height="0.8dp"
+        android:background="@color/light" />
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <com.facebook.drawee.view.SimpleDraweeView
+
+        <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
             android:id="@+id/sdv_userHead"
-            xmlns:fresco="http://schemas.android.com/apk/res-auto"
-            fresco:roundAsCircle="true"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
             android:layout_width="50dp"
-            android:layout_height="50dp" />
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            fresco:roundAsCircle="true" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,25 +63,25 @@
             android:textColor="@color/light"
             android:textSize="22dp"
             android:textStyle="bold" />
+
         <ImageView
             android:id="@+id/iv_createRoom"
-            android:layout_marginTop="5dp"
-            android:src="@mipmap/navigationbar_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_marginTop="5dp"
+            android:src="@mipmap/navigationbar_add" />
     </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.8dp"
-        android:background="@color/light"/>
+        android:background="@color/light" />
 
     <GridView
         android:id="@+id/gv_roomList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent" />
 </LinearLayout>

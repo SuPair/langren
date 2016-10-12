@@ -33,41 +33,7 @@ import io.socket.emitter.Emitter;
  */
 public class MainApplication extends Application {
 
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-
-        Fresco.initialize(getApplicationContext());
-
-        ParseObject.registerSubclass(UserInfo.class);
-        Parse.initialize(new Parse.Configuration.Builder(this)
-                .applicationId("langrensha")
-                .clientKey("")
-                .server(Constants.ServerHost + "/parse")
-                .enableLocalDataStore()
-                .build()
-        );
-
-        initSocket();
-
-        SoundEffectManager.init(this);
-    }
-
-
-    private void initSocket() {
-        try {
-            if (socket == null) {
-                IO.Options options = new IO.Options();
-                options.reconnection = false;
-                socket = IO.socket(Constants.ServerHost + "/msg",options);
-            }
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-    }
-
+    public static String ServerHost;
 
     public static RoomInfo roomInfo = new RoomInfo();
     public static Socket socket;
