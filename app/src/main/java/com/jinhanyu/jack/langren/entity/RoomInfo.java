@@ -1,34 +1,15 @@
 package com.jinhanyu.jack.langren.entity;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.jinhanyu.jack.langren.Me;
 import com.parse.ParseException;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by anzhuo on 2016/9/10.
  */
-public class RoomInfo implements Serializable {
-    @Override
-    public String toString() {
-        return "RoomInfo{" +
-                "roomId='" + roomId + '\'' +
-                ", maxCount=" + maxCount +
-                ", currentCount=" + currentCount +
-                ", name='" + name + '\'' +
-                ", hasSaved=" + hasSaved +
-                ", hasPoisoned=" + hasPoisoned +
-                ", lastGuardedUserId='" + lastGuardedUserId + '\'' +
-                ", policeId='" + policeId + '\'' +
-                ", voteResults=" + voteResults +
-                ", users=" + users +
-                '}';
-    }
-    //voteRecord:[{fromUserId,toUserId}], vote:{userId:voteCount}, voteCounter // 投票计数器，都投完票就计算投票结果
-    // users:[{userId, socket, dead, type}],   const hasSaved, const hasPoisoned, const lastGuardedUserId
+public class RoomInfo{
 
     private String roomId;
     private int maxCount;
@@ -38,6 +19,12 @@ public class RoomInfo implements Serializable {
     private boolean hasPoisoned;
     private String lastGuardedUserId;
     private String policeId;
+    private List<GameRole.Type> types = new ArrayList<>();
+    private String typesString;
+
+    public List<GameRole.Type> getTypes() {
+        return types;
+    }
 
     public String getPoliceId() {
         return policeId;
@@ -108,7 +95,7 @@ public class RoomInfo implements Serializable {
         this.hasSaved = hasSaved;
     }
 
-    @JSONField(name = "vote")
+
     private List<VoteResult> voteResults = new ArrayList<>();
     private List<UserInfo> users = new ArrayList<UserInfo>();
 
@@ -189,5 +176,32 @@ public class RoomInfo implements Serializable {
             gameRole.setDead(false);
             gameRole.setType(6);
         }
+    }
+
+    public String getTypesString() {
+        if(typesString==null){
+            StringBuilder sb = new StringBuilder("身份信息: ");
+            String divider = " ";
+            int citizenCount= 0;
+            int wolfCount = 0;
+            for(GameRole.Type type : types){
+                if(type== GameRole.Type.Citizen){
+                   citizenCount++;
+                }else if(type== GameRole.Type.Wolf){
+                    wolfCount++;
+                }else {
+                    sb.append(type.getName()).append(divider);
+                }
+            }
+            if(citizenCount!=0){
+                sb.append(GameRole.Type.Citizen.getName()).append(citizenCount).append(divider);
+            }
+            if(wolfCount!=0){
+                sb.append(GameRole.Type.Wolf.getName()).append(wolfCount).append(divider);
+            }
+            typesString = sb.toString();
+        }
+        return typesString;
+
     }
 }

@@ -8,7 +8,7 @@ import com.parse.ParseUser;
  * Created by anzhuo on 2016/9/10.
  *
  */
-public class UserInfo extends ParseUser implements Comparable<UserInfo>{
+public class UserInfo extends ParseUser{
 
     public static String default_head ="res://com.jinhanyu.jack.langren/"+ R.mipmap.user_head_bg;
 
@@ -45,12 +45,4 @@ public class UserInfo extends ParseUser implements Comparable<UserInfo>{
         return getObjectId();
     }
 
-    @Override
-    public int compareTo(UserInfo userInfo) {
-        if(gameRole.getScore()> userInfo.getGameRole().getScore())
-            return 1;
-        else
-            return -1;
-
-    }
 }

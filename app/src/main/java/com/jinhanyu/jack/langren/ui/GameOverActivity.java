@@ -13,56 +13,109 @@ import com.jinhanyu.jack.langren.Me;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.SoundEffectManager;
 import com.jinhanyu.jack.langren.adapter.GameOverAdapter;
+import com.jinhanyu.jack.langren.entity.GameResult;
 import com.jinhanyu.jack.langren.entity.UserInfo;
 
-import java.util.Collections;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-public class GameOverActivity extends AppCompatActivity implements View.OnClickListener {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import io.socket.emitter.Emitter;
+
+public class GameOverActivity extends CommonActivity implements View.OnClickListener {
     private Button back_hall;//返回大厅
     private Button again;//再来一局
     private ListView listView;
     private GameOverAdapter adapter;
     private TextView game_win,gameOver_myScore;
-
+    private List<GameResult> gameResults = new ArrayList<>();
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void prepareViews() {
         setContentView(R.layout.game_over);
-
         listView= (ListView) findViewById(R.id.game_over_listView);
-        Collections.sort(MainApplication.roomInfo.getUsers());
-        Collections.reverse(MainApplication.roomInfo.getUsers());
-        adapter = new GameOverAdapter(this,MainApplication.roomInfo.getUsers());
+        adapter = new GameOverAdapter(this,gameResults);
         listView.setAdapter(adapter);
         game_win = (TextView) findViewById(R.id.game_win);
-        game_win.setText(getIntent().getStringExtra("victory"));
         gameOver_myScore = (TextView) findViewById(R.id.game_over_myScore);
-        UserInfo me = MainApplication.roomInfo.findMeInRoom();
-        gameOver_myScore.setText(me.getScore()+me.getGameRole().getScore()+"");
         back_hall = (Button) findViewById(R.id.back_hall);
         again = (Button) findViewById(R.id.again);
-
         back_hall.setOnClickListener(this);
         again.setOnClickListener(this);
         SoundEffectManager.play(R.raw.gameover);
         SoundEffectManager.looping(true);
 
+    }
+
+    @Override
+    protected void prepareSocket() {
+        MainApplication.socket.on("gameOverResult", new Emitter.Listener() {
+            @Override
+            public void call(final Object... args) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            int victory = (int) args[0];
+                            if (victory == 1) {
+                                game_win.setText("狼人胜利");
+                            } else {
+                                game_win.setText("好人胜利");
+                            }
+                            JSONArray array = (JSONArray) args[1];
+                            for (int i = 0; i < array.length(); i++) {
+                                JSONObject obj = (JSONObject) array.get(i);
+                                String userId = obj.getString("userId");
+                                int type = obj.getInt("type");
+                                int score = obj.getInt("score");
+                                GameResult gameResult = new GameResult();
+                                UserInfo user = MainApplication.roomInfo.findUserInRoom(userId);
+                                gameResult.setHead(user.getHead());
+                                gameResult.setNickname(user.getNickname());
+                                gameResult.setType(type);
+                                gameResult.setScore(score);
+                                gameResults.add(gameResult);
+                                if(userId.equals(Me.getUserId())){
+                                    gameOver_myScore.setText(Me.getScore()+score+"");
+                                }
+                            }
+                            Collections.sort(gameResults);
+                            Collections.reverse(gameResults);
+                            adapter.notifyDataSetChanged();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+            }
+        });
+    }
+
+    @Override
+    protected void unbindSocket() {
+        MainApplication.socket.off("gameOverResult");
+    }
 
 
+    private void backToHall(){
+        SoundEffectManager.looping(false);
+        SoundEffectManager.stop();
+        MainApplication.socket.emit("leaveRoom",MainApplication.roomInfo.getRoomId(), Me.getUserId());
+        MainApplication.roomInfo.resetRoom();
+        startActivity(new Intent(this,SelectRoomActivity.class));
+        finish();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.back_hall:
-                SoundEffectManager.looping(false);
-                SoundEffectManager.stop();
-                MainApplication.socket.emit("leaveRoom",MainApplication.roomInfo.getRoomId(), Me.getUserId());
-                MainApplication.roomInfo.resetRoom();
-                startActivity(new Intent(this,SelectRoomActivity.class));
-                finish();
+                backToHall();
                 break;
             case R.id.again:
                 Intent intent1 = new Intent(this, RoomActivity.class);
@@ -77,10 +130,6 @@ public class GameOverActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onBackPressed() {
-        SoundEffectManager.looping(false);
-        SoundEffectManager.stop();
-        MainApplication.socket.emit("leaveRoom",MainApplication.roomInfo.getRoomId(), Me.getUserId());
-        startActivity(new Intent(this,SelectRoomActivity.class));
-        finish();
+       backToHall();
     }
 }

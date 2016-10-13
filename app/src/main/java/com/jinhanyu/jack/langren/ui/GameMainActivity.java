@@ -109,6 +109,9 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
     private RotateAnimation openChatRoomAnimation;
     private RotateAnimation closeChatRoomAnimation;
 
+
+    private boolean hasPolice = false;
+
     private void finishSpeak() {
         bt_endSpeak.setEnabled(false);
         bt_wolf_destroy.setEnabled(false);
@@ -123,7 +126,6 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
         if (intent.getBooleanExtra("reJoinGame", false)) {
             MainApplication.socket.emit("reJoinGame", MainApplication.roomInfo.getRoomId(), Me.getUserId());
         }
-
     }
 
 
@@ -264,6 +266,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
     protected void prepareSocket() {
 
         MainApplication.socket
+                //消息机制
                 .on("langrenMsg", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
@@ -280,6 +283,14 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         });
                     }
                 })
+                .on("blob", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        byte[] buffer = (byte[]) args[0];
+                        voiceManager.speak(voiceManager.decode(buffer));
+                    }
+                })
+                //重连机制
                 .on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
@@ -317,7 +328,6 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             public void call(Object... args) {
                                 try {
                                     Log.i("reJoinGameInGameMain", "nice");
-
                                     //房间的整体信息、玩家的存活状态
                                     JSONObject room = (JSONObject) args[0];
                                     MainApplication.roomInfo.setHasPoisoned(room.getBoolean("hasPoisoned"));
@@ -333,14 +343,12 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                         String userId = (String) user.get("userId");
                                         MainApplication.roomInfo.findUserInRoom(userId).getGameRole().setDead(user.getBoolean("dead"));
                                     }
-
                                     //是否有同伴、同伴的Id
                                     JSONArray companys = (JSONArray) args[1];
                                     for (int i = 0; i < companys.length(); i++) {
                                         String userId = (String) companys.get(i);
                                         MainApplication.roomInfo.findUserInRoom(userId).getGameRole().setType(1);
                                     }
-
                                     //天黑还是天亮
                                     boolean isFromDark = (boolean) args[2];
                                     if (isFromDark) {
@@ -348,7 +356,6 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                     } else {
                                         game_bg.setBackgroundResource(R.mipmap.day);
                                     }
-
                                     //我的身份
                                     int type = (int) args[3];
                                     UserInfo me = MainApplication.roomInfo.findMeInRoom();
@@ -372,6 +379,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         }
 
                 )
+                //游戏开始, 通知狼人同伴
                 .on("start", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
@@ -416,6 +424,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         }
                     }
                 })
+                //天黑阶段
                 .on("dark", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
@@ -441,63 +450,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         MainApplication.roomInfo.setLastGuardedUserId(lastGuardedUserId);
                     }
                 })
-                .on("light", new Emitter.Listener() {
-                    @Override
-                    public void call(Object... args) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                clearTopActivities();
-                                tv_game_hint.setText("天亮了");
-                                SoundEffectManager.play(R.raw.light);//天亮音效
-                                game_bg.setBackgroundResource(R.mipmap.day);
-                            }
-                        });
-                    }
-                })
-                .on("votePolice", new Emitter.Listener() {
-                    @Override
-                    public void call(Object... args) {
-                        //开始选警长。
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                SoundEffectManager.stop();//声音停止
-                                tv_game_hint.setText("开始选警长");
-                                if (MainApplication.roomInfo.findMeInRoom().getGameRole().isDead())
-                                    return;
-                                startActivity(new Intent(GameMainActivity.this, VoteActivity.class).putExtra("type", RoomInfo.VOTE_POLICE));
-                            }
-                        });
-                    }
-                })
-                .on("voteWolf", new Emitter.Listener() {
-                    @Override
-                    public void call(Object... args) {
-                        //开始票坏人。
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                tv_game_hint.setText("开始票坏人");
-                                if (MainApplication.roomInfo.findMeInRoom().getGameRole().isDead())
-                                    return;
-                                startActivity(new Intent(GameMainActivity.this, VoteActivity.class).putExtra("type", RoomInfo.VOTE_WOLF));
-                            }
-                        });
-                    }
-                })
-                .on("come back", new Emitter.Listener() {
-                    @Override
-                    public void call(Object... args) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                clearTopActivities();
-                                tv_game_hint.setText("投票结束");
-                            }
-                        });
-                    }
-                })
+                //天黑行动
                 .on("action", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
@@ -517,10 +470,58 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         }
                     }
                 })
+                //天亮阶段
+                .on("light", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                clearTopActivities();
+                                tv_game_hint.setText("天亮了");
+                                SoundEffectManager.play(R.raw.light);//天亮音效
+                                game_bg.setBackgroundResource(R.mipmap.day);
+                            }
+                        });
+                    }
+                })
+                //开始选警长
+                .on("votePolice", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                SoundEffectManager.stop();//声音停止
+                                tv_game_hint.setText("开始选警长");
+                                if (MainApplication.roomInfo.findMeInRoom().getGameRole().isDead())
+                                    return;
+                                startActivity(new Intent(GameMainActivity.this, VoteActivity.class).putExtra("type", RoomInfo.VOTE_POLICE));
+                            }
+                        });
+                    }
+                })
+                //开始票坏人
+                .on("voteWolf", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                tv_game_hint.setText("开始票坏人");
+                                if (MainApplication.roomInfo.findMeInRoom().getGameRole().isDead())
+                                    return;
+                                startActivity(new Intent(GameMainActivity.this, VoteActivity.class).putExtra("type", RoomInfo.VOTE_WOLF));
+                            }
+                        });
+                    }
+                })
+                //晚上结果
                 .on("darkResult", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
                         clearTopActivities();
+                        hasPolice  = true;
                         String userId1 = (String) args[0];
                         String userId2 = (String) args[1];
                         final StringBuilder sb = new StringBuilder();
@@ -529,7 +530,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                 @Override
                                 public void run() {
                                     SoundEffectManager.stop();
-                                    tv_game_hint.setText("今晚是平安夜");
+                                    Toast.makeText(GameMainActivity.this, "昨晚是平安夜", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         } else {
@@ -538,7 +539,6 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                 info.getGameRole().setDead(true);
                                 sb.append(info.getNickname() + "被杀  ");
                             }
-
                             if (userId2 != null) {
                                 UserInfo info = MainApplication.roomInfo.findUserInRoom(userId2);
                                 info.getGameRole().setDead(true);
@@ -554,13 +554,14 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         }
                     }
                 })
+                //猎人
                 .on("hunter", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                tv_game_hint.setText("等待死亡玩家发动技能,这是专为猎人设计的");
+                                tv_game_hint.setText("等待死亡玩家发动技能");
                             }
                         });
                     }
@@ -591,6 +592,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         });
                     }
                 })
+                //警长
                 .on("changePolice", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
@@ -633,6 +635,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         });
                     }
                 })
+                //遗言
                 .on("leaveWords", new Emitter.Listener() {
                     @Override
                     public void call(final Object... args) {
@@ -681,6 +684,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         speakAnim.stop();
                     }
                 })
+                //发言
                 .on("startSpeak", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
@@ -738,7 +742,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                     }
                                 };
                                 tickTimer.startTick();
-                                if (MainApplication.roomInfo.findMeInRoom().getGameRole().getType() == GameRole.Type.Wolf)
+                                if (MainApplication.roomInfo.findMeInRoom().getGameRole().getType() == GameRole.Type.Wolf && hasPolice)
                                     bt_wolf_destroy.setEnabled(true);
 
                             }
@@ -758,48 +762,24 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                         });
                     }
                 })
-                .on("blob", new Emitter.Listener() {
-                    @Override
-                    public void call(Object... args) {
-                        byte[] buffer = (byte[]) args[0];
-                        voiceManager.speak(voiceManager.decode(buffer));
-                    }
-                })
+                //其他
                 .on("gameOver", new Emitter.Listener() {
                     @Override
                     public void call(final Object... args) {
+                        startActivity(new Intent(GameMainActivity.this,GameOverActivity.class));
+                        finish();
+                    }
+                })
+                .on("come back", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                try {
-                                    JSONObject gameResult = (JSONObject) args[0];
-                                    int victory = gameResult.getInt("victory");
-                                    Intent intent = new Intent(GameMainActivity.this, GameOverActivity.class);
-                                    if (victory == 0) {
-                                        intent.putExtra("victory", "狼人胜利");
-                                    } else if (victory == 1) {
-                                        intent.putExtra("victory", "好人胜利");
-                                    }
-                                    JSONArray array = gameResult.getJSONArray("returnResults");
-                                    for (int i = 0; i < array.length(); i++) {
-                                        JSONObject obj = (JSONObject) array.get(i);
-                                        String userId = obj.getString("userId");
-                                        int type = obj.getInt("type");
-                                        int score = obj.getInt("score");
-                                        GameRole gameRole = MainApplication.roomInfo.findUserInRoom(userId).getGameRole();
-                                        gameRole.setType(type);
-                                        gameRole.setScore(score);
-
-                                    }
-                                    startActivity(intent);
-                                    finish();
-
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
+                                clearTopActivities();
+                                tv_game_hint.setText("投票结束");
                             }
                         });
-
                     }
                 })
                 .on("wolfDestroy", new Emitter.Listener() {
@@ -828,12 +808,35 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
 
         voiceManager.stopPlay();
         voiceManager.stopRecord();
-        MainApplication.socket.off("start").off("company").off("dark").off("darkResult").off("roomInfo").off("light").off("action").off(Socket.EVENT_DISCONNECT)
-                .off("votePolice").off("voteWolf").off("come back").off("wolfDestroy").off("gameOver")
-                .off("endSpeak").off("youSpeak").off("speak").off("startSpeak")
-                .off("youLeaveWords").off("leaveWords")
+        MainApplication.socket
+                //消息机制
+                .off("langrenMsg").off("blob")
+                //重连机制
+                .off(Socket.EVENT_DISCONNECT).off(Socket.EVENT_CONNECT).off("reJoinGame")
+                //游戏开始, 通知狼人同伴
+                .off("start").off("company")
+                //天黑阶段
+                .off("dark").off("roomInfo")
+                //天黑行动
+                .off("action")
+                //天亮阶段
+                .off("light")
+                //开始选警长
+                .off("votePolice")
+                //开始票坏人
+                .off("voteWolf")
+                //晚上结果
+                .off("darkResult")
+                //猎人
+                .off("hunter").off("youHunterDead").off("hunterFinished")
+                //警长
                 .off("deliverPolice").off("changePolice").off("deliverPoliceFinished")
-                .off("hunterDead").off("youHunterDead").off("hunterFinished").off("blob");
+                //遗言
+                .off("youLeaveWords").off("leaveWords").off("leaveWordsFinished")
+                //发言
+                .off("endSpeak").off("youSpeak").off("speak").off("startSpeak")
+                //其他
+                .off("come back").off("wolfDestroy").off("gameOver");
     }
 
 
@@ -850,7 +853,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                 boolean isChatRoomVisible = wolf_chatRoom.getVisibility()==View.VISIBLE;
                 if(isChatRoomVisible) {
                     toggle_chatRoom.startAnimation(closeChatRoomAnimation);
-                    wolf_chatRoom.setVisibility(View.INVISIBLE);
+                    wolf_chatRoom.setVisibility(View.GONE);
                 }
                 else {
                     toggle_chatRoom.startAnimation(openChatRoomAnimation);

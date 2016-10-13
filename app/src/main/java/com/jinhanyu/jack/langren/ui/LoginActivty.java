@@ -41,7 +41,7 @@ public   class LoginActivty extends CommonActivity implements View.OnClickListen
         modify_ip = getLayoutInflater().inflate(R.layout.modify_ip, null);
         final EditText et_new_ip_address = (EditText) modify_ip.findViewById(R.id.et_new_ip_address);
         et_new_ip_address.setText(MainApplication.ServerHost);
-        modify_ip_dialog = new AlertDialog.Builder(LoginActivty.this).setTitle("修改ip").setView(modify_ip)
+        modify_ip_dialog = new AlertDialog.Builder(LoginActivty.this).setTitle("修改ip,确定后重新点开应用").setView(modify_ip)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

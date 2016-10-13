@@ -58,6 +58,8 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
     protected void prepareViews() {
         setContentView(R.layout.room);
 
+        TextView tv_room_types = (TextView) findViewById(R.id.tv_room_types);
+        tv_room_types.setText(MainApplication.roomInfo.getTypesString());
         waitList = (GridView) findViewById(R.id.gv_waitingList);
         cancel = (Button) findViewById(R.id.ib_waitRoom_cancel);
         ready = (ToggleButton) findViewById(R.id.tb_waitRoom_ready);

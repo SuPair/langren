@@ -5,6 +5,18 @@
     android:orientation="vertical"
     android:background="@mipmap/wolf_bg">
 
+    <TextView
+        android:background="@drawable/progress_custom_bg"
+        android:id="@+id/tv_room_types"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"/>
+
     <GridView
         android:id="@+id/gv_waitingList"
         android:layout_width="match_parent"

@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.langren.R;
+import com.jinhanyu.jack.langren.entity.GameResult;
 import com.jinhanyu.jack.langren.entity.UserInfo;
 
 import java.util.List;
@@ -15,9 +16,9 @@ import java.util.List;
 /**
  * Created by anzhuo on 2016/9/22.
  */
-public class GameOverAdapter extends CommonAdapter<UserInfo> {
+public class GameOverAdapter extends CommonAdapter<GameResult> {
 
-    public GameOverAdapter(Context context, List<UserInfo> data) {
+    public GameOverAdapter(Context context, List<GameResult> data) {
         super(context, data);
     }
 
@@ -34,12 +35,11 @@ public class GameOverAdapter extends CommonAdapter<UserInfo> {
             view.setTag(viewHolder);
         }
         viewHolder = (ViewHolder) view.getTag();
-        UserInfo info = data.get(i);
+        GameResult info = data.get(i);
         viewHolder.iv_head.setImageURI(info.getHead());
         viewHolder.tv_name.setText(info.getNickname());
-        viewHolder.identification_label.setText(info.getGameRole().getType().getName());
-        viewHolder.tv_score.setText(info.getGameRole().getScore()+"");
-
+        viewHolder.identification_label.setText(info.getType().getName());
+        viewHolder.tv_score.setText(info.getScore()+"");
         return view;
     }
 

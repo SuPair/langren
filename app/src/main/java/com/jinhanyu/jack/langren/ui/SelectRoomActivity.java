@@ -25,6 +25,7 @@ import com.jinhanyu.jack.langren.Me;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.SoundEffectManager;
 import com.jinhanyu.jack.langren.adapter.SelectRoomAdapter;
+import com.jinhanyu.jack.langren.entity.GameRole;
 import com.jinhanyu.jack.langren.entity.RoomInfo;
 import com.jinhanyu.jack.langren.util.ScreenUtils;
 
@@ -77,7 +78,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
         modify_ip = getLayoutInflater().inflate(R.layout.modify_ip, null);
         final EditText et_new_ip_address = (EditText) modify_ip.findViewById(R.id.et_new_ip_address);
         et_new_ip_address.setText(MainApplication.ServerHost);
-        modify_ip_dialog = new AlertDialog.Builder(SelectRoomActivity.this).setTitle("修改ip").setView(modify_ip)
+        modify_ip_dialog = new AlertDialog.Builder(SelectRoomActivity.this).setTitle("修改ip,确定后重新点开应用").setView(modify_ip)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -137,6 +138,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
         view = getLayoutInflater().inflate(R.layout.create_room, null);
         final EditText et_room_name;
         et_room_name = (EditText) view.findViewById(R.id.et_room_name);
+        et_room_name.setText(Me.getNickname()+"的房间");
         final CheckBox cb_wizard = (CheckBox) view.findViewById(R.id.cb_wizard);
         final CheckBox cb_predictor = (CheckBox) view.findViewById(R.id.cb_predictor);
         final CheckBox cb_guard = (CheckBox) view.findViewById(R.id.cb_guard);
@@ -186,6 +188,10 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                                 info.setName(obj.getString("name"));
                                 info.setCurrentCount(obj.getInt("currentCount"));
                                 info.setMaxCount(obj.getInt("maxCount"));
+                                JSONArray types = (JSONArray) args[4];
+                                for (int j = 0; j < types.length(); j++) {
+                                    info.getTypes().add(GameRole.Type.values()[(int) types.get(j)]);
+                                }
                                 list.add(info);
                             }
                             refreshUI(adapter);
@@ -197,17 +203,24 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                 .on("createRoom", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
-                        RoomInfo info = new RoomInfo();
-                        info.setRoomId((String) args[0]);
-                        info.setName((String) args[1]);
-                        info.setCurrentCount((Integer) args[2]);
-                        info.setMaxCount((Integer) args[3]);
-
-                        list.add(info);
-                        refreshUI(adapter);
-                        //进入房间
-                        MainApplication.roomInfo = info;
-                        startActivity(new Intent(SelectRoomActivity.this, RoomActivity.class));
+                        try {
+                            RoomInfo info = new RoomInfo();
+                            info.setRoomId((String) args[0]);
+                            info.setName((String) args[1]);
+                            info.setCurrentCount((Integer) args[2]);
+                            info.setMaxCount((Integer) args[3]);
+                            JSONArray types = (JSONArray) args[4];
+                            for (int i = 0; i < types.length(); i++) {
+                                info.getTypes().add(GameRole.Type.values()[(int) types.get(i)]);
+                            }
+                            list.add(info);
+                            refreshUI(adapter);
+                            //进入房间
+                            MainApplication.roomInfo = info;
+                            startActivity(new Intent(SelectRoomActivity.this, RoomActivity.class));
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
 
 
                     }
@@ -229,15 +242,21 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                 .on("newRoom", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
-                        RoomInfo info = new RoomInfo();
-                        info.setRoomId((String) args[0]);
-                        info.setName((String) args[1]);
-                        info.setCurrentCount((Integer) args[2]);
-                        info.setMaxCount((Integer) args[3]);
-
-                        list.add(info);
-
-                        refreshUI(adapter);
+                        try {
+                            RoomInfo info = new RoomInfo();
+                            info.setRoomId((String) args[0]);
+                            info.setName((String) args[1]);
+                            info.setCurrentCount((Integer) args[2]);
+                            info.setMaxCount((Integer) args[3]);
+                            JSONArray types = (JSONArray) args[4];
+                            for (int i = 0; i < types.length(); i++) {
+                                info.getTypes().add(GameRole.Type.values()[(int) types.get(i)]);
+                            }
+                            list.add(info);
+                            refreshUI(adapter);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
                 })
                 .on("roomChange", new Emitter.Listener() {
