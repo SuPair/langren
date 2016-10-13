@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:textSize="20sp"
-            android:text="房间名称:" />
+            android:text="@string/RoomName" />
 
         <EditText
             android:textSize="20sp"
@@ -45,28 +45,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="女巫" />
+            android:text="@string/witch" />
 
         <CheckBox
             android:id="@+id/cb_predictor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="先知" />
+            android:text="@string/seer" />
 
         <CheckBox
             android:id="@+id/cb_guard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="守卫" />
+            android:text="@string/guard" />
 
         <CheckBox
             android:id="@+id/cb_hunter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="猎人" />
+            android:text="@string/hunter" />
     </LinearLayout>
 
     <LinearLayout
@@ -84,7 +84,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="狼人"
+                android:text="@string/wolf"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="5dp"/>
 
@@ -103,7 +103,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="村民"
+                android:text="@string/villager"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="5dp"/>
 

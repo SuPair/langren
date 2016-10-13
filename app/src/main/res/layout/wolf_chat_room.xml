@@ -36,7 +36,7 @@
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:paddingLeft="10dp"
-            android:hint="发消息给狼人同伴"
+            android:hint="send_wolf"
             android:background="@drawable/edit_text_style_dark"/>
         <TextView
             android:id="@+id/sendMsg"

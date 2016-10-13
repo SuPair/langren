@@ -19,7 +19,7 @@
             android:background="@mipmap/game_top"
             android:gravity="center"
             android:padding="25dp"
-            android:text="狼人杀排行榜"
+            android:text="@string/WolfKill_Top"
             android:textColor="@color/game_top"
             android:textSize="40dp"
             android:textStyle="bold" />

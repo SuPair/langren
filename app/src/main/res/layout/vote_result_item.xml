@@ -26,7 +26,7 @@
         android:layout_weight="3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="投给了"/>
+        android:text="choose"/>
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/toUserHead"
         android:layout_width="50dp"

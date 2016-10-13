@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="投票结果是："
+            android:text="vote_result"
             android:textColor="@color/red" />
         <TextView
             android:id="@+id/tv_vote_result"
@@ -29,7 +29,7 @@
             android:textColor="@color/red"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="被淘汰"/>
+            android:text="@string/out"/>
     </LinearLayout>
 
     <View
@@ -41,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="投票记录："
+        android:text="vote_record:"
         android:textColor="@color/colorPrimaryDark" />
 
     <ListView

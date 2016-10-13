@@ -18,7 +18,7 @@
         android:layout_weight="1"
         android:layout_marginLeft="20dp"
         android:layout_height="wrap_content"
-        android:hint="服务器ip地址"
+        android:hint="@string/server_address"
         android:textSize="30sp"
         android:background="@drawable/edit_text_style"/>
 </LinearLayout>

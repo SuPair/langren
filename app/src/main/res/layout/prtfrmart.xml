@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="下拉刷新"
+            android:text="@string/Pull_refresh"
             android:textColor="@color/state"
             android:textSize="20sp"
             android:textStyle="italic" />

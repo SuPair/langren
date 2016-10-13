@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="狼人杀--语音版"
+        android:text="@string/wolfKill_Voice"
         android:textSize="18sp"
         android:gravity="end"
         android:layout_margin="5dp"/>

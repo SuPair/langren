@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:gravity="center"
-        android:text="【游 戏 规 则】"
+        android:text="@string/gameRule"
         android:textColor="#c5ccc7"
         android:textSize="30sp"
         android:textStyle="bold" />

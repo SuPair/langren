@@ -13,7 +13,7 @@
         android:clickable="true"
         android:gravity="center"
         android:padding="5dp"
-        android:text="没网了"
+        android:text="@string/no_net"
         android:textColor="@color/red"
         android:visibility="gone" />
 
