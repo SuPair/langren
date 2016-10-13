@@ -175,6 +175,7 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                MainApplication.roomInfo.resetRoom();
                                 startActivity(new Intent(RoomActivity.this, GameMainActivity.class));
                                 ready.setChecked(false);
                             }
