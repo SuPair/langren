@@ -20,15 +20,9 @@ public class GameRole {
     private int     sign_type=6;
     private boolean isDead;
     private boolean isReady;
-    private int score;
 
-    public int getScore() {
-        return score;
-    }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
+
 
     public boolean isReady() {
         return isReady;

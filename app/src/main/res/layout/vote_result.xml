@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="vote_result"
+            android:text="@string/vote_result"
             android:textColor="@color/red" />
         <TextView
             android:id="@+id/tv_vote_result"
@@ -41,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="vote_record:"
+        android:text="@string/vote_record"
         android:textColor="@color/colorPrimaryDark" />
 
     <ListView

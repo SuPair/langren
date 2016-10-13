@@ -66,7 +66,6 @@
     <string name="already_guard">上轮守护的玩家</string>
     <string name="server_address">服务器ip地址</string>
     <string name="modification_ip">修改ip</string>
-    <string name="no_connect">连接\n不上？</string>
     <string name="MyRoom">我的房间</string>
     <string name="RoomName">房间名称</string>
     <string name="time_leftover">剩余时间:</string>
@@ -84,7 +83,6 @@
     <string name="self_destroy">自爆</string>
     <string name="player_info">玩家详细信息</string>
     <string name="you_identity">你的身份是：</string>
-    <string name="type_some_message">type some message</string>
     <string name="forget_password">忘记密码</string>
     <string name="type_your_account">请输入您的账号...</string>
     <string name="type_your_password">请输入密码...</string>

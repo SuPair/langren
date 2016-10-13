@@ -10,6 +10,11 @@
         <item name="alertDialogTheme">@style/MyAlertDialogStyle</item>
     </style>
 
+    <style name="MySpinnerStyle">
+        <item name="android:textColor">@color/light</item>
+        <item name="android:background">@color/dark</item>
+    </style>
+
     <style name="ChooseButton">
         <item name="android:padding">5dp</item>
         <item name="android:layout_marginTop">10dp</item>

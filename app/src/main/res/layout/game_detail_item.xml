@@ -40,7 +40,6 @@
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
-            android:background="@color/state"
             android:entries="@array/sign_type"
             android:gravity="center" />
     </LinearLayout>

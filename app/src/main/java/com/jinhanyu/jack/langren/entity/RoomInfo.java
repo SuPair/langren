@@ -1,5 +1,7 @@
 package com.jinhanyu.jack.langren.entity;
 
+import android.util.Log;
+
 import com.jinhanyu.jack.langren.Me;
 import com.parse.ParseException;
 
@@ -170,6 +172,7 @@ public class RoomInfo{
     }
 
     public void resetRoom() {
+        Log.i("resetRoom",users.toString());
         policeId = null;
         for(UserInfo userInfo : users){
             GameRole gameRole = userInfo.getGameRole();

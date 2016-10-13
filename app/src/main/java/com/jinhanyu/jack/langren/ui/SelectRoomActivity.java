@@ -188,7 +188,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                                 info.setName(obj.getString("name"));
                                 info.setCurrentCount(obj.getInt("currentCount"));
                                 info.setMaxCount(obj.getInt("maxCount"));
-                                JSONArray types = (JSONArray) args[4];
+                                JSONArray types =obj.getJSONArray("types");
                                 for (int j = 0; j < types.length(); j++) {
                                     info.getTypes().add(GameRole.Type.values()[(int) types.get(j)]);
                                 }

@@ -60,13 +60,14 @@ public class GameOverActivity extends CommonActivity implements View.OnClickList
                     @Override
                     public void run() {
                         try {
-                            int victory = (int) args[0];
+                            JSONObject res = (JSONObject) args[0];
+                            int victory = res.getInt("victory");
                             if (victory == 1) {
                                 game_win.setText("狼人胜利");
                             } else {
                                 game_win.setText("好人胜利");
                             }
-                            JSONArray array = (JSONArray) args[1];
+                            JSONArray array = res.getJSONArray("returnResults");
                             for (int i = 0; i < array.length(); i++) {
                                 JSONObject obj = (JSONObject) array.get(i);
                                 String userId = obj.getString("userId");
@@ -108,7 +109,6 @@ public class GameOverActivity extends CommonActivity implements View.OnClickList
         MainApplication.socket.emit("leaveRoom",MainApplication.roomInfo.getRoomId(), Me.getUserId());
         MainApplication.roomInfo.resetRoom();
         startActivity(new Intent(this,SelectRoomActivity.class));
-        finish();
     }
 
     @Override
@@ -118,12 +118,10 @@ public class GameOverActivity extends CommonActivity implements View.OnClickList
                 backToHall();
                 break;
             case R.id.again:
-                Intent intent1 = new Intent(this, RoomActivity.class);
                 SoundEffectManager.looping(false);
                 SoundEffectManager.stop();
                 MainApplication.roomInfo.resetRoom();
-                startActivity(intent1);
-                finish();
+                startActivity(new Intent(this, RoomActivity.class));
                 break;
         }
     }

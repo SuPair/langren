@@ -59,7 +59,7 @@ public class SelectRoomAdapter extends CommonAdapter<RoomInfo> {
         viewHolder.totalNum.setText(roomInfo.getMaxCount()+"");
         viewHolder.roomName.setText(roomInfo.getName());
         List<String> news =new ArrayList<>();
-        news.add(MainApplication.roomInfo.getTypesString());
+        news.add(roomInfo.getTypesString());
         viewHolder.roomTypes.setData(news);
         return view;
     }
