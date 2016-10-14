@@ -107,7 +107,6 @@ public class GameOverActivity extends CommonActivity implements View.OnClickList
         SoundEffectManager.looping(false);
         SoundEffectManager.stop();
         MainApplication.socket.emit("leaveRoom",MainApplication.roomInfo.getRoomId(), Me.getUserId());
-        MainApplication.roomInfo.resetRoom();
         startActivity(new Intent(this,SelectRoomActivity.class));
     }
 
@@ -120,7 +119,6 @@ public class GameOverActivity extends CommonActivity implements View.OnClickList
             case R.id.again:
                 SoundEffectManager.looping(false);
                 SoundEffectManager.stop();
-                MainApplication.roomInfo.resetRoom();
                 startActivity(new Intent(this, RoomActivity.class));
                 break;
         }
