@@ -2,6 +2,7 @@ package com.jinhanyu.jack.langren.ui;
 
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jinhanyu.jack.langren.ActionPerformer;
 import com.jinhanyu.jack.langren.MainApplication;
@@ -10,6 +11,7 @@ import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.TickTimer;
 import com.jinhanyu.jack.langren.adapter.GameRoleCommonAdapter;
 import com.jinhanyu.jack.langren.entity.GameRole;
+import com.jinhanyu.jack.langren.entity.UserInfo;
 
 import io.socket.emitter.Emitter;
 
@@ -55,13 +57,19 @@ public class PredictorActivity extends CommonActivity implements ActionPerformer
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        UserInfo user = MainApplication.roomInfo.findUserInRoom(toCheckUserId);
                         if(type==0){
-                            action_done_label.setText(MainApplication.roomInfo.findUserInRoom(toCheckUserId).getNickname()+"是好人");
+                            String msg = user.getNickname()+"是好人";
+                            action_done_label.setText(msg);
+                            Toast.makeText(PredictorActivity.this, msg, Toast.LENGTH_SHORT).show();
                         }else if(type==1){
-                            action_done_label.setText(MainApplication.roomInfo.findUserInRoom(toCheckUserId).getNickname()+"是狼人");
+                            String msg = user.getNickname()+"是狼人";
+                            action_done_label.setText(msg);
+                            Toast.makeText(PredictorActivity.this, msg, Toast.LENGTH_SHORT).show();
                             MainApplication.roomInfo.findUserInRoom(toCheckUserId).getGameRole().setType(1);
                         }
 
+                        MainApplication.roomInfo.getHasCheckedUsers().add(user);
                     }
                 });
 
