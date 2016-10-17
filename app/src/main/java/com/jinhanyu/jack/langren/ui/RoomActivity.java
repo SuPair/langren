@@ -11,6 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -46,6 +47,7 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
     private View profile;
     private PopupWindow popupWindow;
     private SimpleDraweeView userHead;
+    private boolean isFetching = true;
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -120,6 +122,7 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                                         userInfo.getGameRole().setReady(readys.get(userInfo.getObjectId()));
                                         MainApplication.roomInfo.getUsers().add(userInfo);
                                     }
+                                    isFetching = false;
                                     refreshUI(adapter);
                                 }
                             });
@@ -148,6 +151,7 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                     @Override
                     public void call(Object... args) {
                         String userId = (String) args[0];
+                        while (isFetching);
                         UserInfo userInfo = MainApplication.roomInfo.findUserInRoom(userId);
                         MainApplication.roomInfo.getUsers().remove(userInfo);
                         refreshUI(adapter);
@@ -206,7 +210,20 @@ public class RoomActivity extends CommonActivity implements View.OnClickListener
                             }
                         });
                     }
+                })
+        .on("roomError", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                final String msg = (String) args[0];
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(RoomActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
                 });
+            }
+        });
         MainApplication.socket.emit("enterRoom", MainApplication.roomInfo.getRoomId(), Me.getUserId());
     }
 

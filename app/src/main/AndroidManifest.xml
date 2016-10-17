@@ -33,7 +33,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.LoginActivty" android:launchMode="singleTask"/>
+        <activity android:name=".ui.LoginActivty" android:launchMode="singleTask" />
         <activity android:name=".ui.UserNameActivity" />
         <activity android:name=".ui.UserHeadActivity" />
         <activity android:name=".ui.SelectRoomActivity" android:launchMode="singleTask"/>

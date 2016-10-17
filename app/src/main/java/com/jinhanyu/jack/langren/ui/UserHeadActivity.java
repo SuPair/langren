@@ -139,8 +139,14 @@ public class UserHeadActivity extends Activity implements View.OnClickListener {
                         public void done(ParseException e) {
                             if (e == null) {
                                 Toast.makeText(UserHeadActivity.this, "上传头像成功！", Toast.LENGTH_SHORT).show();
-                                setResult(RESULT_OK,getIntent().putExtra("head",finalBm));
-                                finish();
+                                if(getIntent().getBooleanExtra("modify",false)){
+                                    setResult(RESULT_OK,getIntent().putExtra("head",finalBm));
+                                    finish();
+                                }else {
+                                    startActivity(new Intent(UserHeadActivity.this,SelectRoomActivity.class));
+                                    finish();
+                                }
+
                             }
                         }
                     });

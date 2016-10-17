@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baoyz.actionsheet.ActionSheet;
 import com.jinhanyu.jack.langren.CustomProgress;
@@ -55,7 +56,7 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
 
         builder = ActionSheet.createBuilder(this, getSupportFragmentManager())
                 .setCancelButtonTitle("Cancel")
-                .setOtherButtonTitles("排行榜", "切换账号", "退出游戏")
+                .setOtherButtonTitles("排行榜", "切换账号", "版本更新")
                 .setCancelableOnTouchOutside(true)
                 .setListener(this);
 
@@ -114,8 +115,7 @@ public abstract class CommonActivity extends AppCompatActivity implements Action
                 finish();
                 break;
             case 2:
-                android.os.Process.killProcess(android.os.Process.myPid());    //获取PID
-                System.exit(0);   //常规java、c#的标准退出法，返回值为0代表正常退出
+                Toast.makeText(CommonActivity.this, "当前已是最新版本", Toast.LENGTH_SHORT).show();
                 break;
         }
     }

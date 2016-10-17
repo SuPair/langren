@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.SoundEffectManager;
+import com.jinhanyu.jack.langren.entity.UserInfo;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -47,7 +48,7 @@ public class UserNameActivity extends AppCompatActivity implements View.OnClickL
                 final String username = game_number.getText().toString();
                 final String password = game_password.getText().toString();
                 final String nickname = game_name.getText().toString();
-                final ParseUser user = new ParseUser();
+                final UserInfo user = new UserInfo();
                 user.setUsername(username);
                 user.setPassword(password);
                 user.put("nickname",nickname);

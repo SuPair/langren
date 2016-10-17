@@ -50,10 +50,11 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
     private AlertDialog dialog,modify_ip_dialog;
     private PopupWindow popupWindow;
     private View cannot_connect;
+    private boolean isFetching = true;
 
 
     private void restartApplication() {
-        System.exit(0);
+
     }
 
     @Override
@@ -78,7 +79,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
         modify_ip = getLayoutInflater().inflate(R.layout.modify_ip, null);
         final EditText et_new_ip_address = (EditText) modify_ip.findViewById(R.id.et_new_ip_address);
         et_new_ip_address.setText(MainApplication.ServerHost);
-        modify_ip_dialog = new AlertDialog.Builder(SelectRoomActivity.this).setTitle("修改ip,确定后重新点开应用").setView(modify_ip)
+        modify_ip_dialog = new AlertDialog.Builder(SelectRoomActivity.this).setTitle("修改ip,确定后重启应用").setView(modify_ip)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -194,6 +195,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                                 }
                                 list.add(info);
                             }
+                            isFetching = false;
                             refreshUI(adapter);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -229,7 +231,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                     @Override
                     public void call(Object... args) {
                         String roomId = (String) args[0];
-
+                        while (isFetching);
                         int i;
                         for (i = 0; i < list.size(); i++) {
                             if (list.get(i).getRoomId().equals(roomId))
@@ -296,18 +298,24 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
         MainApplication.socket
                 .on("serverError", new Emitter.Listener() {
                     @Override
-                    public void call(Object... args) {
-                        Looper.prepare();
-                        Toast.makeText(getApplicationContext(), "游戏错误：" + args[0], Toast.LENGTH_SHORT).show();
-                        Looper.loop();
+                    public void call(final Object... args) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "游戏错误：" + args[0], Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 })
                 .on(Socket.EVENT_ERROR, new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
-                        Looper.prepare();
-                        Toast.makeText(getApplicationContext(), "服务器可能崩了...", Toast.LENGTH_SHORT).show();
-                        Looper.loop();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "服务器可能崩了...", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 })
                 .once(Socket.EVENT_CONNECT, new Emitter.Listener() {
@@ -320,11 +328,15 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                 })
                 .once(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
                     @Override
-                    public void call(Object... args) {
-                        Looper.prepare();
-                        Toast.makeText(getApplicationContext(), "socket断开了" + args[0], Toast.LENGTH_SHORT).show();
-                        MainApplication.socket.connect();
-                        Looper.loop();
+                    public void call(final Object... args) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "socket断开了" + args[0], Toast.LENGTH_SHORT).show();
+                                MainApplication.socket.connect();
+                            }
+                        });
+
                     }
                 })
                 .on("alreadyInRoomTag", new Emitter.Listener() {

@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.langren.ActionPerformer;
 import com.jinhanyu.jack.langren.MainApplication;
+import com.jinhanyu.jack.langren.Me;
 import com.jinhanyu.jack.langren.R;
 import com.jinhanyu.jack.langren.entity.GameRole;
 import com.jinhanyu.jack.langren.entity.UserInfo;
@@ -87,7 +88,12 @@ public class GameRoleCommonAdapter extends CommonAdapter<UserInfo> implements Ac
         } else {
             viewHolder.state.setText(R.string.isLiving);
         }
-        if(actionStr.equals("守护") && info.getUserId().equals(MainApplication.roomInfo.getLastGuardedUserId())){
+        if(actionStr.equals("票") && MainApplication.roomInfo.findMeInRoom().getGameRole().isDead()){
+            viewHolder.action.setEnabled(false);
+        }else if(actionStr.equals("验") && ( info.getUserId().equals(Me.getUserId())|| info.getGameRole().getType()!= GameRole.Type.Unknown)){
+            viewHolder.action.setEnabled(false);
+        }
+        else if(actionStr.equals("守护") && (info.getUserId().equals(Me.getUserId()) ||  MainApplication.roomInfo.getHasCheckedUsers().contains(info))){
             viewHolder.action.setEnabled(false);
         }
         ArrayAdapter adapter = ArrayAdapter.createFromResource(context, R.array.sign_type, android.R.layout.simple_spinner_item);

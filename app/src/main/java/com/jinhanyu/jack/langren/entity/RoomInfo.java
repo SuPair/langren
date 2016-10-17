@@ -24,6 +24,14 @@ public class RoomInfo{
     private List<GameRole.Type> types = new ArrayList<>();
     private String typesString;
 
+    private UserInfo me;
+
+    private List<UserInfo>  hasCheckedUsers = new ArrayList<>();
+
+    public List<UserInfo> getHasCheckedUsers() {
+        return hasCheckedUsers;
+    }
+
     public List<GameRole.Type> getTypes() {
         return types;
     }
@@ -42,16 +50,21 @@ public class RoomInfo{
                 return info;
             }
         }
-        throw new RuntimeException("客户端：  用户未找到");
+        return null;
     }
 
     public UserInfo findMeInRoom() {
-        for (UserInfo info : users) {
-            if (info.getUserId().equals(Me.getUserId())) {
-                return info;
+        if(me==null) {
+            for (UserInfo info : users) {
+                if (info.getUserId().equals(Me.getUserId())) {
+                    me = info;
+                    return info;
+                }
             }
+            throw new RuntimeException("客户端：  房间里没有我");
         }
-        throw new RuntimeException("客户端：  房间里没有我");
+
+        return me;
     }
 
     public int findUserIndexInRoom(String userId) {
@@ -174,6 +187,7 @@ public class RoomInfo{
     public void resetRoom() {
         Log.i("resetRoom",users.toString());
         policeId = null;
+        hasCheckedUsers.clear();
         for(UserInfo userInfo : users){
             GameRole gameRole = userInfo.getGameRole();
             gameRole.setDead(false);

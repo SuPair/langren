@@ -493,9 +493,6 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             @Override
                             public void run() {
                                 SoundEffectManager.stop();//声音停止
-                                tv_game_hint.setText("开始选警长");
-                                if (MainApplication.roomInfo.findMeInRoom().getGameRole().isDead())
-                                    return;
                                 startActivity(new Intent(GameMainActivity.this, VoteActivity.class).putExtra("type", RoomInfo.VOTE_POLICE));
                             }
                         });
@@ -509,8 +506,6 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                             @Override
                             public void run() {
                                 tv_game_hint.setText("开始票坏人");
-                                if (MainApplication.roomInfo.findMeInRoom().getGameRole().isDead())
-                                    return;
                                 startActivity(new Intent(GameMainActivity.this, VoteActivity.class).putExtra("type", RoomInfo.VOTE_WOLF));
                             }
                         });

@@ -61,7 +61,7 @@ public class PlayerSetActivity extends AppCompatActivity implements View.OnClick
                 finish();
                 break;
             case R.id.game_head_choose://修改头像
-                startActivityForResult(new Intent(PlayerSetActivity.this, UserHeadActivity.class),0);
+                startActivityForResult(new Intent(PlayerSetActivity.this, UserHeadActivity.class).putExtra("modify",true),0);
                 break;
             case R.id.player_set_complete://完成
                 final String nickname = game_nickname.getText().toString();//昵称
