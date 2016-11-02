@@ -3,8 +3,6 @@ package com.jinhanyu.jack.langren.ui;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
@@ -46,16 +44,12 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
     private TextView game_top;
     private SimpleDraweeView head, userHead;
     private TextView username, nickname, scoreText, title;
-    private View view, profile, modify_ip;
-    private AlertDialog dialog,modify_ip_dialog;
+    private View view, profile;
+    private AlertDialog dialog;
     private PopupWindow popupWindow;
-    private View cannot_connect;
     private boolean isFetching = true;
 
 
-    private void restartApplication() {
-
-    }
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -76,35 +70,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
         setContentView(R.layout.select_room);
         watchNetworkState();
 
-        modify_ip = getLayoutInflater().inflate(R.layout.modify_ip, null);
-        final EditText et_new_ip_address = (EditText) modify_ip.findViewById(R.id.et_new_ip_address);
-        et_new_ip_address.setText(MainApplication.ServerHost);
-        modify_ip_dialog = new AlertDialog.Builder(SelectRoomActivity.this).setTitle("修改ip,确定后重启应用").setView(modify_ip)
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        String new_ip_address = et_new_ip_address.getText().toString().trim();
-                        if (!new_ip_address.matches("([0-9]{1,3}\\.){3}[0-9]{1,3}")) {
-                            Toast.makeText(SelectRoomActivity.this, "格式不对", Toast.LENGTH_SHORT).show();
-                        } else {
-                            getSharedPreferences("ip", MODE_APPEND).edit().putString("ip", new_ip_address).commit();
-                            restartApplication();
-                        }
-                    }
-                })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                    }
-                }).create();
-        cannot_connect = findViewById(R.id.cannot_connect);
-        cannot_connect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                modify_ip_dialog.show();
-            }
-        });
 
         list = new ArrayList<>();
         roomList = (GridView) findViewById(R.id.gv_roomList);
@@ -284,17 +250,9 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
 
 
 
-    private boolean hasConnected =false;
 
     private void moreListener() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                 if(!hasConnected)
-                     Toast.makeText(SelectRoomActivity.this, "没连接上,ip可能有问题", Toast.LENGTH_SHORT).show();
-            }
-        },5000);
-        
+
         MainApplication.socket
                 .on("serverError", new Emitter.Listener() {
                     @Override
@@ -322,7 +280,6 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                     @Override
                     public void call(Object... args) {
                         Log.i("connected", "haha");
-                        hasConnected = true;
                         MainApplication.socket.emit("login", Me.getUserId());
                     }
                 })
