@@ -55,7 +55,5 @@ public class TickTimer extends Timer {
             }
         };
         schedule(task,0,1000);
-        SoundEffectManager.looping(true);
-        SoundEffectManager.play(R.raw.timer);
     }
 }

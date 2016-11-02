@@ -736,7 +736,7 @@ public class GameMainActivity extends CommonActivity implements View.OnClickList
                                         MainApplication.socket.emit("pass", MainApplication.roomInfo.getRoomId());
                                     }
                                 };
-                                tickTimer.startTick();
+                                tickTimer.startTick();                               ;
                                 if (MainApplication.roomInfo.findMeInRoom().getGameRole().getType() == GameRole.Type.Wolf && hasPolice)
                                     bt_wolf_destroy.setEnabled(true);
 
