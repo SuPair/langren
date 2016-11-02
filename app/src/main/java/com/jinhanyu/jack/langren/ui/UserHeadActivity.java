@@ -17,13 +17,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-
 import com.jinhanyu.jack.langren.Me;
 import com.jinhanyu.jack.langren.R;
-import com.jinhanyu.jack.langren.entity.UserInfo;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
@@ -92,7 +89,6 @@ public class UserHeadActivity extends Activity implements View.OnClickListener {
     }
 
     public void gototakephoto(View view) {
-        //startActivity(new Intent(this,TakePhotoActivity.class));
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, 1);
     }
@@ -103,7 +99,7 @@ public class UserHeadActivity extends Activity implements View.OnClickListener {
         if (requestCode == 1 && resultCode == RESULT_OK) {
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
             cameraView.setImageBitmap(bitmap);
-        } else if (requestCode == 2 && resultCode == RESULT_OK) {
+        } else if (requestCode == 2 && resultCode == RESULT_OK)  {
             Uri uri = data.getData();
             ContentResolver cr = this.getContentResolver();
             try {

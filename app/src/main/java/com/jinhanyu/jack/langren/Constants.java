@@ -9,8 +9,11 @@ public class Constants {
           return "http://"+newServerHost+":3000";
     }
 
-    public static final String ServerHost = "172.168.0.14";
+    public static final String ServerHost = "123.207.99.121";
 
+    /**
+     * 设置各个分段的时间（发言计时、投票计时、发动技能计时、等等）
+     */
     public static final int SPEAK_SECONDS  = 40;
     public static final int WOLF_SECONDS   = 15;
     public static final int WIZARD_SECONDS = 15;
