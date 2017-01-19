@@ -9,7 +9,7 @@ public class Constants {
           return "http://"+newServerHost+":3000";
     }
 
-    public static final String ServerHost = "123.207.99.121";
+    public static final String ServerHost = "118.89.55.172";
 
     /**
      * 设置各个分段的时间（发言计时、投票计时、发动技能计时、等等）
