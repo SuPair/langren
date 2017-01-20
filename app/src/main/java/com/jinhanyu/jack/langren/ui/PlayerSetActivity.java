@@ -28,7 +28,7 @@ public class PlayerSetActivity extends AppCompatActivity implements View.OnClick
     private EditText game_nickname;//游戏昵称
     private com.facebook.drawee.view.SimpleDraweeView game_head;//游戏头像
     private TextView game_head_choose;//修改头像
-    private TextView player_set_complete;//设置完成
+    private TextView player_set_complete,log_out;//设置完成
 
 
     @Override
@@ -42,10 +42,12 @@ public class PlayerSetActivity extends AppCompatActivity implements View.OnClick
         game_head = (SimpleDraweeView) findViewById(R.id.game_head);
         game_head_choose = (TextView) findViewById(R.id.game_head_choose);
         player_set_complete = (TextView) findViewById(R.id.player_set_complete);
+        log_out= (TextView) findViewById(R.id.log_out);
 
         player_set_back.setOnClickListener(this);
         game_head_choose.setOnClickListener(this);
         player_set_complete.setOnClickListener(this);
+        log_out.setOnClickListener(this);
 
         game_number.setText(Me.getUsername());
         game_nickname.setText(Me.getNickname());
@@ -80,6 +82,9 @@ public class PlayerSetActivity extends AppCompatActivity implements View.OnClick
                         SoundEffectManager.play(R.raw.complete);
                     }
                 });
+                break;
+            case R.id.log_out:
+                startActivity(new Intent(PlayerSetActivity.this,LoginActivty.class));
                 break;
 
         }

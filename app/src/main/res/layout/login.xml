@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/wolf_bg"
+    android:background="@color/black"
     android:orientation="vertical">
 
     <include layout="@layout/network_state"/>
@@ -23,7 +23,7 @@
             android:inputType="text"
             android:text="@string/game_account"
             android:textColor="@color/state"
-            android:textSize="24sp" />
+            android:textSize="19sp" />
 
         <EditText
             android:id="@+id/game_account"
@@ -37,7 +37,7 @@
             android:background="@drawable/edit_text_style_dark"
             android:ellipsize="end"
             android:maxLength="11"
-            android:padding="5dp" />
+            android:padding="7dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -54,7 +54,7 @@
             android:layout_marginLeft="20dp"
             android:text="@string/game_password"
             android:textColor="@color/state"
-            android:textSize="24sp" />
+            android:textSize="19sp" />
 
         <EditText
             android:id="@+id/game_password"
@@ -67,7 +67,7 @@
             android:background="@drawable/edit_text_style_dark"
             android:inputType="textPassword"
             android:singleLine="true"
-            android:padding="5dp" />
+            android:padding="7dp" />
     </LinearLayout>
 
     <TextView
@@ -75,6 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="15dp"
         android:text="@string/forget_password"
         android:textColor="@color/state"

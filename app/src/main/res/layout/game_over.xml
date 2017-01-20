@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/wolf_bg"
+    android:background="@mipmap/hall_bg"
     android:orientation="vertical">
 
     <TextView
@@ -13,8 +13,8 @@
         android:padding="20dp"
         android:text="游戏结束"
         android:textColor="#ffdd00"
-        android:textSize="50sp"
-        android:textStyle="italic|bold" />
+        android:textSize="25sp"
+        android:textStyle="bold" />
 
     <ListView
         android:id="@+id/game_over_listView"
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/my_score"
-            android:textSize="30sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/game_over_myScore"
@@ -60,7 +60,7 @@
             android:layout_height="wrap_content"
             android:text="@string/back_to_hall"
             android:background="@drawable/button_common"
-            android:textSize="20sp"/>
+            android:textSize="18sp"/>
 
         <Button
             android:id="@+id/again"
@@ -69,7 +69,7 @@
             android:text="@string/play_again"
             android:layout_marginLeft="40dp"
             android:background="@drawable/button_common"
-            android:textSize="20sp"/>
+            android:textSize="18sp"/>
 
     </LinearLayout>
 </LinearLayout>

@@ -289,7 +289,7 @@ public class SelectRoomActivity extends CommonActivity implements View.OnClickLi
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(getApplicationContext(), "socket断开了" + args[0], Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "连接断开了" + args[0], Toast.LENGTH_SHORT).show();
                                 MainApplication.socket.connect();
                             }
                         });
