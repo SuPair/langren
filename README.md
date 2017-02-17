@@ -1,2 +1,1 @@
-# langren
-langrengame
+# langren安卓端狼人杀游戏，支持语音发言，游戏流程自动化
